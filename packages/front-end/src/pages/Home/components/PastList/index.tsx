@@ -27,6 +27,7 @@ export default function PastList() {
               )}`,
             },
           ]}
+          showScores
           {...item}
         />
       )}

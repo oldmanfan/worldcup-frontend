@@ -41,12 +41,15 @@ export default function ListItem(props: IListItemProps) {
   useEffect(() => {
     const initImg = async () => {
       if (countryA && countryB) {
-        const a = await import(`../../assets/img/countries/${countryA.toNumber()}@2x.png`);
-        const b = await import(`../../assets/img/countries/${countryB.toNumber()}@2x.png`);
-        console.log('import countries img=', a.default);
+        const a = await import(
+          `../../assets/img/countries/${countryA.toNumber()}@2x.png`
+        );
+        const b = await import(
+          `../../assets/img/countries/${countryB.toNumber()}@2x.png`
+        );
         setImgs([a.default, b.default]);
       }
-    }
+    };
     initImg();
   }, [countryA, countryB]);
 
