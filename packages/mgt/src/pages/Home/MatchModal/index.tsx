@@ -11,10 +11,12 @@ const { RangePicker } = DatePicker;
 import { MatchStatus, MatchStatistics, ListItemProps } from '@/hooks/types';
 import useQatar from '@/hooks/useQatar';
 import { getErrorMsg } from '@/utils';
+import { PayToken } from '@/hooks/usePlayToken'
 
 export interface MatchModalProps {
   visible: boolean;
   record?: ListItemProps;
+  payTokens: PayToken[];
   onClose: () => void;
   onOk: () => void;
 }
@@ -82,22 +84,33 @@ export default function MatchModal(props: MatchModalProps) {
         countryA: props.record.countryA.toNumber(),
         countryB: props.record.countryB.toNumber(),
         matchTime: [
-          moment(toUtcTime(props.record.matchStartTime.toNumber()), 'YYYY-MM-dd HH:mm:ss'),
-          moment(toUtcTime(props.record.matchEndTime.toNumber()), 'YYYY-MM-dd HH:mm:ss'),
+          moment(props.record.matchStartTime.toNumber() * 1000),
+          moment(props.record.matchEndTime.toNumber() * 1000),
         ],
         guessTime: [
-          moment(toUtcTime(props.record.guessStartTime.toNumber()), 'YYYY-MM-dd HH:mm:ss'),
-          moment(toUtcTime(props.record.guessEndTime.toNumber()), 'YYYY-MM-dd HH:mm:ss'),
+          moment(props.record.guessStartTime.toNumber() * 1000),
+          moment(props.record.guessEndTime.toNumber() * 1000),
         ],
         payToken: props.record.payToken,
       });
     }
   }, [props.record]);
+
   useEffect(() => {
     if (!props.record) {
       formRef.current?.resetFields();
     }
   }, [props.visible]);
+
+  console.log('props.payTokens=', props.payTokens);
+
+  const playTokenOptions = props.payTokens?.map(item => {
+    return {
+      value: item.address,
+      label: `${item.name}-${item.address}`,
+    }
+  }) || [];
+
   // const navigate = useNavigate();
   // const { add, setAdd } = useState();
   // const { connect } = useWallet();
@@ -150,14 +163,22 @@ export default function MatchModal(props: MatchModalProps) {
             options={CountryOptions}
           />
         </Form.Item>
-        <Form.Item name="matchTime" label="比赛开始时间" rules={[{ required: true }]}>
+        <Form.Item name="matchTime" label="比赛开始时间" rules={[{ required: true }]} extra="(北京时间)">
           <RangePicker showTime locale={locale} />
         </Form.Item>
-        <Form.Item name="guessTime" label="竞猜开始时间" rules={[{ required: true }]}>
+        <Form.Item name="guessTime" label="竞猜开始时间" rules={[{ required: true }]} extra="(北京时间)">
           <RangePicker showTime locale={locale} />
         </Form.Item>
         <Form.Item name="payToken" label="payToken" rules={[{ required: true }]}>
-          <Input />
+          {/* <Input /> */}
+          <Select
+            showSearch
+            allowClear
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+            options={playTokenOptions}
+          />
         </Form.Item>
       </Form>
     </Modal>

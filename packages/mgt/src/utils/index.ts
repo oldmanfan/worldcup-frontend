@@ -18,3 +18,16 @@ export function getErrorMsg(err: any) {
   const msg = err?.error?.data?.message || err?.error?.message || err?.reason || err?.message || 'request error';
   return msg;
 }
+
+/**
+ * delay
+ * @param timeout time
+ * @returns Promise callback
+ */
+export async function delay(timeout: number): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, timeout);
+  });
+}
