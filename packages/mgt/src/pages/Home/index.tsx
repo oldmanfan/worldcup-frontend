@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 // import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button, Space, Switch, Table, Modal, message } from 'antd';
 import { ExclamationCircleOutlined, RightOutlined } from '@ant-design/icons';
-// import useWallet from '@/hooks/useWallet';
+import useWallet from '@/hooks/useWallet';
+import usePlayToken from '@/hooks/usePlayToken';
 // import useQatar from '@/hooks/useQatar';
 import useLens from '@/hooks/useLens';
 import useQatar from '@/hooks/useQatar';
@@ -14,15 +15,20 @@ import { MatchStatus, MatchStatistics, ListItemProps } from '@/hooks/types';
 import MatchModal from './MatchModal';
 import SetScores from './SetScores';
 import SetSettingRole from './SetSettingRole';
+import SetFeeRatio from './SetFeeRatio';
+import { delay } from '@/utils';
+import { PayTokenList } from '@/constant';
 
 
 export default function Home() {
-  // const navigate = useNavigate();
+  const { chainId } = useWallet();
   const [showMatch, setShowMatch] = useState(false);
   const [modifyRecord, setModifyRecord] = useState<ListItemProps>(null!);
   // setScores
   const [showScores, setShowScores] = useState(false);
   const [showSettingRole, setShowSettingRole] = useState(false);
+  const [showSetFeeRatio, setShowSetFeeRatio] = useState(false);
+  const { payTokens, loadData } = usePlayToken();
 
   const { account, getAllMatches, allMatches } = useLens();
   const { getQatarContract } = useQatar();
@@ -50,6 +56,12 @@ export default function Home() {
     }
   }
 
+  useEffect(() => {
+    if (chainId) {
+      loadData();
+    }
+  }, [chainId])
+
   /**
    * 比赛启停开关
    * @param matId 比赛id
@@ -62,15 +74,49 @@ export default function Home() {
       content: `此场比赛的matchId=${matId}, 请确认！`,
       onOk() {
         return new Promise(async (resolve, reject) => {
+          try {
+            // toPause
+            const contract = getQatarContract();
+            const tx = await contract.pauseMatch(matId, toPause);
+            await tx?.wait();
+            await delay(5000);
+            getAllMatches();
+            resolve(true);
+          } catch (e) {
+            reject(e);
+            const msg = getErrorMsg(e);
+            message.error(msg);
+          }
+        });
+      },
+      onCancel() { },
+    });
+  };
+
+  /**
+   * 比赛结束
+   * @param matId 比赛id
+   */
+  const finished = (matId: number) => {
+    Modal.confirm({
+      title: '确认将此场比赛改为结束状态',
+      icon: <ExclamationCircleOutlined />,
+      content: `此场比赛的matchId=${matId}, 请确认！`,
+      onOk() {
+        return new Promise(async (resolve, reject) => {
           // toPause
-          const contract = getQatarContract();
-          const tx = await contract.pauseMatch(matId, toPause);
-          await tx?.wait();
-          getAllMatches();
-          resolve(true);
-        }).catch((e) => {
-          const msg = getErrorMsg(e);
-          message.error(msg);
+          try {
+            const contract = getQatarContract();
+            const tx = await contract.setMatchFinished(matId);
+            await tx?.wait();
+            await delay(5000);
+            getAllMatches();
+            resolve(true);
+          } catch (e) {
+            reject(e);
+            const msg = getErrorMsg(e);
+            message.error(msg);
+          }
         });
       },
       onCancel() { },
@@ -189,6 +235,9 @@ export default function Home() {
               setModifyRecord(record);
               setShowScores(true);
             }}>设置比分</a>
+            <a onClick={() => {
+              finished(record.matchId.toNumber());
+            }}>结束比赛</a>
           </Space>
         )
       }
@@ -207,6 +256,9 @@ export default function Home() {
         <Button onClick={() => setShowSettingRole(true)}>
           设置操作员角色
         </Button>
+        <Button onClick={() => setShowSetFeeRatio(true)}>
+          设置手续费率
+        </Button>
       </Space>
       <div>
         <Table
@@ -216,6 +268,7 @@ export default function Home() {
         />
       </div>
       <MatchModal
+        payTokens={payTokens}
         record={modifyRecord}
         visible={showMatch}
         onClose={() => onStartDone(false)}
@@ -231,6 +284,11 @@ export default function Home() {
         visible={showSettingRole}
         onClose={() => setShowSettingRole(false)}
         onOk={() => setShowSettingRole(false)}
+      />
+      <SetFeeRatio
+        visible={showSetFeeRatio}
+        onClose={() => setShowSetFeeRatio(false)}
+        onOk={() => setShowSetFeeRatio(false)}
       />
     </div>
   );
