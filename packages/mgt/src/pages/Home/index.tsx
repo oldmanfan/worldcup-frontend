@@ -107,6 +107,7 @@ export default function Home() {
           // toPause
           try {
             const contract = getQatarContract();
+            console.log('setMatchFinished matId=', matId);
             const tx = await contract.setMatchFinished(matId);
             await tx?.wait();
             await delay(5000);
