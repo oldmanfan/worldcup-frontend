@@ -17,6 +17,7 @@ import { makeQatarContract, QatarContract } from '@/hooks/useContract';
 import useContractAddress from '@/hooks/useContractAddress';
 import { APPROVE_MAX, ScoreList } from '@/constant';
 import useInvite from '@/hooks/useInvite';
+import MyBet from '../MyBet';
 
 interface ScoreFormProps {
   value: number;
@@ -383,6 +384,7 @@ export default function Guess(props: GuessOptions) {
               {$t('{#链接钱包#}')}
             </Button>
           )}
+          <MyBet />
         </div>
       )}
     </>
