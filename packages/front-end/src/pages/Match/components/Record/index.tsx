@@ -1,0 +1,134 @@
+import { useEffect, useState } from 'react';
+import styles from './index.module.less';
+import useTranslation from '@/hooks/useTranslation';
+import { useMatchStore } from '@/models';
+import useWallet from '@/hooks/useWallet';
+import { GuessType } from '@/constant/GuessType';
+import { CountriesById, ScoreById } from '@/constant';
+import { formatTime } from '@/utils';
+import { BetRecord } from '@/hooks/types';
+import { toBN } from '@/utils/bn';
+
+export interface RecordProps {
+  active: number;
+}
+
+export default function Record(props: RecordProps) {
+  const { $t, changeLocale } = useTranslation();
+  const { currentMatch, records } = useMatchStore();
+  const { account } = useWallet();
+  const [list, setList] = useState<BetRecord[]>([]);
+  useEffect(() => {
+    if (!currentMatch) return;
+    if (props.active === 1) {
+      // 输赢竞猜
+      setList(currentMatch.winloseRecords);
+    } else {
+      // 比分竞猜
+      setList(currentMatch.scoreGuessRecords);
+    }
+  }, [currentMatch]);
+
+  const getRecordLabel = (guessType: number) => {
+    if (!currentMatch) return '';
+    if (guessType === GuessType.GUESS_WINLOSE_A_WIN) {
+      return `競猜${CountriesById[currentMatch.countryA.toNumber()].zhName}勝`;
+    }
+
+    if (guessType === GuessType.GUESS_WINLOSE_B_WIN) {
+      return `競猜${CountriesById[currentMatch.countryB.toNumber()].zhName}勝`;
+    }
+
+    if (guessType === GuessType.GUESS_WINLOSE_DRAW) {
+      return `競猜平局`;
+    }
+
+    return `競猜${ScoreById[guessType].label}`;
+  };
+
+  return (
+    <>
+      {currentMatch && (
+        <div className={styles.record}>
+          <h2 className={styles.h2}>
+            <span>{$t('{#本场输赢竞猜参与记录#}')}</span>
+          </h2>
+          <div className={styles.list}>
+            {records.map((item, index) => {
+              return (
+                <div className={styles.item} key={index}>
+                  <div>
+                    <div className={styles.light}>
+                      {account.slice(0, 6)}...${account.slice(-5)}
+                    </div>
+                    <div className={styles.light}>
+                      {/* {Number(item.guessType) === GuessType.GUESS_WINLOSE_A_WIN
+                        ? `競猜${
+                            CountriesById[currentMatch.countryA.toNumber()]
+                              .zhName
+                          }勝`
+                        : `競猜${
+                            CountriesById[currentMatch.countryB.toNumber()]
+                              .zhName
+                          }勝`} */}
+                      {getRecordLabel(Number(item.guessType))}
+                    </div>
+                  </div>
+                  <div>
+                    <div className={styles.time}>
+                      {formatTime(item.betTime.toNumber(), 'MM-DD hh:mm')}
+                    </div>
+                    <div className={styles.value}>
+                      競猜
+                      <strong>
+                        {toBN(item.betAmount).div(1e18).toString()}
+                      </strong>
+                      TT
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+            {/* TODO: 有数据的时候这里要删除掉 */}
+            {/* <div className={styles.item}>
+              <div>
+                <div className={styles.light}>0x7546…88407</div>
+                <div className={styles.light}>競猜巴西勝</div>
+              </div>
+              <div>
+                <div className={styles.time}>10-28 12:22</div>
+                <div className={styles.value}>
+                  競猜<strong>13138.238</strong>TT
+                </div>
+              </div>
+            </div> */}
+            {/* <div className={styles.item}>
+              <div>
+                <div className={styles.light}>0x7546…88407</div>
+                <div className={styles.light}>競猜巴西勝</div>
+              </div>
+              <div>
+                <div className={styles.time}>10-28 12:22</div>
+                <div className={styles.value}>
+                  競猜<strong>13138.238</strong>TT
+                </div>
+              </div>
+            </div>
+            <div className={styles.item}>
+              <div>
+                <div className={styles.light}>0x7546…88407</div>
+                <div className={styles.light}>競猜巴西勝</div>
+              </div>
+              <div>
+                <div className={styles.time}>10-28 12:22</div>
+                <div className={styles.value}>
+                  競猜<strong>13138.238</strong>TT
+                </div>
+              </div>
+            </div> */}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

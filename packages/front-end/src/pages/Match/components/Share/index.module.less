@@ -1,0 +1,104 @@
+
+.icon {
+  position: fixed;
+  right: 11px;
+  bottom: 85px;
+  z-index: 5;
+  cursor: pointer;
+  width: 77px;
+  height: 51px;
+  background: url('@/assets/img/icon-share.png');
+  background-size: 100%;
+}
+.share {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: #000000;
+    opacity: 0.8;
+    z-index: 8;
+  }
+  .content {
+    position: relative;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .bg {
+      display: inline-block;
+      width: 300px;
+      height: 213px;
+      background: url('@/assets/img/share-bg-zh.png');
+      background-size: 100%;
+      margin-bottom: 5px;
+    }
+    .close {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      background: url('@/assets/img/icon-close.png');
+      background-size: 100%;
+      align-self: flex-end;
+      margin-right: 21px;
+      &:active {
+        opacity: 0.75;
+      }
+    }
+    p {
+      font-size: 14px;
+      font-weight: 400;
+      color: #FADC34;
+      line-height: 20px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 200px;
+      height: 42px;
+      background: #F9D936;
+      border-style: none;
+      box-shadow: inset 0px -3px 0px 0px #D9753E;
+      border-radius: 21px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #D13918;
+      line-height: 20px;
+      &:active {
+        opacity: 0.75;
+      }
+    }
+    .toast {
+      padding: 8px 15px;
+      background: #3E414A;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #FFFFFF;
+      line-height: 17px;
+      display: inline-block;
+      position: absolute;
+      top: -68px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.hidden-overflow {
+  overflow: hidden;
+}

@@ -1,0 +1,19 @@
+.homePage {
+  padding-bottom: 105px;
+  background-color: #0d132b;
+  color: #fff;
+}
+
+:global(.tabs-wrap) {
+  color: #fff;
+  :global(.ant-tabs-nav-list) {
+    width: 100vw;
+    justify-content: space-around;
+  }
+  :global(.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn) {
+    color: #fff !important;
+  }
+  :global(.ant-tabs-nav::before) {
+    border-bottom: 0px;
+  }
+}

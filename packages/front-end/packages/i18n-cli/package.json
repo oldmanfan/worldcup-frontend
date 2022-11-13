@@ -1,0 +1,58 @@
+{
+  "name": "@tester-i18n/cli",
+  "version": "0.1.1",
+  "description": "i18n-cli",
+  "type": "commonjs",
+  "bin": {
+    "i18n-cli": "bin/index.js"
+  },
+  "main": "./dist/lib/index.js",
+  "module": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "require": "./dist/lib/index.cjs"
+    },
+    "./lib": {
+      "types": "./dist/lib/index.d.ts",
+      "import": "./dist/lib/index.js",
+      "require": "./dist/lib/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "types",
+    "package.json"
+  ],
+  "publishConfig": {
+    "registry": "http://127.0.0.1:4873/"
+  },
+  "scripts": {
+    "init": "tsc --init",
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "prebuild": "rimraf dist",
+    "cli": "ts-node ./src/cli.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/gulp": "^4.0.9",
+    "@types/node": "^18.11.3",
+    "gulp": "^4.0.2",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.3"
+  },
+  "dependencies": {
+    "cac": "^6.7.14",
+    "glob": "^8.0.3"
+  }
+}
