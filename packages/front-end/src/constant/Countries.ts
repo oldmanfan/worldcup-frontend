@@ -40,7 +40,7 @@ export const Countries: {
   Ghana: { id: 32, zhName: '加纳' },
 };
 
-interface ICountriesById {
+export interface ICountriesById {
   [id: number]: { zhName: string; enName: string };
 }
 export const CountriesById: ICountriesById = (() => {
@@ -56,3 +56,9 @@ export const CountriesById: ICountriesById = (() => {
   }
   return countriesById as ICountriesById;
 })();
+
+export function getCountryName(id: number, local: string) {
+  return local === 'zh-hk'
+    ? CountriesById[id].zhName
+    : CountriesById[id].enName;
+}

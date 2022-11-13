@@ -18,10 +18,11 @@ import useContractAddress from '@/hooks/useContractAddress';
 import { APPROVE_MAX, ScoreList } from '@/constant';
 import useInvite from '@/hooks/useInvite';
 import MyBet from '../MyBet';
+import { MatchStatus } from '@/hooks/types';
 
 interface ScoreFormProps {
   value: number;
-  onChange: (value: number) => void;
+  onChange: (value: number, label: string) => void;
 }
 
 interface OptionsProps {
@@ -68,7 +69,7 @@ function ScoreForm(props: ScoreFormProps) {
                     className={
                       item.value === props.value ? styles.selected : ''
                     }
-                    onClick={() => props.onChange(item.value)}
+                    onClick={() => props.onChange(item.value, item.label)}
                   >
                     <label>{item.label}</label>
                     <div>{toFixed(toBN(item.desc).div(1e18).toString())}</div>
@@ -88,7 +89,7 @@ interface WinLossFormProps {
 }
 
 function WinLossForm(props: WinLossFormProps) {
-  const { $t } = useTranslation();
+  const { $t, locale } = useTranslation();
   const { currentMatch } = useMatchStore();
   const [options, setOptions] = useState<OptionsProps[]>([]);
 
@@ -98,8 +99,14 @@ function WinLossForm(props: WinLossFormProps) {
         currentMatch.winlosePool.odds.map((item) =>
           toBN(item).div(1e18).toNumber(),
         ) || [];
-      const countryA = CountriesById[currentMatch.countryA.toNumber()].zhName;
-      const countryB = CountriesById[currentMatch.countryB.toNumber()].zhName;
+      const countryA =
+        locale === 'zh-hk'
+          ? CountriesById[currentMatch.countryA.toNumber()].zhName
+          : CountriesById[currentMatch.countryA.toNumber()].enName;
+      const countryB =
+        locale === 'zh-hk'
+          ? CountriesById[currentMatch.countryB.toNumber()].zhName
+          : CountriesById[currentMatch.countryB.toNumber()].enName;
       const options = [
         {
           value: GuessType.GUESS_WINLOSE_A_WIN,
@@ -173,7 +180,6 @@ export default function Guess(props: GuessOptions) {
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
   const { setRelationship } = useInvite();
-
 
   useEffect(() => {
     if (account && provider && contractAddress) {
@@ -281,100 +287,137 @@ export default function Guess(props: GuessOptions) {
     }
   };
 
+  const handleAll = () => {
+    setInputValue(ttBalance.div(1e18).toString());
+  };
+
+  const getForm = () => {
+    if (!currentMatch) return <></>;
+    if (currentMatch.status === MatchStatus.MATCH_FINISHED) return <></>;
+    return props.type === 1 ? (
+      <WinLossForm
+        value={Number(winLoss)}
+        onChange={(value, label) => {
+          setWinLoss(value);
+          setSelectedLabel(label);
+        }}
+      />
+    ) : (
+      <ScoreForm
+        value={score}
+        onChange={(value, label) => {
+          setScore(value);
+          setSelectedLabel(label);
+        }}
+      />
+    );
+  };
+
   return (
     <>
       {currentMatch && (
         <div className={styles.guess}>
           <h3>{$t('{#輸贏總獎池#}')}</h3>
           <div className={styles.total}>
-            $ {toBN(currentMatch.winlosePool.deposited).div(1e18).toString()}
+            ${' '}
+            {props.type === 1
+              ? toBN(currentMatch.winlosePool.deposited).div(1e18).toString()
+              : toBN(currentMatch.scoreGuessPool.deposited)
+                  .div(1e18)
+                  .toString()}
           </div>
-          {props.type === 1 ? (
-            <WinLossForm
-              value={Number(winLoss)}
-              onChange={(value, label) => {
-                setWinLoss(value);
-                setSelectedLabel(label);
-              }}
-            />
-          ) : (
-            <ScoreForm value={score} onChange={setScore} />
+
+          {/* Form表单 */}
+          {getForm()}
+
+          {/* 竞猜操作区域 */}
+          {currentMatch.status !== MatchStatus.MATCH_FINISHED && (
+            <div>
+              <div className={styles.formItem}>
+                <label>
+                  {' '}
+                  {props.type === 1
+                    ? $t('{#當前%s總參投金額#}').replace('%s', selectedLabel)
+                    : $t('{#當前%s參投金額#}').replace('%s', selectedLabel)}
+                  :
+                </label>
+                {eachDeposited.length > 0 && (
+                  <div>
+                    ${' '}
+                    {props.type === 1
+                      ? toFixed(
+                          toBN(eachDeposited[Number(winLoss) - 27])
+                            .div(1e18)
+                            .toString(),
+                        )
+                      : toFixed(
+                          toBN(eachDeposited[Number(score) - 1])
+                            .div(1e18)
+                            .toString(),
+                        )}
+                  </div>
+                )}
+              </div>
+              <div className={styles.formItem}>
+                <label>{$t('{#回報率#}')}:</label>
+                <div>
+                  {props.type === 1
+                    ? toFixed(
+                        toBN(
+                          currentMatch.winlosePool.odds[Number(winLoss) - 27],
+                        )
+                          .div(1e18)
+                          .toString(),
+                      )
+                    : toFixed(
+                        toBN(currentMatch.scoreGuessPool.odds[score - 1])
+                          .div(1e18)
+                          .toString(),
+                      )}
+                </div>
+              </div>
+              <div className={styles.split} />
+              <div className={styles.input}>
+                <div>
+                  <i />
+                </div>
+                <input
+                  type="text"
+                  placeholder={$t('{#輸入TT參與競猜#}')}
+                  value={inputValue}
+                  onChange={(value) => handleInput(value.target.value)}
+                />
+                <button onClick={handleAll}>ALL</button>
+              </div>
+              <div className={styles.balance}>
+                {toFixed(ttBalance.div(1e18).toString())} TT
+              </div>
+              {/* <div className={styles.error}>
+                <ExclamationCircleFilled />
+                <span>当前余额不足，去充值</span>
+                <RightOutlined />
+              </div> */}
+              <div className={styles.formItem}>
+                <label>{$t('{#預盈可得#}')}</label>
+                <div className={styles.primary}>
+                  {toFixed(reward.toString())} TT
+                </div>
+              </div>
+              <div className={styles.formItem}>
+                <label>{$t('{#手續費#}')}</label>
+                <div className={styles.grey}> {toFixed(fee)} TT</div>
+              </div>
+              <Button
+                loading={loading}
+                type="primary"
+                className={styles.btn}
+                onClick={handleGuess}
+              >
+                {$t('{#參與競猜#}')}
+              </Button>
+            </div>
           )}
 
-          <div className={styles.formItem}>
-            <label> {$t('{#當前%s總參投金額#}').replace('%s', selectedLabel)}:</label>
-            {eachDeposited.length > 0 && (
-              <div>
-                ${' '}
-                {props.type === 1
-                  ? toFixed(
-                      toBN(eachDeposited[Number(winLoss) - 27])
-                        .div(1e18)
-                        .toString(),
-                    )
-                  : toFixed(
-                      toBN(eachDeposited[Number(score) - 1])
-                        .div(1e18)
-                        .toString(),
-                    )}
-              </div>
-            )}
-          </div>
-          <div className={styles.formItem}>
-            <label>{$t('{#回報率#}')}:</label>
-            <div>
-              {props.type === 1
-                ? toFixed(
-                    toBN(currentMatch.winlosePool.odds[Number(winLoss) - 27])
-                      .div(1e18)
-                      .toString(),
-                  )
-                : toFixed(
-                    toBN(currentMatch.scoreGuessPool.odds[score - 1])
-                      .div(1e18)
-                      .toString(),
-                  )}
-            </div>
-          </div>
-          <div className={styles.split} />
-          <div className={styles.input}>
-            <div>
-              <i />
-            </div>
-            <input
-              type="text"
-              placeholder={$t('{#輸入TT參與競猜#}')}
-              value={inputValue}
-              onChange={(value) => handleInput(value.target.value)}
-            />
-            <button>ALL</button>
-          </div>
-          <div className={styles.balance}>
-            {ttBalance.div(1e18).toString()} TT
-          </div>
-          {/* <div className={styles.error}>
-            <ExclamationCircleFilled />
-            <span>当前余额不足，去充值</span>
-            <RightOutlined />
-          </div> */}
-          <div className={styles.formItem}>
-            <label>{$t('{#預盈可得#}')}</label>
-            <div className={styles.primary}>
-              {toFixed(reward.toString())} TT
-            </div>
-          </div>
-          <div className={styles.formItem}>
-            <label>{$t('{#手續費#}')}</label>
-            <div className={styles.grey}> {fee} TT</div>
-          </div>
-          <Button
-            loading={loading}
-            type="primary"
-            className={styles.btn}
-            onClick={handleGuess}
-          >
-            {$t('{#參與競猜#}')}
-          </Button>
           {!account && (
             <Button
               type="primary"
@@ -384,7 +427,7 @@ export default function Guess(props: GuessOptions) {
               {$t('{#連接錢包#}')}
             </Button>
           )}
-          <MyBet />
+          <MyBet active={props.type} />
         </div>
       )}
     </>

@@ -54,13 +54,15 @@ export default function Info(props: InfoProps) {
             -
             {formatTime(
               currentMatch.guessEndTime.toNumber(),
-              locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm'
+              locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
             )}
           </div>
           <div className={styles.detail}>
             <div>
               <label>
-                {CountriesById[currentMatch.countryA.toNumber()].zhName}
+                {locale === 'zh-hk'
+                  ? CountriesById[currentMatch.countryA.toNumber()].zhName
+                  : CountriesById[currentMatch.countryA.toNumber()].enName}
               </label>
               <div className={styles.nation}>
                 <img src={imgs[0]} alt="" />
@@ -68,7 +70,9 @@ export default function Info(props: InfoProps) {
             </div>
             <div>
               <label>
-                {CountriesById[currentMatch.countryB.toNumber()].zhName}
+                {locale === 'zh-hk'
+                  ? CountriesById[currentMatch.countryB.toNumber()].zhName
+                  : CountriesById[currentMatch.countryB.toNumber()].enName}
               </label>
               <div className={styles.nation}>
                 <img src={imgs[1]} alt="" />

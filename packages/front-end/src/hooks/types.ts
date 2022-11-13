@@ -5,9 +5,6 @@ import { BigNumber } from 'ethers';
 export enum MatchStatus {
   GUESS_NOT_START, // 竞猜未开始
   GUESS_ON_GOING, // 竞猜进行中
-  GUESS_STOPED, // 竞猜已停止
-
-  MATCH_NOT_START, // 比赛未开始
   MATCH_ON_GOING, // 比赛进行中
   MATCH_FINISHED, // 比赛己完成
 }
@@ -63,6 +60,9 @@ export interface ListItemProps extends MatchStatistics {
 }
 
 export interface PlayerRecords extends BetRecord {
+  matchId: BigNumber; // 比赛id
+  countryA: BigNumber; // 参赛国A
+  countryB: BigNumber; // 参赛国B
   scoresA: BigNumber;
   scoresB: BigNumber;
   winAmount: BigNumberLike;

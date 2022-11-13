@@ -29,6 +29,9 @@ export function makeContract<T extends Contract>(
 
 // ERC20合约类型
 export interface ERC20Contract extends Contract {
+  name: () => Promise<string>;
+  symbol: () => Promise<string>;
+  decimals: () => Promise<number>;
   approve: (spender: string, amount: string) => Promise<ContractTransaction>;
   allowance: (owner: string, spender: string) => Promise<BigNumber>;
   balanceOf: (account: string) => Promise<BigNumber>;

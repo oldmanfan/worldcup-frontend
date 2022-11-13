@@ -17,6 +17,10 @@ export default function Banner() {
   const { $t } = useTranslation();
 
   const handleClaim = async () => {
+    if (!playerTotalInfo?.playerTotalUnWithdraw) {
+      message.error('There are no unclaimed rewards');
+      return;
+    }
     try {
       if (toBN(playerTotalInfo?.playerTotalUnWithdraw).eq(0)) {
         message.error('There are no extractable rewards');

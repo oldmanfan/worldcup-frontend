@@ -1,3 +1,4 @@
+import { getCountryName } from './Countries';
 export class GuessType {
   static readonly GUESS_SCORE_10 = 1; // 比分竞猜 1: 0
   static readonly GUESS_SCORE_21 = 2; // 比分竞猜 2: 1

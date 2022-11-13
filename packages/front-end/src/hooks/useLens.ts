@@ -90,6 +90,9 @@ export function useMatches() {
               scoresA: item.scoresA,
               scoresB: item.scoresB,
               matchEndTime: item.matchEndTime,
+              matchId: item.matchId,
+              countryA: item.countryA,
+              countryB: item.countryB,
             });
 
             if (winlose.win) {
@@ -122,6 +125,9 @@ export function useMatches() {
               scoresA: item.scoresA,
               scoresB: item.scoresB,
               matchEndTime: item.matchEndTime,
+              matchId: item.matchId,
+              countryA: item.countryA,
+              countryB: item.countryB,
             });
 
             if (scoreGuess.win) {
@@ -165,7 +171,9 @@ export function useMatches() {
           (item) => item.status === MatchStatus.GUESS_NOT_START,
         );
         const onGoingMatches = allMatches.filter(
-          (item) => item.status === MatchStatus.GUESS_ON_GOING,
+          (item) =>
+            item.status === MatchStatus.GUESS_ON_GOING ||
+            item.status === MatchStatus.MATCH_ON_GOING,
         );
         const finishedMatches = allMatches.filter(
           (item) => item.status === MatchStatus.MATCH_FINISHED,

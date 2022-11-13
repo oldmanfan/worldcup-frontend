@@ -1,8 +1,9 @@
 import { List } from 'antd';
 import ListItem from '@/components/ListItem';
 import { useMatches } from '@/hooks/useLens';
-import { formatTime } from '@/utils';
+import { formatTime, toFixed } from '@/utils';
 import useTranslation from '@/hooks/useTranslation';
+import { toBN } from '@/utils/bn';
 
 // 往期赛事
 export default function PastList() {
@@ -16,7 +17,7 @@ export default function PastList() {
           rows={[
             {
               name: $t('{#當前獎池金額#}'),
-              value: `$${item.totalPool}`,
+              value: `$${toFixed(toBN(item.totalPool).div(1e18).toString())}`,
             },
             {
               name: $t('{#參與人數#}'),

@@ -6,6 +6,7 @@ import { ListItemProps } from '@/hooks/types';
 import { CountriesById } from '@/constant/Countries';
 import { useMatchStore } from '@/models';
 import useTranslation from '@/hooks/useTranslation';
+import { toBN } from '@/utils/bn';
 
 interface RowProps {
   name: string;
@@ -40,6 +41,7 @@ export default function ListItem(props: IListItemProps) {
   const navigate = useNavigate();
   const [imgs, setImgs] = useState<string[]>([]);
   const { $t, locale } = useTranslation();
+  const [scoreVisible, setScoreVisible] = useState(false);
 
   useEffect(() => {
     const initImg = async () => {
@@ -73,6 +75,12 @@ export default function ListItem(props: IListItemProps) {
     navigate(`/match/${match.matchId.toNumber()}`);
   };
 
+  useEffect(() => {
+    if (!(toBN(scoresA).eq(255) && toBN(scoresB).eq(255)) && showScores) {
+      setScoreVisible(true);
+    }
+  }, []);
+
   return (
     <div className={styles.listItem} onClick={handleClick}>
       <div className={styles.nav}>
@@ -84,8 +92,8 @@ export default function ListItem(props: IListItemProps) {
           <span>
             <span>
               {locale === 'zh-hk'
-              ? CountriesById[countryA.toNumber()].zhName
-              : CountriesById[countryA.toNumber()].enName}
+                ? CountriesById[countryA.toNumber()].zhName
+                : CountriesById[countryA.toNumber()].enName}
             </span>
             <strong>VS</strong>
             <span>
@@ -94,7 +102,7 @@ export default function ListItem(props: IListItemProps) {
                 : CountriesById[countryB.toNumber()].enName}
             </span>
           </span>
-          {showScores && (
+          {scoreVisible && (
             <span className={styles.record}>{`${scoresA} : ${scoresB}`}</span>
           )}
         </div>
@@ -114,7 +122,7 @@ export default function ListItem(props: IListItemProps) {
       <div className={styles.divider}></div>
       {(showWinLoseReward || showScoreGuessReward) && (
         <div className={styles.recordWrap}>
-          <label>{$t("{#盈得#}")}</label>
+          <label>{$t('{#盈得#}')}</label>
           {showWinLoseReward && (
             <span>{totalWinloseReward.toString(10)} TT</span>
           )}
