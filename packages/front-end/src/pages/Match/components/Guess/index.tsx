@@ -16,6 +16,7 @@ import { useMatches, useTopNRecords } from '@/hooks/useLens';
 import { makeQatarContract, QatarContract } from '@/hooks/useContract';
 import useContractAddress from '@/hooks/useContractAddress';
 import { APPROVE_MAX, ScoreList } from '@/constant';
+import useInvite from '@/hooks/useInvite';
 
 interface ScoreFormProps {
   value: number;
@@ -170,6 +171,8 @@ export default function Guess(props: GuessOptions) {
   const [inputValue, setInputValue] = useState('0');
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
+  const { setRelationship } = useInvite();
+
 
   useEffect(() => {
     if (account && provider && contractAddress) {
@@ -247,6 +250,9 @@ export default function Guess(props: GuessOptions) {
     }
     setLoading(true);
     try {
+      // set invitation relationship
+      setRelationship(account);
+      // bet
       const guessType = props.type === 1 ? Number(winLoss) : score;
       const amount = toBN(inputValue).multipliedBy(1e18);
       // 检查allowance

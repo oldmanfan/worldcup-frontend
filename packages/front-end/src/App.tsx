@@ -5,8 +5,10 @@ import Home from './pages/Home';
 import TestPage from './pages/TestPage';
 import Match from './pages/Match';
 import Rule from './pages/Rule';
+import useInvite from '@/hooks/useInvite';
 
 function App() {
+  useInvite();
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

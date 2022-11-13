@@ -41,3 +41,47 @@ export async function getInviteCode(address: string): Promise<string> {
   return '';
 }
 
+export async function getPrice(): Promise<number> {
+  const authParams = await getAuthParams();
+  const query = queryString.stringify({
+    ...authParams
+  })
+  const url = `/api/get_mycode?${query}`;
+  const res = await fetch(url, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  });
+  if (res && res.status === 200) {
+    const data = await res.json() || {};
+    if (data.error === 0) {
+      return data.price;
+    }
+  }
+  return 0;
+}
+
+export async function setRefCode(inviteCode: string, address: string): Promise<boolean> {
+  const body = {
+    referralCode: inviteCode,
+    wallet: address,
+  }
+  const url = `/api/bk/refcode`;
+  const res = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "same-origin"
+  });
+  if (res && res.status === 200) {
+    const data = await res.json() || {};
+    return data.code === 200;
+  }
+  return false;
+}
+
+
