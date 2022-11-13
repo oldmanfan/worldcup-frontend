@@ -15,13 +15,26 @@ export interface IContractAddress {
 }
 export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.BSC_TESTNET]: {
-    lens: '0x34DEaEFF1D932d01E2962D2628c47AC2D6182017',
-    tt: '0xE9505ed0712e075E24aD4Cf1cB3Af4350EA78c4C',
-    qatar: '0x166760410792e2df04749EDa81d1243BA02961B9',
+    lens: '0xa2335B6e89f12e7Ebf2fAe27e009AF72a71B5048',
+    tt: '0x254d2Be5Cd077245E6005Ff54C7f874425d71091',
+    qatar: '0xeE2D69e6BDcB446ea9BD61FB8ebE1f7F7b9094e5',
   },
   [ChainIds.HECO_TESTNET]: {
-    lens: '0x0d0332259f3030292B4e937Be09D44DA52A2121e',
-    tt: '0xc221B190B6f7Dba255D47c9279839C217d86df2a',
-    qatar: '0xEd1DF85808F2d32b6cDd57fc10Cee7cf746a42d3',
+    lens: '0x85cF354E61081617DD8b08B87ec27CAccD1d3ac4',
+    tt: '0x6c633473FBFc289Af5B0a67FF8fb8551608967F8',
+    qatar: '0xEF83D8bCb40F89B6dbfA9429439D2851f7e0c5B4',
   },
 };
+
+/**
+ * payToken下拉框设置
+ */
+export const PayTokenList = {
+  [ChainIds.BSC_TESTNET]: [
+    '0x254d2Be5Cd077245E6005Ff54C7f874425d71091',
+  ],
+  [ChainIds.HECO_TESTNET]: [
+    '0x6c633473FBFc289Af5B0a67FF8fb8551608967F8',
+  ],
+}
+
