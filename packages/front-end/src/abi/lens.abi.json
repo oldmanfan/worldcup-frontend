@@ -218,6 +218,11 @@
             "internalType": "struct WorldCupLens.BetRecord[]",
             "name": "scoreGuessRecords",
             "type": "tuple[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPaused",
+            "type": "bool"
           }
         ],
         "internalType": "struct WorldCupLens.MatchStatistics[]",
@@ -447,6 +452,11 @@
             "internalType": "struct WorldCupLens.BetRecord[]",
             "name": "scoreGuessRecords",
             "type": "tuple[]"
+          },
+          {
+            "internalType": "bool",
+            "name": "isPaused",
+            "type": "bool"
           }
         ],
         "internalType": "struct WorldCupLens.MatchStatistics",

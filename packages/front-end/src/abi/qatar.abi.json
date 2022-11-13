@@ -3,12 +3,36 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
         "name": "_vault",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "player",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "totalClaimed",
+        "type": "uint256"
+      }
+    ],
+    "name": "AllRewardClaimed",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -189,6 +213,61 @@
       {
         "indexed": true,
         "internalType": "uint256",
+        "name": "matchId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "countryA",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "countryB",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "guessStartTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "guessEndTime",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "payToken",
+        "type": "address"
+      }
+    ],
+    "name": "MatchUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
         "name": "matId",
         "type": "uint256"
       },
@@ -239,12 +318,6 @@
         "indexed": false,
         "internalType": "uint256",
         "name": "betReward",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "rewards",
         "type": "uint256"
       }
     ],
@@ -350,6 +423,13 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claimAllRewards",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -631,12 +711,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "startTime",
+        "name": "matchStartTime",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "endTime",
+        "name": "matchEndTime",
         "type": "uint256"
       },
       {
@@ -690,6 +770,54 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "matchId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "countryA",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "countryB",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "startTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "endTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "guessStartTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "guessEndTime",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "payToken",
+        "type": "address"
+      }
+    ],
+    "name": "updateMatch",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

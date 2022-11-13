@@ -28,6 +28,16 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
     tt: '0xc221B190B6f7Dba255D47c9279839C217d86df2a',
     qatar: '0xEd1DF85808F2d32b6cDd57fc10Cee7cf746a42d3',
   },
+  [ChainIds.BSC_MAINNET]: {
+    lens: '',
+    tt: '',
+    qatar: '',
+  },
+  [ChainIds.HECO_MAINNET]: {
+    lens: '',
+    tt: '',
+    qatar: '',
+  },
 };
 
 export const APPROVE_MAX =
