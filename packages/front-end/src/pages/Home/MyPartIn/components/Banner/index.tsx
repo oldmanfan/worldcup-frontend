@@ -1,6 +1,6 @@
 import styles from './index.module.less';
 import { useMatches } from '@/hooks/useLens';
-import { toFixed } from '@/utils';
+import { toFixed, sleep } from '@/utils';
 import { toBN } from '@/utils/bn';
 import { Button, message } from 'antd';
 import { useState } from 'react';
@@ -8,20 +8,32 @@ import useWallet from '@/hooks/useWallet';
 import useContractAddress from '@/hooks/useContractAddress';
 import { makeQatarContract } from '@/hooks/useContract';
 export default function Banner() {
-  const { playerTotalInfo } = useMatches();
+  const { playerTotalInfo, getAllMatches } = useMatches();
   const [loading, setLoading] = useState(false);
   const { account, provider } = useWallet();
   const { contractAddress } = useContractAddress();
 
   const handleClaim = async () => {
     try {
+      if (toBN(playerTotalInfo?.playerTotalUnWithdraw).eq(0)) {
+        message.error('There are no extractable rewards');
+        return;
+      }
+      setLoading(true);
       const contract = makeQatarContract(
         contractAddress.qatar,
         provider,
         account,
       );
+      const tx = await contract.claimAllRewards();
+      await tx.wait();
+      await sleep();
+      getAllMatches();
+      message.success('Claim Success');
     } catch (error) {
       message.error(error.message || 'Claim Failed');
+    } finally {
+      setLoading(false);
     }
   };
 
