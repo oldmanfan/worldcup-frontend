@@ -115,10 +115,10 @@ export default function MatchModal(props: MatchModalProps) {
               <span>{toUtcTime(props.record.guessEndTime.toNumber())}</span>
             </Space>
           </Form.Item>
-          <Form.Item name="scoreA" label="scoreA">
+          <Form.Item label="countryA">
             {CountriesById[props.record?.countryA.toNumber()].zhName}
           </Form.Item>
-          <Form.Item name="scoreB" label="scoreA">
+          <Form.Item label="countryB">
             {CountriesById[props.record?.countryB.toNumber()].zhName}
           </Form.Item>
         </>}
