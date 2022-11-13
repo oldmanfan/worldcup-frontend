@@ -14,12 +14,18 @@ export interface LocaleContextWrapperProps {
   children?: React.ReactNode;
 }
 
+let oldLocale = localStorage.getItem('lang');
+if (!oldLocale && navigator.language.indexOf('zh') > -1) {
+  oldLocale = 'zh-hk'
+}
+
 export default function LocaleContextWrapper(props: LocaleContextWrapperProps) {
   const fallback = 'en-us';
-  const [locale, setLocale] = useState(props.locale || fallback);
+  const [locale, setLocale] = useState(props.locale || oldLocale || fallback);
   const [messages, setMessages] = useState<Record<string, Record<string, string>>>({});
 
   const changeLocale = (locale: string) => {
+    localStorage.setItem('lang', locale);
     setLocale(locale);
   };
 
