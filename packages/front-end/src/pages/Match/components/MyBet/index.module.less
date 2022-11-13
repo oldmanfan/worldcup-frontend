@@ -1,0 +1,49 @@
+.my {
+  .item {
+    padding: 20px 0;
+    border-bottom: solid 1px #293453;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    > div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+      label {
+        color: #FFFFFF;
+        flex-shrink: 0;
+        margin-right: 4px;
+      }
+      strong {
+        color: #FF5852;
+        font-weight: 600;
+        flex-grow: 1;
+      }
+      span {
+        color: #256EC7;
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        > i {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          background: url('@/assets/img/icon-time.png');
+          background-size: 100%;
+          margin-right: 4px;
+        }
+      }
+    }
+    > p {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(225, 225,225, 0.6);
+      line-height: 18px;
+      margin: 0;
+    }
+    &:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+  }
+}
