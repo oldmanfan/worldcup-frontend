@@ -1,4 +1,5 @@
-import zhCN from 'antd/es/locale/zh_CN';
+// import zhCN from 'antd/es/locale/zh_CN';
+import enUS from 'antd/es/locale/en_US';
 import { ConfigProvider } from 'antd';
 import { Outlet } from 'react-router-dom';
 import LocaleContextWrapper from '../context/locale';
@@ -10,7 +11,7 @@ export default function DefaultLayout() {
     <WalletProvider>
       <MatchStoreProvider>
         <LocaleContextWrapper>
-          <ConfigProvider locale={zhCN}>
+          <ConfigProvider locale={enUS}>
             <Outlet />
           </ConfigProvider>
         </LocaleContextWrapper>
