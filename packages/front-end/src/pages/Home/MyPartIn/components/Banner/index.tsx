@@ -38,7 +38,7 @@ export default function Banner() {
       await sleep();
       getAllMatches();
       message.success('Claim Success');
-    } catch (error) {
+    } catch (error: any) {
       message.error(error.message || 'Claim Failed');
     } finally {
       setLoading(false);
@@ -115,7 +115,7 @@ export default function Banner() {
             <div>
               <label>{$t('{#收益率#}')}</label>
               <span>
-                {toFixed(
+                {toBN(playerTotalInfo.playerWinRate).isNaN() ? '0' : toFixed(
                   toBN(playerTotalInfo.playerWinRate).div(1e18).toString(),
                 )}
               </span>
