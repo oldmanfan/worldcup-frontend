@@ -53,7 +53,10 @@ export default function Banner(props: BannerProps) {
   };
 
   return (
-    <div className={cls(styles.banner, { [styles.hideBg]: props.hideBg })}>
+    <div className={cls(styles.banner, {
+      [styles.en]: locale !== 'zh-hk',
+      [styles.hideBg]: props.hideBg,
+    })}>
       <div>
         <div className={styles.address} onClick={handleConnect}>
           <i className={cls(styles['icon-chain'], `chain-${chainId}`)} />
