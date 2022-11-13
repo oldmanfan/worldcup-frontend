@@ -8,6 +8,7 @@ import useWallet from '@/hooks/useWallet';
 import useContractAddress from '@/hooks/useContractAddress';
 import { makeQatarContract } from '@/hooks/useContract';
 import useTranslation from '@/hooks/useTranslation';
+import BannerTop from '@/components/Banner';
 
 export default function Banner() {
   const { playerTotalInfo, getAllMatches } = useMatches();
@@ -46,6 +47,7 @@ export default function Banner() {
 
   return (
     <>
+      <BannerTop hideBg />
       {playerTotalInfo && (
         <div className={styles.bannerWrap}>
           <div className={styles.totalReward}>

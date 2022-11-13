@@ -10,6 +10,7 @@ import { NavLink } from 'react-router-dom';
 
 export interface BannerProps {
   rule?: boolean;
+  hideBg?: boolean;
 }
 export default function Banner(props: BannerProps) {
   const { shortAddress, chainId, connect } = useWallet();
@@ -52,7 +53,7 @@ export default function Banner(props: BannerProps) {
   };
 
   return (
-    <div className={styles.banner}>
+    <div className={cls(styles.banner, { [styles.hideBg]: props.hideBg })}>
       <div>
         <div className={styles.address} onClick={handleConnect}>
           <i className={cls(styles['icon-chain'], `chain-${chainId}`)} />
