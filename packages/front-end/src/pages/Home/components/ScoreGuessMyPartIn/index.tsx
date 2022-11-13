@@ -3,10 +3,12 @@ import { formatTime, toFixed } from '@/utils';
 import PlayerListItem from '@/components/PlayerListItem';
 import { useMatchStore } from '@/models';
 import { toBN } from '@/utils/bn';
+import useTranslation from '@/hooks/useTranslation';
 
 // 往期赛事
 export default function ScoreGuessMyPartIn() {
   const { playerScoreGuessRecords } = useMatchStore();
+  const { $t } = useTranslation();
   return (
     <List
       dataSource={playerScoreGuessRecords}
@@ -14,11 +16,11 @@ export default function ScoreGuessMyPartIn() {
         <PlayerListItem
           rows={[
             {
-              name: '下注金额',
+              name: $t('{#下注金額#}'),
               value: `${toFixed(toBN(item.winAmount).div(1e18).toString())} TT`,
             },
             {
-              name: '开奖时间',
+              name: $t('{#開獎時間#}'),
               value: `${formatTime(toBN(item.matchEndTime).toNumber() * 1000)}`,
             },
           ]}

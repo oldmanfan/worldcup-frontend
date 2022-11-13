@@ -15,7 +15,7 @@ export interface MyBetProps {
 }
 
 export default function MyBet(props: RecordProps) {
-  const { $t, changeLocale } = useTranslation();
+  const { $t } = useTranslation();
   const { currentMatch } = useMatchStore();
   // const { account } = useWallet();
   // const [list, setList] = useState<BetRecord[]>([]);
@@ -29,11 +29,11 @@ export default function MyBet(props: RecordProps) {
             return (
               <div className={styles.item} key={index}>
                 <div>
-                  <label>已竞猜中国VS巴西</label>
+                  <label>{$t('{#已競猜#}')}中国VS巴西</label>
                   <strong>2:1</strong>
-                  <span><i />待开奖</span>
+                  <span><i />{$t('{#待開獎#}')}</span>
                 </div>
-                <p>参与12121.131TT，赔率8.3倍</p>
+                <p>{$t('{#參與%sTT，赔率%n倍#}').replace('%s', '12121.131').replace('%n', '8.3')}</p>
               </div>
             );
           })}

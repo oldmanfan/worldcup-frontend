@@ -56,7 +56,7 @@ export default function Banner(props: BannerProps) {
       <div>
         <div className={styles.address} onClick={handleConnect}>
           <i className={cls(styles['icon-chain'], `chain-${chainId}`)} />
-          <span>{shortAddress ? shortAddress : $t('{#链接钱包#}')}</span>
+          <span>{shortAddress ? shortAddress : $t('{#連接錢包#}')}</span>
         </div>
         {props.rule ? (
           <NavLink className={styles.rule} to="/rule">

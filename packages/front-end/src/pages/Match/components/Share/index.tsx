@@ -41,9 +41,9 @@ export default function Share() {
         <div className={styles.content}>
           <i className={styles.close} onClick={() => setShowShare(false)} />
           <div className={styles.bg} />
-          <p><label>{$t('{#参与入口#}')}:</label>www.MetaTdex.com</p>
-          <button onClick={() => onCopy()}>{$t('{#复制链接#}')}</button>
-          {showToast && <div className={styles.toast}>{$t('{#复制成功，快去分享吧#}')}</div>}
+          <p><label>{$t('{#參與入口#}')}:</label>www.MetaTdex.com</p>
+          <button onClick={() => onCopy()}>{$t('{#複製鏈接#}')}</button>
+          {showToast && <div className={styles.toast}>{$t('{#複製成功，快去分享吧#}')}</div>}
         </div>
       </div>)}
     </div>

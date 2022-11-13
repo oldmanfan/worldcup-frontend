@@ -49,7 +49,7 @@ export default function Match() {
         <Record active={active} />
         <div className={styles.textCenter}>
           <NavLink to="/" className={styles.btn}>
-            {$t('{#查看更多赛事#}')}
+            {$t('{#查看更多賽事#}')}
           </NavLink>
         </div>
         <Share />

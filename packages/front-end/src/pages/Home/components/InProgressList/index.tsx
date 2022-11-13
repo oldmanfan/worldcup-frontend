@@ -4,6 +4,7 @@ import ListItem from '@/components/ListItem';
 import { useMatches } from '@/hooks/useLens';
 import { formatTime } from '@/utils';
 import { toBN } from '@/utils/bn';
+import useTranslation from '@/hooks/useTranslation';
 
 const data = [
   {
@@ -30,6 +31,7 @@ const data = [
 export default function InProgressList() {
   const navigate = useNavigate();
   const { onGoingMatches } = useMatches();
+  const { $t } = useTranslation();
   return (
     <List
       dataSource={onGoingMatches}
@@ -37,15 +39,16 @@ export default function InProgressList() {
         <ListItem
           rows={[
             {
-              name: '当前奖池金额',
+              name: $t('{#當前獎池金額#}'),
               value: `$${toBN(item.totalPool).div(1e18).toString()}`,
             },
             {
-              name: '参与人数',
-              value: `${item.totalPlayers} 人`,
+              name: $t('{#參與人數#}'),
+              value: $t('{#%s 人#}').replace('%s', item.totalPlayers as string),
+              // value  `${item.totalPlayers} 人`,
             },
             {
-              name: '下注时间',
+              name: $t('{#下注時間#}'),
               value: `${formatTime(Number(item.guessStartTime))} - ${formatTime(
                 Number(item.guessEndTime.toString()),
               )}`,

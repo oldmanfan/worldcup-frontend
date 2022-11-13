@@ -7,6 +7,7 @@ import { CountriesById } from '@/constant/Countries';
 import { useMatchStore } from '@/models';
 import { toBN } from '@/utils/bn';
 import { toFixed } from '@/utils';
+import useTranslation from '@/hooks/useTranslation';
 
 interface RowProps {
   name: string;
@@ -21,6 +22,7 @@ export default function PlayerListItem(props: IListItemProps) {
   const { winAmount, scoresA, scoresB, win, rows, onClick, ...rest } = props;
   const { setMatch } = useMatchStore();
   const navigate = useNavigate();
+  const { $t } = useTranslation();
 
   // const handleClick = () => {
   //   const match = {
@@ -49,7 +51,7 @@ export default function PlayerListItem(props: IListItemProps) {
       </div>
       <div className={styles.divider}></div>
       <div className={styles.recordWrap}>
-        <label>盈得</label>
+        <label>{$t("{#盈得#}")}</label>
         <span>{toFixed(toBN(winAmount).div(1e18).toString())} TT</span>
       </div>
       <i

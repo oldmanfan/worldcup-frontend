@@ -7,11 +7,14 @@ import { useState } from 'react';
 import useWallet from '@/hooks/useWallet';
 import useContractAddress from '@/hooks/useContractAddress';
 import { makeQatarContract } from '@/hooks/useContract';
+import useTranslation from '@/hooks/useTranslation';
+
 export default function Banner() {
   const { playerTotalInfo, getAllMatches } = useMatches();
   const [loading, setLoading] = useState(false);
   const { account, provider } = useWallet();
   const { contractAddress } = useContractAddress();
+  const { $t } = useTranslation();
 
   const handleClaim = async () => {
     try {
@@ -43,7 +46,7 @@ export default function Banner() {
         <div className={styles.bannerWrap}>
           <div className={styles.totalReward}>
             <div>
-              <label>累計競猜價值(TT)</label>
+              <label>{$t('{#累計競猜價值#}')}(TT)</label>
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalBetAmount)
@@ -53,12 +56,12 @@ export default function Banner() {
               </span>
             </div>
             <Button loading={loading} onClick={handleClaim}>
-              領取獎勵
+              {$t('{#領取獎勵#}')}
             </Button>
           </div>
           <div className={styles.valueBox}>
             <div>
-              <label>中奖</label>
+              <label>{$t('{#中獎#}')}</label>
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalWinAmount)
@@ -69,7 +72,7 @@ export default function Banner() {
               </span>
             </div>
             <div>
-              <label>已领取</label>
+              <label>{$t('{#已領取#}')}</label>
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalWithdraw)
@@ -80,7 +83,7 @@ export default function Banner() {
               </span>
             </div>
             <div>
-              <label>待领取</label>
+              <label>{$t('{#待領取#}')}</label>
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalUnWithdraw)
@@ -94,17 +97,17 @@ export default function Banner() {
           <div className={styles.divider}></div>
           <div className={styles.valueBox}>
             <div>
-              <label>參與次數</label>
+              <label>{$t('{#參與次數#}')}</label>
               <span>{toBN(playerTotalInfo.playerTotalPartIn).toNumber()}</span>
             </div>
             <div>
-              <label>中獎次數</label>
+              <label>{$t('{#中獎次數#}')}</label>
               <span>
                 {toBN(playerTotalInfo.playerTotalWinTimes).toNumber()}
               </span>
             </div>
             <div>
-              <label>收益率</label>
+              <label>{$t('{#收益率#}')}</label>
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerWinRate).div(1e18).toString(),

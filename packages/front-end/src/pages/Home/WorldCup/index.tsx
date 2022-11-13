@@ -4,8 +4,10 @@ import PastList from '../components/PastList';
 import FutureList from '../components/FutureList';
 import styles from './index.module.less';
 import Banner from '@/components/Banner';
+import useTranslation from '@/hooks/useTranslation'
 
 export default function WorldCup() {
+  const { $t } = useTranslation();
   return (
     <div className={styles.worldCup}>
       <Banner />
@@ -19,13 +21,13 @@ export default function WorldCup() {
             color: 'rgba(255,255,255,0.4)',
           }}
         >
-          <Tabs.TabPane tab="正在进行" key="inprogress">
+          <Tabs.TabPane tab={$t('{#正在進行#}')} key="inprogress">
             <InProgressList />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="未来赛事" key="future">
+          <Tabs.TabPane tab={$t('{#未來賽事#}')} key="future">
             <FutureList />
           </Tabs.TabPane>
-          <Tabs.TabPane tab="往期赛事" key="past">
+          <Tabs.TabPane tab={$t('{#往期賽事#}')} key="past">
             <PastList />
           </Tabs.TabPane>
         </Tabs>

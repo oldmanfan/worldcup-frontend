@@ -14,7 +14,7 @@ export interface RecordProps {
 }
 
 export default function Record(props: RecordProps) {
-  const { $t, changeLocale } = useTranslation();
+  const { $t, locale } = useTranslation();
   const { currentMatch, records } = useMatchStore();
   const { account } = useWallet();
   const [list, setList] = useState<BetRecord[]>([]);
@@ -32,18 +32,24 @@ export default function Record(props: RecordProps) {
   const getRecordLabel = (guessType: number) => {
     if (!currentMatch) return '';
     if (guessType === GuessType.GUESS_WINLOSE_A_WIN) {
-      return `競猜${CountriesById[currentMatch.countryA.toNumber()].zhName}勝`;
+      return $t('{#競猜%s勝#}').replace('%s', locale === 'zh-hk'
+        ? CountriesById[currentMatch.countryA.toNumber()].zhName
+        : CountriesById[currentMatch.countryA.toNumber()].enName
+      );
     }
 
     if (guessType === GuessType.GUESS_WINLOSE_B_WIN) {
-      return `競猜${CountriesById[currentMatch.countryB.toNumber()].zhName}勝`;
+      return $t('{#競猜%s勝#}').replace('%s', locale === 'zh-hk'
+        ? CountriesById[currentMatch.countryB.toNumber()].zhName
+        : CountriesById[currentMatch.countryB.toNumber()].enName
+      );
     }
 
     if (guessType === GuessType.GUESS_WINLOSE_DRAW) {
-      return `競猜平局`;
+      return $t('{#競猜平局#}');
     }
 
-    return `競猜${ScoreById[guessType].label}`;
+    return $t('{#競猜%s#}').replace('%s', ScoreById[guessType].label);
   };
 
   return (
@@ -51,7 +57,7 @@ export default function Record(props: RecordProps) {
       {currentMatch && (
         <div className={styles.record}>
           <h2 className={styles.h2}>
-            <span>{$t('{#本场输赢竞猜参与记录#}')}</span>
+            <span>{$t('{#本場輸贏競猜參與記錄#}')}</span>
           </h2>
           <div className={styles.list}>
             {records.map((item, index) => {
@@ -78,12 +84,8 @@ export default function Record(props: RecordProps) {
                     <div className={styles.time}>
                       {formatTime(item.betTime.toNumber(), 'MM-DD hh:mm')}
                     </div>
-                    <div className={styles.value}>
-                      競猜
-                      <strong>
-                        {toBN(item.betAmount).div(1e18).toString()}
-                      </strong>
-                      TT
+                    <div className={styles.value}
+                      v-html={$t('{#競猜<strong>%s</strong>TT#}').replace('%s', toBN(item.betAmount).div(1e18).toString())}>
                     </div>
                   </div>
                 </div>

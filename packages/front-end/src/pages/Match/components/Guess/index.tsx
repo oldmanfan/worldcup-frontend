@@ -149,7 +149,7 @@ export interface GuessOptions {
 }
 
 export default function Guess(props: GuessOptions) {
-  const { $t, changeLocale } = useTranslation();
+  const { $t } = useTranslation();
   const navigate = useNavigate();
   const [winLoss, setWinLoss] = useState<GuessType>(
     GuessType.GUESS_WINLOSE_A_WIN,
@@ -302,7 +302,7 @@ export default function Guess(props: GuessOptions) {
           )}
 
           <div className={styles.formItem}>
-            <label>当前{selectedLabel}总参投金额:</label>
+            <label> {$t('{#當前%s總參投金額#}').replace('%s', selectedLabel)}:</label>
             {eachDeposited.length > 0 && (
               <div>
                 ${' '}
@@ -321,7 +321,7 @@ export default function Guess(props: GuessOptions) {
             )}
           </div>
           <div className={styles.formItem}>
-            <label>回报:</label>
+            <label>{$t('{#回報率#}')}:</label>
             <div>
               {props.type === 1
                 ? toFixed(
@@ -343,7 +343,7 @@ export default function Guess(props: GuessOptions) {
             </div>
             <input
               type="text"
-              placeholder={$t('{#输入TT参与竞猜#}')}
+              placeholder={$t('{#輸入TT參與競猜#}')}
               value={inputValue}
               onChange={(value) => handleInput(value.target.value)}
             />
@@ -364,7 +364,7 @@ export default function Guess(props: GuessOptions) {
             </div>
           </div>
           <div className={styles.formItem}>
-            <label>{$t('{#手续费#}')}</label>
+            <label>{$t('{#手續費#}')}</label>
             <div className={styles.grey}> {fee} TT</div>
           </div>
           <Button
@@ -381,7 +381,7 @@ export default function Guess(props: GuessOptions) {
               className={styles.btn}
               onClick={() => connect()}
             >
-              {$t('{#链接钱包#}')}
+              {$t('{#連接錢包#}')}
             </Button>
           )}
           <MyBet />

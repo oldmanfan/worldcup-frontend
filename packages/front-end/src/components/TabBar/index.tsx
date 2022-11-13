@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './index.module.less';
+import useTranslation from '@/hooks/useTranslation';
 
 type keyType = 'worldcup' | 'mypartin';
 
@@ -9,16 +10,18 @@ interface TabBarProps {
 export default function TabBar(props: TabBarProps) {
   const { onSelected } = props;
   const [selected, setSelected] = useState<keyType>('worldcup');
+  const { $t } = useTranslation();
+
   const tabs = [
     {
       key: 'worldcup',
       icon: '',
-      name: '世界杯赛事',
+      name: $t('{#世界盃賽事#}'),
     },
     {
       key: 'mypartin',
       icon: '',
-      name: '我的参与',
+      name: $t('{#我的參與#}'),
     },
   ];
 

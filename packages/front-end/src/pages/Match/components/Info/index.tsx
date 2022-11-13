@@ -11,7 +11,7 @@ export interface InfoProps {
 }
 
 export default function Info(props: InfoProps) {
-  const { $t } = useTranslation();
+  const { $t, locale } = useTranslation();
   const [active, setActive] = useState(1);
   const { currentMatch } = useMatchStore();
   const [imgs, setImgs] = useState<string[]>([]);
@@ -46,13 +46,16 @@ export default function Info(props: InfoProps) {
             <span>{$t('{#競猜進行中#}')}</span>
           </h2>
           <div className={styles.tip}>
-            下注時間：
+            {$t('{#下注時間#}')}：
             {formatTime(
               currentMatch.guessStartTime.toNumber(),
-              'MM月DD日 hh:mm',
+              locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
             )}
             -
-            {formatTime(currentMatch.guessEndTime.toNumber(), 'MM月DD日 hh:mm')}
+            {formatTime(
+              currentMatch.guessEndTime.toNumber(),
+              locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm'
+            )}
           </div>
           <div className={styles.detail}>
             <div>

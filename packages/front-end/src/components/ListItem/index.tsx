@@ -5,6 +5,7 @@ import styles from './index.module.less';
 import { ListItemProps } from '@/hooks/types';
 import { CountriesById } from '@/constant/Countries';
 import { useMatchStore } from '@/models';
+import useTranslation from '@/hooks/useTranslation';
 
 interface RowProps {
   name: string;
@@ -38,6 +39,8 @@ export default function ListItem(props: IListItemProps) {
   const { setMatch } = useMatchStore();
   const navigate = useNavigate();
   const [imgs, setImgs] = useState<string[]>([]);
+  const { $t, locale } = useTranslation();
+
   useEffect(() => {
     const initImg = async () => {
       if (countryA && countryB) {
@@ -79,9 +82,17 @@ export default function ListItem(props: IListItemProps) {
             <img src={imgs[1]} alt="" />
           </i>
           <span>
-            <span>{CountriesById[countryA.toNumber()].zhName}</span>
+            <span>
+              {locale === 'zh-hk'
+              ? CountriesById[countryA.toNumber()].zhName
+              : CountriesById[countryA.toNumber()].enName}
+            </span>
             <strong>VS</strong>
-            <span>{CountriesById[countryB.toNumber()].zhName}</span>
+            <span>
+              {locale === 'zh-hk'
+                ? CountriesById[countryB.toNumber()].zhName
+                : CountriesById[countryB.toNumber()].enName}
+            </span>
           </span>
           {showScores && (
             <span className={styles.record}>{`${scoresA} : ${scoresB}`}</span>
@@ -103,7 +114,7 @@ export default function ListItem(props: IListItemProps) {
       <div className={styles.divider}></div>
       {(showWinLoseReward || showScoreGuessReward) && (
         <div className={styles.recordWrap}>
-          <label>盈得</label>
+          <label>{$t("{#盈得#}")}</label>
           {showWinLoseReward && (
             <span>{totalWinloseReward.toString(10)} TT</span>
           )}
