@@ -341,7 +341,7 @@ export default function Guess(props: GuessOptions) {
                   <strong>812.138 TT</strong>
                 </span>
                 <Button type="primary">
-                  {true ? $t('{#已领取#}') : $t('{#領取獎勵#}')}
+                  {true ? $t('{#已領取#}') : $t('{#領取獎勵#}')}
                 </Button>
               </div>
             </div>
