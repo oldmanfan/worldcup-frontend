@@ -4,6 +4,7 @@ import useTranslation from '@/hooks/useTranslation';
 import { useMatchStore } from '@/models';
 import { formatTime } from '@/utils';
 import { CountriesById } from '@/constant/Countries';
+import { MatchStatus } from '@/hooks/types';
 
 export interface InfoProps {
   active: number;
@@ -15,6 +16,8 @@ export default function Info(props: InfoProps) {
   const [active, setActive] = useState(1);
   const { currentMatch } = useMatchStore();
   const [imgs, setImgs] = useState<string[]>([]);
+  const [statusLabel, setStatusLabel] = useState<string>();
+  const [statusTimeLabel, setStatusTimeLabel] = useState<string>();
 
   const change = (key: number) => {
     setActive(key);
@@ -37,44 +40,74 @@ export default function Info(props: InfoProps) {
     initImg();
   }, [currentMatch?.countryA, currentMatch?.countryA]);
 
-  // console.log('currentMatch===', currentMatch)
+  useEffect(() => {
+    if (currentMatch) {
+      let statusLabel = '';
+      let statusTimeLabel = '';
+      if (currentMatch?.status === MatchStatus.GUESS_NOT_START) {
+        statusLabel = $t('{#競猜即將開始#}');
+        statusTimeLabel = $t('{#下注時間#}');
+      }
+      if (currentMatch?.status === MatchStatus.GUESS_ON_GOING) {
+        statusLabel = $t('{#競猜進行中#}');
+        statusTimeLabel = $t('{#下注時間#}');
+      }
+      if (currentMatch?.status === MatchStatus.MATCH_ON_GOING) {
+        statusLabel = $t('{#竞猜已结束#}');
+        statusTimeLabel = $t('{#比赛時間#}');
+      }
+      if (currentMatch?.status === MatchStatus.MATCH_FINISHED) {
+        statusLabel = $t('{#比賽已結束#}');
+        statusTimeLabel = $t('{#结束時間#}');
+      }
+
+      setStatusLabel(statusLabel);
+      setStatusTimeLabel(statusTimeLabel);
+    }
+  }, [currentMatch]);
+
   return (
     <>
       {currentMatch && (
         <div className={styles.info}>
-          {
-            currentMatch?.status === 3 ? (
-              <>
-                <h2 className={styles.h2}>
-                  <span>{$t('{#比賽已結束#}')}</span>
-                </h2>
-                <div className={styles.tip}>
-                  {$t('{#結束時間#}')}：
-                  {formatTime(
-                    currentMatch.matchEndTime.toNumber(),
-                    locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
-                  )}
-                </div>
-              </>
-            ) : (
-                <>
-                  <h2 className={styles.h2}>
-                    <span>{currentMatch?.status === 0? $t('{#競猜即將開始#}') : $t('{#競猜進行中#}')}</span>
-                  </h2>
-                  <div className={styles.tip}>
-                    {$t('{#下注時間#}')}：
-                    {formatTime(
-                      currentMatch.guessStartTime.toNumber(),
-                      locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
-                    )}
-                    -
-                    {formatTime(
-                      currentMatch.guessEndTime.toNumber(),
-                      locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
-                    )}
-                  </div>
-                </>
-            )}
+          {currentMatch?.status === 3 ? (
+            <>
+              <h2 className={styles.h2}>
+                <span>{$t('{#比賽已結束#}')}</span>
+              </h2>
+              <div className={styles.tip}>
+                {$t('{#結束時間#}')}：
+                {formatTime(
+                  currentMatch.matchEndTime.toNumber(),
+                  locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                )}
+              </div>
+            </>
+          ) : (
+            <>
+              <h2 className={styles.h2}>
+                <span>
+                  {/* {currentMatch?.status === 0
+                    ? $t('{#競猜即將開始#}')
+                    : $t('{#競猜進行中#}')} */}
+                  {statusLabel}
+                </span>
+              </h2>
+              <div className={styles.tip}>
+                {/* {$t('{#下注時間#}')}： */}
+                {statusTimeLabel}：
+                {formatTime(
+                  currentMatch.guessStartTime.toNumber(),
+                  locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                )}
+                -
+                {formatTime(
+                  currentMatch.guessEndTime.toNumber(),
+                  locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                )}
+              </div>
+            </>
+          )}
           <div className={styles.detail}>
             <div>
               <label>

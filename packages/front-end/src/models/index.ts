@@ -1,16 +1,10 @@
 import { useState } from 'react';
 import { createStore } from 'hox';
-import {
-  ListItemProps,
-  TopNRecords,
-  PlayerRecords,
-  Token,
-} from '@/hooks/types';
+import { ListItemProps, TopNRecords, PlayerRecords } from '@/hooks/types';
 
 export const [useMatchStore, MatchStoreProvider] = createStore(() => {
   const [currentMatch, setCurrentMatch] = useState<ListItemProps | undefined>();
   const [records, setRecords] = useState<TopNRecords[]>([]);
-  const [token, setToken] = useState<Token>();
   const [playerWinLoseRecords, setPlayerWinLoseRecords] = useState<
     PlayerRecords[]
   >([]);
@@ -21,11 +15,6 @@ export const [useMatchStore, MatchStoreProvider] = createStore(() => {
   function setMatch(match: ListItemProps) {
     setCurrentMatch(match);
   }
-
-  function setTokenStore(token: Token) {
-    setToken(token);
-  }
-
   function setRecordStore(records: TopNRecords[]) {
     setRecords(records);
   }
@@ -43,10 +32,8 @@ export const [useMatchStore, MatchStoreProvider] = createStore(() => {
     records,
     playerWinLoseRecords,
     playerScoreGuessRecords,
-    token,
 
     setMatch,
-    setTokenStore,
     setRecordStore,
     setPlayerWinLoseRecordsStore,
     setPlayerScoreGuessRecordsStore,

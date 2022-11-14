@@ -62,6 +62,7 @@ export function useMatches() {
         let playerWinLoseRecords: PlayerRecords[] = [];
         let playerScoreGuessRecords: PlayerRecords[] = [];
         const allMatches = res.map((item) => {
+          console.log({ decimal: item.payTokenDecimals.toNumber() });
           const { winlosePool, scoreGuessPool, winloseRecords } = item;
           const totalPool = toBN(winlosePool.deposited).plus(
             toBN(scoreGuessPool.deposited),
@@ -93,6 +94,7 @@ export function useMatches() {
               matchId: item.matchId,
               countryA: item.countryA,
               countryB: item.countryB,
+              status: item.status,
             });
 
             if (winlose.win) {
@@ -128,6 +130,7 @@ export function useMatches() {
               matchId: item.matchId,
               countryA: item.countryA,
               countryB: item.countryB,
+              status: item.status,
             });
 
             if (scoreGuess.win) {
