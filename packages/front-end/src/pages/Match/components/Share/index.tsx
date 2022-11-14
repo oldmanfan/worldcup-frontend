@@ -11,7 +11,22 @@ export default function Share() {
   const { $t, locale } = useTranslation();
   const [showShare, setShowShare] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [inviteCode, setInviteCode] = useState<string>('');
   const { account } = useWallet();
+
+  const shareUrl = `${location.origin}?invite=${inviteCode}`;
+
+  useEffect(() => {
+    const queryCode = async () => {
+      const code = await getInviteCode(account);
+      if (code) {
+        setInviteCode(code);
+      }
+    }
+    if (account) {
+      queryCode();
+    }
+  }, [account]);
 
   useEffect(() => {
     if (showShare) {
@@ -23,8 +38,7 @@ export default function Share() {
   }, [showShare]);
 
   const onCopy = async () => {
-    const code = await getInviteCode(account);
-    copy(`http://www.MetaTdex.com?invite=${code}`);
+    copy(shareUrl);
     setShowToast(true);
     await delay(2000);
     setShowToast(false);
@@ -42,7 +56,7 @@ export default function Share() {
         <div className={styles.content}>
           <i className={styles.close} onClick={() => setShowShare(false)} />
           <div className={cls(styles.bg, { [styles.en]: locale !== 'zh-hk' })} />
-          <p><label>{$t('{#參與入口#}')}: </label>www.MetaTdex.com</p>
+          <p><label>{$t('{#參與入口#}')}: </label>{shareUrl}</p>
           <button onClick={() => onCopy()}>{$t('{#複製鏈接#}')}</button>
           {showToast && <div className={styles.toast}>{$t('{#複製成功，快去分享吧#}')}</div>}
         </div>
