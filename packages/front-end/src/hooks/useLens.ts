@@ -137,7 +137,7 @@ export function useMatches() {
 
             if (scoreGuess.win) {
               playerTotalWinAmount = playerTotalWinAmount.plus(
-                toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)),
+                toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)).div(1e18),
               );
               totalScoreGuessReward = totalScoreGuessReward.plus(
                 toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)),
