@@ -80,15 +80,46 @@ export default function Info(props: InfoProps) {
           setIsBWin(false);
         }
       }
+
       // TODO:
       // setVsText($t('{#恭喜您中奖#}'))
       // setVsText($t('{#本场未参与#}'))
       // setVsText($t('{#您未中奖#}'))
 
+      if (currentMatch) {
+        // 检查奖励是否已领取
+        let isWin = false;
+        if (props.active === 1) {
+          currentMatch.winloseRecords.map((item) => {
+            if (item.win) {
+              isWin = true;
+            }
+          });
+          isWin
+            ? setVsText($t('{#恭喜您中奖#}'))
+            : setVsText($t('{#您未中奖#}'));
+          if (currentMatch.winloseRecords.length === 0) {
+            setVsText($t('{#本场未参与#}'));
+          }
+        } else {
+          currentMatch.scoreGuessRecords.map((item) => {
+            if (item.win) {
+              isWin = true;
+            }
+          });
+          isWin
+            ? setVsText($t('{#恭喜您中奖#}'))
+            : setVsText($t('{#您未中奖#}'));
+          if (currentMatch.scoreGuessRecords.length === 0) {
+            setVsText($t('{#本场未参与#}'));
+          }
+        }
+      }
+
       setStatusLabel(statusLabel);
       setStatusTimeLabel(statusTimeLabel);
     }
-  }, [currentMatch]);
+  }, [currentMatch, props.active]);
 
   return (
     <>

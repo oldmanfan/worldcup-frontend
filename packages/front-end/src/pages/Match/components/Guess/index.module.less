@@ -1,8 +1,14 @@
 .guess {
-  background: #161D31;
+  background: #161d31;
   border-radius: 4px;
   border: 1px solid;
-  border-image: linear-gradient(180deg, rgba(13, 19, 43, 1), rgba(39, 73, 146, 1)) 1 1;
+  margin-top: 12px;
+  border-image: linear-gradient(
+      180deg,
+      rgba(13, 19, 43, 1),
+      rgba(39, 73, 146, 1)
+    )
+    1 1;
   padding: 18px 15px 20px;
   > h3 {
     font-size: 14px;
@@ -16,7 +22,7 @@
 .total {
   font-size: 20px;
   font-weight: 500;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 24px;
   margin-bottom: 25px;
   text-align: center;
@@ -28,7 +34,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 14px;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-bottom: 10px;
   > label {
     color: rgba(255, 255, 255, 0.6);
@@ -37,7 +43,7 @@
     margin-bottom: 0;
   }
   .primary {
-    color: #256EC7;
+    color: #256ec7;
   }
   .grey {
     color: rgba(255, 255, 255, 0.6);
@@ -51,9 +57,9 @@
 
 .input {
   height: 42px;
-  background: #161D31;
+  background: #161d31;
   border-radius: 2px;
-  border: 1px solid #454A60;
+  border: 1px solid #454a60;
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
@@ -61,9 +67,9 @@
     flex-shrink: 0;
     width: 42px;
     height: 40px;
-    background: #0F1821;
+    background: #0f1821;
     // border-radius: 0px 2px 2px 0px;
-    border-right: 1px solid #454A60;
+    border-right: 1px solid #454a60;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -86,7 +92,7 @@
   }
   > input {
     flex-grow: 1;
-    background: #161D31;
+    background: #161d31;
     border-style: none;
     min-width: 30px !important;
     font-size: 14px;
@@ -103,7 +109,7 @@
     width: 40px;
     font-size: 14px;
     font-weight: 600;
-    color: #256EC7;
+    color: #256ec7;
     line-height: 20px;
     background-color: transparent;
     border-style: none;
@@ -113,13 +119,13 @@
 .error {
   font-size: 14px;
   font-weight: 500;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 16px;
   text-align: right;
   margin-bottom: 18px;
 }
 .error {
-  color: #FF5852;
+  color: #ff5852;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -133,15 +139,15 @@
 .btn {
   width: 100%;
   height: 42px !important;
-  background: #256EC7;
+  background: #256ec7;
   border-radius: 2px;
   font-size: 14px;
   font-weight: 600 !important;
-  color: #FFFFFF;
+  color: #ffffff;
   margin-top: 10px;
   &:disabled {
-    background: #27335D !important;
-    border-color: #27335D !important;
+    background: #27335d !important;
+    border-color: #27335d !important;
     color: rgb(255, 255, 255, 0.6);
   }
 }
@@ -154,10 +160,10 @@
   > div {
     width: 98px;
     height: 56px;
-    background: #27335D;
+    background: #27335d;
     border-radius: 6px;
     border: 1px solid #274992;
-    background: #27335D;
+    background: #27335d;
     font-size: 14px;
     font-weight: 500;
     color: rgba(255, 255, 255, 0.6);
@@ -168,14 +174,14 @@
     cursor: pointer;
 
     &.selected {
-      background: #FF5852;
-      border: 1px solid #FF5852;
+      background: #ff5852;
+      border: 1px solid #ff5852;
     }
 
     label {
       font-size: 14px;
       font-weight: 500;
-      color: #FFFFFF;
+      color: #ffffff;
       line-height: 16px;
       display: inline-block;
       margin-bottom: 6px;
@@ -184,11 +190,16 @@
 }
 
 .score-form {
-  background: #161D31;
+  background: #161d31;
   box-shadow: inset 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   border: 1px solid;
-  border-image: linear-gradient(180deg, rgba(13, 19, 43, 1), rgba(13, 19, 43, 1)) 1 1;
+  border-image: linear-gradient(
+      180deg,
+      rgba(13, 19, 43, 1),
+      rgba(13, 19, 43, 1)
+    )
+    1 1;
   padding: 16px 9px;
   margin: 0 -14px 16px;
   .title {
@@ -196,7 +207,7 @@
     align-items: center;
     font-size: 14px;
     font-weight: 400;
-    color: #FFFFFF;
+    color: #ffffff;
     line-height: 20px;
     text-align: center;
     margin-bottom: 8px;
@@ -219,7 +230,7 @@
     > a {
       width: calc((100% - 24px) / 5);
       height: 46px;
-      background: #27335D;
+      background: #27335d;
       border-radius: 4px;
       border: 1px solid #274992;
       font-size: 12px;
@@ -231,16 +242,16 @@
       align-items: center;
       justify-content: center;
 
-      >label {
-        color: #FFFFFF;
+      > label {
+        color: #ffffff;
         margin-bottom: 4px;
       }
       &:last-child {
         width: 100%;
       }
       &.selected {
-        background: #FF5852;
-        border-color: #FF5852;
+        background: #ff5852;
+        border-color: #ff5852;
         border-radius: 4px;
       }
     }
@@ -266,7 +277,7 @@
     strong {
       font-size: 20px;
       font-weight: 600;
-      color: #256EC7;
+      color: #256ec7;
       line-height: 24px;
     }
     button {
@@ -274,8 +285,10 @@
       height: 40px;
       border-radius: 21px;
       &:disabled {
-        background: #27335D !important;
-        border-color: #27335D !important;
+        background: #27335d !important;
+        border-color: #27335d !important;
+        color: #ffffff !important;
+        opacity: 0.6;
       }
     }
   }

@@ -205,6 +205,7 @@ export default function Guess(props: GuessOptions) {
       const amount = toBN(inputValue).multipliedBy(
         toBN(10).pow(token.decimals),
       );
+      console.log('amount====', amount.toString(10));
       // 检查allowance
       const allowance = await ttContract.allowance(
         account,
@@ -221,7 +222,7 @@ export default function Guess(props: GuessOptions) {
       const tx = await qatarContract.guess(
         currentMatch?.matchId.toNumber(),
         guessType,
-        amount.toString(),
+        amount.toString(10),
       );
       await tx.wait();
       message.success('Bet success');
@@ -311,7 +312,12 @@ export default function Guess(props: GuessOptions) {
               <p>{$t('{#盈得#}')}</p>
               <div>
                 <span>
-                  <strong>812.138 TT</strong>
+                  <strong>
+                    {(claimedReward &&
+                      claimedReward.betAmount.div(1e18).toString()) ||
+                      0}{' '}
+                    {token && token?.symbol}
+                  </strong>
                 </span>
                 {/* 选中输赢奖池 */}
                 {claimedReward && claimedReward.claimedAmount.eq(0) ? (
@@ -323,7 +329,9 @@ export default function Guess(props: GuessOptions) {
                     {$t('{#領取獎勵#}')}
                   </Button>
                 ) : (
-                  <Button type="primary">{$t('{#已領取#}')}</Button>
+                  <Button type="primary" disabled>
+                    {$t('{#已領取#}')}
+                  </Button>
                 )}
               </div>
             </div>
@@ -392,7 +400,7 @@ export default function Guess(props: GuessOptions) {
                 <button onClick={handleAll}>ALL</button>
               </div>
               <div className={styles.balance}>
-                {toFixed(ttBalance.div(1e18).toString())} {token?.name}
+                {toFixed(ttBalance.div(1e18).toString())} {token?.symbol}
               </div>
               {/* <div className={styles.error}>
                 <ExclamationCircleFilled />
@@ -402,14 +410,14 @@ export default function Guess(props: GuessOptions) {
               <div className={styles.formItem}>
                 <label>{$t('{#預盈可得#}')}</label>
                 <div className={styles.primary}>
-                  {toFixed(reward.toString())} {token?.name}
+                  {toFixed(reward.toString())} {token?.symbol}
                 </div>
               </div>
               <div className={styles.formItem}>
                 <label>{$t('{#手續費#}')}</label>
                 <div className={styles.grey}>
                   {' '}
-                  {toFixed(fee)} {token?.name}
+                  {toFixed(fee)} {token?.symbol}
                 </div>
               </div>
               {showLeftTime ? (
