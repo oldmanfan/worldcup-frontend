@@ -9,6 +9,10 @@ import useTranslation from '@/hooks/useTranslation';
 export default function WinLoseMyPartIn() {
   const { playerWinLoseRecords } = useMatchStore();
   const { $t } = useTranslation();
+
+  if (!playerWinLoseRecords || playerWinLoseRecords.length < 1) {
+    return <div className="no-data"><i /></div>
+  }
   return (
     <List
       dataSource={playerWinLoseRecords}

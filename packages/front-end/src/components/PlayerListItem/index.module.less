@@ -20,12 +20,21 @@
     background: #161d31;
     margin-bottom: 2px;
     border-radius: 8px 8px 0px 0px;
-    img {
-      width: 40px;
-      height: 24px;
-      background-color: red;
+    border-bottom: 1px solid #0D132B;
+    i {
       margin-right: 12px;
+      img {
+        width: 24px;
+        height: 24px;
+
+        &:first-child {
+          margin-right: -10px;
+          z-index: 2;
+          position: relative;
+        }
+      }
     }
+
     span {
       font-size: 14px;
       font-weight: 500;
@@ -65,6 +74,9 @@
       }
       label {
         opacity: 0.6;
+      }
+      span {
+        font-weight: 500;
       }
     }
   }
