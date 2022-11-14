@@ -97,19 +97,21 @@ export default function Guess(props: GuessOptions) {
   useEffect(() => {
     if (currentMatch) {
       // 检查奖励是否已领取
+      setClaimedReward(undefined);
       if (props.type === 1) {
         currentMatch.winloseRecords.map((item) => {
-          if (item.win) {
+          if (item.win && item.claimedAmount.eq(0)) {
             setClaimedReward(item);
           }
         });
       } else {
         currentMatch.scoreGuessRecords.map((item) => {
-          if (item.win) {
+          if (item.win && item.claimedAmount.eq(0)) {
             setClaimedReward(item);
           }
         });
       }
+      console.log('claimed reward', claimedReward, props.type);
 
       const token: Token = {
         address: currentMatch.payToken,
@@ -263,16 +265,24 @@ export default function Guess(props: GuessOptions) {
 
   const handleClaim = async () => {
     try {
-      setClaimLoading(true);
-      const tx = await qatarContract.claimReward(
-        currentMatch.matchId.toNumber(),
-        claimedReward.betId.toNumber(),
-      );
-      await tx.wait();
-      message.success('claim success');
-      setClaimedReward(undefined);
+      console.log({ qatarContract });
+      if (qatarContract && currentMatch && claimedReward) {
+        setClaimLoading(true);
+
+        const tx = await qatarContract.claimReward(
+          toBN(currentMatch.matchId).toString(10),
+          toBN(claimedReward.betId).toString(10),
+        );
+        await tx.wait();
+        // 刷新数据
+        getAllMatches();
+        message.success('claim success');
+        setClaimedReward(undefined);
+      }
     } catch (error) {
-      message.error(error.message || 'Claim Failed');
+      message.error('Claim Failed');
+    } finally {
+      setClaimLoading(false);
     }
   };
 
@@ -312,7 +322,10 @@ export default function Guess(props: GuessOptions) {
                 <span>
                   <strong>
                     {(claimedReward &&
-                      claimedReward.betAmount.div(1e18).toString()) ||
+                      toBN(claimedReward.betAmount)
+                        .multipliedBy(toBN(claimedReward.odds).div(1e18))
+                        .div(1e18)
+                        .toString()) ||
                       0}{' '}
                     {token && token?.symbol}
                   </strong>

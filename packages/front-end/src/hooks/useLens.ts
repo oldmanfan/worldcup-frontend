@@ -97,8 +97,11 @@ export function useMatches() {
             });
 
             if (winlose.win) {
+              // odds默认有1e18
               playerTotalWinAmount = playerTotalWinAmount.plus(
-                toBN(winlose.odds).multipliedBy(toBN(winlose.betAmount)),
+                toBN(winlose.odds)
+                  .multipliedBy(toBN(winlose.betAmount))
+                  .div(1e18),
               );
               totalWinloseReward = totalWinloseReward.plus(
                 toBN(winlose.odds).multipliedBy(toBN(winlose.betAmount)),

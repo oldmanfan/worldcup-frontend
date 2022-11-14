@@ -92,7 +92,7 @@ export interface QatarContract extends Contract {
     guessType: number,
     payAmount: string,
   ) => Promise<ContractTransaction>;
-  claimReward: (matId: number, betId: number) => Promise<ContractTransaction>;
+  claimReward: (matId: string, betId: string) => Promise<ContractTransaction>;
   claimAllRewards: () => Promise<ContractTransaction>;
 }
 
