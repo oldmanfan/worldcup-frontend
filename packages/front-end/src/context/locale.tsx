@@ -30,7 +30,7 @@ export default function LocaleContextWrapper(props: LocaleContextWrapperProps) {
   };
 
   const fetchLocaleMessage = async (locale: string) => {
-    console.log('fetchLocaleMessage...');
+    console.log('fetchLocaleMessage...', locale);
     if (messages[locale]) {
       return;
     }
@@ -41,21 +41,15 @@ export default function LocaleContextWrapper(props: LocaleContextWrapperProps) {
         ...messages,
         [locale]: res.default,
       });
+
     } catch (e) {
       console.error('import lang message error:', e);
     }
   };
   useEffect(() => {
-    fetchLocaleMessage(fallback);
-  }, [fallback]);
+    fetchLocaleMessage(locale);
+  }, [locale]);
 
-  useEffect(() => {
-    // console.log('useEffect...');
-    // fetchLocaleMessage(locale).then((messages) => addMessage(locale, messages)).catch();
-    if (fallback !== locale) {
-      fetchLocaleMessage(locale);
-    }
-  }, [locale, fallback]);
   return (
     <LocaleContext.Provider value={{ locale, fallback, changeLocale, messages }}>
       {props.children}
