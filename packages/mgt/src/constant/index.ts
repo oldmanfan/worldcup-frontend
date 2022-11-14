@@ -24,6 +24,17 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
     qatar: "0xEF83D8bCb40F89B6dbfA9429439D2851f7e0c5B4",
     lens: "0xb46E6b32E1F7087cB78e974A59daAfd3dC8c2afC"
   },
+
+  [ChainIds.BSC_MAINNET]: {
+    lens: '',
+    tt: '',
+    qatar: '',
+  },
+  [ChainIds.HECO_MAINNET]: {
+    lens: '',
+    tt: '',
+    qatar: '',
+  },
 };
 
 /**
@@ -35,6 +46,12 @@ export const PayTokenList = {
   ],
   [ChainIds.HECO_TESTNET]: [
     '0x6c633473FBFc289Af5B0a67FF8fb8551608967F8',
+  ],
+  [ChainIds.BSC_MAINNET]: [
+
+  ],
+  [ChainIds.HECO_MAINNET]: [
+
   ],
 }
 
