@@ -21,6 +21,7 @@ import MyBet from '../MyBet';
 import { MatchStatus } from '@/hooks/types';
 import { makeERC20Contract } from '@/hooks/useContract';
 import LeftTime from '../LeftTime';
+import { getPrice } from '@/api';
 
 interface ScoreFormProps {
   value: number;
@@ -182,6 +183,8 @@ export default function Guess(props: GuessOptions) {
   const [ttBalance, setTTBalance] = useState(toBN(0));
   const { currentMatch, token } = useMatchStore();
   const [inputValue, setInputValue] = useState('0');
+  // tt的价格
+  const [ttPrice, setTTPrice] = useState<number>(0);
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
   const { setRelationship } = useInvite();
@@ -244,6 +247,8 @@ export default function Guess(props: GuessOptions) {
       if (currentMatch.status === 0) {
         setShowLeftTime(true);
       }
+      // 获取价格
+      getPrice().then(setTTPrice)
     }
   }, [currentMatch, props.type]);
 
@@ -345,17 +350,22 @@ export default function Guess(props: GuessOptions) {
     );
   };
 
+  // TODO: 判断是u还是tt, 是tt才需要乘以ttPrice
+  //  总奖池
+  const totalPool = currentMatch ? (props.type === 1
+    ? toBN(currentMatch.winlosePool.deposited).div(1e18).multipliedBy(ttPrice || 1).toString()
+    : toBN(currentMatch.scoreGuessPool.deposited)
+      .div(1e18)
+      .multipliedBy(ttPrice || 1).toString()) : '0';
+
   return (
     <>
       {currentMatch && (
         <div className={styles.guess}>
           <h3>{$t('{#輸贏總獎池#}')}</h3>
           <div className={styles.total}>
-            {props.type === 1
-              ? toBN(currentMatch.winlosePool.deposited).div(1e18).toString()
-              : toBN(currentMatch.scoreGuessPool.deposited)
-                  .div(1e18)
-                  .toString()}
+            <span style={{ marginRight: 2 }}>$</span>
+            <span>{Number(totalPool) > 0 ? Number(totalPool).toFixed(2) : 0}</span>
           </div>
           {currentMatch.status === MatchStatus.MATCH_FINISHED && (
             <div className={styles.winInfo}>
