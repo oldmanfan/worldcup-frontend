@@ -1,6 +1,7 @@
 import { toBase64 } from '@/utils';
 import queryString from 'query-string';
 import md5 from 'crypto-js/md5';
+import { MyCodeApi } from '@/constant';
 
 export interface AuthParams {
   time: number;
@@ -25,7 +26,7 @@ export async function getInviteCode(address: string): Promise<string> {
     ...authParams,
     address,
   });
-  const url = `/api/get_mycode?${query}`;
+  const url = `${MyCodeApi}?${query}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
