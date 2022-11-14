@@ -21,7 +21,7 @@ export interface ScoreFormProps {
 }
 
 export default function ScoreForm(props: ScoreFormProps) {
-  const { $t } = useTranslation();
+  const { $t, locale } = useTranslation();
   const { currentMatch } = useMatchStore();
   const [options, setOptions] = useState<OptionsProps[]>(ScoreList);
 
@@ -42,16 +42,26 @@ export default function ScoreForm(props: ScoreFormProps) {
         <div className={styles['score-form']}>
           <div className={styles.title}>
             <div className={styles.left}>
-              {CountriesById[currentMatch.countryA.toNumber()].zhName}
+              {locale === 'zh-hk'
+                ? CountriesById[currentMatch.countryA.toNumber()].zhName
+                : CountriesById[currentMatch.countryA.toNumber()].enName
+              }
             </div>
             <div>{$t('{#平局#}')}</div>
             <div className={styles.right}>
-              {CountriesById[currentMatch.countryB.toNumber()].zhName}
+              {locale === 'zh-hk'
+                ? CountriesById[currentMatch.countryB.toNumber()].zhName
+                : CountriesById[currentMatch.countryB.toNumber()].enName
+              }
             </div>
           </div>
           <div className={styles.options}>
             {options.length > 0 &&
               options.map((item) => {
+                let label = item.label;
+                if (item.value === 26) {
+                  label = $t('{#其他#}');
+                }
                 return (
                   <a
                     key={item.value as string}
@@ -59,10 +69,10 @@ export default function ScoreForm(props: ScoreFormProps) {
                       item.value === props.value ? styles.selected : ''
                     }
                     onClick={() =>
-                      props.onChange(item.value as number, item.label)
+                      props.onChange(item.value as number, label)
                     }
                   >
-                    <label>{item.label}</label>
+                    <label>{label}</label>
                     <div>{toFixed(toBN(item.desc).div(1e18).toString(10))}</div>
                   </a>
                 );
