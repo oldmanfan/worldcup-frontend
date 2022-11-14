@@ -18,143 +18,12 @@ import useContractAddress from '@/hooks/useContractAddress';
 import { APPROVE_MAX, ScoreList } from '@/constant';
 import useInvite from '@/hooks/useInvite';
 import MyBet from '../MyBet';
-import { MatchStatus, Token } from '@/hooks/types';
+import { BetRecord, MatchStatus, Token } from '@/hooks/types';
 import { makeERC20Contract } from '@/hooks/useContract';
 import LeftTime from '../LeftTime';
 import { getPrice } from '@/api';
-
-interface ScoreFormProps {
-  value: number;
-  onChange: (value: number, label: string) => void;
-}
-
-interface OptionsProps {
-  value: number | GuessType;
-  label: string;
-  desc: number | string;
-}
-
-function ScoreForm(props: ScoreFormProps) {
-  const { $t } = useTranslation();
-  const { currentMatch } = useMatchStore();
-  const [options, setOptions] = useState<OptionsProps[]>(ScoreList);
-
-  useEffect(() => {
-    if (currentMatch) {
-      const newOptions = currentMatch.scoreGuessPool.odds.map((item, index) => {
-        let newOption = ScoreList[index];
-        newOption.desc = toBN(item).toString(10);
-        return newOption;
-      });
-      setOptions(newOptions);
-    }
-  }, [currentMatch]);
-
-  return (
-    <>
-      {currentMatch && (
-        <div className={styles['score-form']}>
-          <div className={styles.title}>
-            <div className={styles.left}>
-              {CountriesById[currentMatch.countryA.toNumber()].zhName}
-            </div>
-            <div>{$t('{#平局#}')}</div>
-            <div className={styles.right}>
-              {CountriesById[currentMatch.countryB.toNumber()].zhName}
-            </div>
-          </div>
-          <div className={styles.options}>
-            {options.length > 0 &&
-              options.map((item) => {
-                return (
-                  <a
-                    key={item.value as string}
-                    className={
-                      item.value === props.value ? styles.selected : ''
-                    }
-                    onClick={() =>
-                      props.onChange(item.value as number, item.label)
-                    }
-                  >
-                    <label>{item.label}</label>
-                    <div>{toFixed(toBN(item.desc).div(1e18).toString())}</div>
-                  </a>
-                );
-              })}
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
-interface WinLossFormProps {
-  value: number;
-  onChange: (value: number, label: string) => void;
-}
-
-function WinLossForm(props: WinLossFormProps) {
-  const { $t, locale } = useTranslation();
-  const { currentMatch } = useMatchStore();
-  const [options, setOptions] = useState<OptionsProps[]>([]);
-
-  useEffect(() => {
-    if (currentMatch) {
-      const odds: number[] =
-        currentMatch.winlosePool.odds.map((item) =>
-          toBN(item).div(1e18).toNumber(),
-        ) || [];
-      const countryA =
-        locale === 'zh-hk'
-          ? CountriesById[currentMatch.countryA.toNumber()].zhName
-          : CountriesById[currentMatch.countryA.toNumber()].enName;
-      const countryB =
-        locale === 'zh-hk'
-          ? CountriesById[currentMatch.countryB.toNumber()].zhName
-          : CountriesById[currentMatch.countryB.toNumber()].enName;
-      const options = [
-        {
-          value: GuessType.GUESS_WINLOSE_A_WIN,
-          label: $t('{#%s勝#}').replace('%s', countryA),
-          desc: odds[0],
-        },
-        {
-          value: GuessType.GUESS_WINLOSE_DRAW,
-          label: $t('{#平局#}'),
-          desc: odds[1],
-        },
-        {
-          value: GuessType.GUESS_WINLOSE_B_WIN,
-          label: $t('{#%s勝#}').replace('%s', countryB),
-          desc: odds[2],
-        },
-      ];
-      setOptions(options);
-      props.onChange(options[0].value, options[0].label);
-    }
-  }, [currentMatch]);
-
-  return (
-    <>
-      {currentMatch && options.length > 0 && (
-        <div className={styles['winloss-form']}>
-          {options.map((item) => {
-            return (
-              <div
-                key={`key${item.value}`}
-                className={props.value === item.value ? styles.selected : ''}
-                onClick={() => props.onChange(item.value as number, item.label)}
-              >
-                <label>{item.label}</label>
-                <div>{toFixed(item.desc)}</div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </>
-  );
-}
+import ScoreForm from './components/ScoreForm';
+import WinLossForm from './components/WinLossForm';
 
 export interface GuessOptions {
   type: number;
@@ -192,9 +61,8 @@ export default function Guess(props: GuessOptions) {
   const { getTopNRecords } = useTopNRecords();
   const { setRelationship } = useInvite();
   const [showBetOption, setShowBetOption] = useState(true);
-  const [winloseClaimed, setWinloseClaimed] = useState(toBN(0));
-  const [scoreGuessClaimed, setScoreGuessClaimed] = useState(toBN(0));
-  const [isClaimed, setIsClaimed] = useState(false);
+  const [claimedReward, setClaimedReward] = useState<BetRecord | undefined>();
+  const [claimLoading, setClaimLoading] = useState(false);
 
   useEffect(() => {
     if (account && provider && contractAddress) {
@@ -214,7 +82,6 @@ export default function Guess(props: GuessOptions) {
         const ttContract = makeERC20Contract(token.address, provider, account);
         const balance = await ttContract.balanceOf(account);
         setTTBalance(toBN(balance));
-        console.log('get token balance===', balance.toString(), token);
       }
     };
 
@@ -299,23 +166,18 @@ export default function Guess(props: GuessOptions) {
       }
 
       // 检查奖励是否已领取
-      let winloseClaimed = toBN(0);
-      let scoreGuessClaimed = toBN(0);
-      currentMatch.winloseRecords.map((item) => {
-        winloseClaimed = winloseClaimed.plus(toBN(item.claimedAmount));
-      });
-
-      currentMatch.scoreGuessRecords.map((item) => {
-        scoreGuessClaimed = scoreGuessClaimed.plus(toBN(item.claimedAmount));
-      });
-
-      setWinloseClaimed(winloseClaimed);
-      setScoreGuessClaimed(scoreGuessClaimed);
-
       if (props.type === 1) {
-        setIsClaimed(winloseClaimed.gt(0));
+        currentMatch.winloseRecords.map((item) => {
+          if (item.win) {
+            setClaimedReward(item);
+          }
+        });
       } else {
-        setIsClaimed(scoreGuessClaimed.gt(0));
+        currentMatch.scoreGuessRecords.map((item) => {
+          if (item.win) {
+            setClaimedReward(item);
+          }
+        });
       }
     }
   }, [currentMatch, props.type]);
@@ -400,6 +262,21 @@ export default function Guess(props: GuessOptions) {
     );
   };
 
+  const handleClaim = async () => {
+    try {
+      setClaimLoading(true);
+      const tx = await qatarContract.claimReward(
+        currentMatch.matchId.toNumber(),
+        claimedReward.betId.toNumber(),
+      );
+      await tx.wait();
+      message.success('claim success');
+      setClaimedReward(undefined);
+    } catch (error) {
+      message.error(error.message || 'Claim Failed');
+    }
+  };
+
   // TODO: 判断是u还是tt, 是tt才需要乘以ttPrice
   //  总奖池
   const totalPool = currentMatch
@@ -418,7 +295,9 @@ export default function Guess(props: GuessOptions) {
     <>
       {currentMatch && (
         <div className={styles.guess}>
-          <h3>{$t('{#輸贏總獎池#}')}</h3>
+          <h3>
+            {props.type === 1 ? $t('{#輸贏總獎池#}') : $t('{#比分總獎池#}')}
+          </h3>
           <div className={styles.total}>
             <span style={{ marginRight: 2 }}>$</span>
             <span>
@@ -434,9 +313,18 @@ export default function Guess(props: GuessOptions) {
                 <span>
                   <strong>812.138 TT</strong>
                 </span>
-                <Button type="primary">
-                  {true ? $t('{#已領取#}') : $t('{#領取獎勵#}')}
-                </Button>
+                {/* 选中输赢奖池 */}
+                {claimedReward && claimedReward.claimedAmount.eq(0) ? (
+                  <Button
+                    type="primary"
+                    onClick={handleClaim}
+                    loading={claimLoading}
+                  >
+                    {$t('{#領取獎勵#}')}
+                  </Button>
+                ) : (
+                  <Button type="primary">{$t('{#已領取#}')}</Button>
+                )}
               </div>
             </div>
           )}

@@ -62,7 +62,6 @@ export function useMatches() {
         let playerWinLoseRecords: PlayerRecords[] = [];
         let playerScoreGuessRecords: PlayerRecords[] = [];
         const allMatches = res.map((item) => {
-          console.log({ decimal: item.payTokenDecimals.toNumber() });
           const { winlosePool, scoreGuessPool, winloseRecords } = item;
           const totalPool = toBN(winlosePool.deposited).plus(
             toBN(scoreGuessPool.deposited),

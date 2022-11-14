@@ -83,7 +83,6 @@ export default function MyBet(props: MyBetProps) {
     setPlayerCurrentMatchRecords(records);
   }, [currentMatch, props.active]);
 
-  console.log({ playerCurrentMatchRecords, props });
   return (
     <>
       {currentMatch && (
