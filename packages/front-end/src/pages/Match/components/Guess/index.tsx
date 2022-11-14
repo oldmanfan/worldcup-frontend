@@ -19,6 +19,7 @@ import { APPROVE_MAX, ScoreList } from '@/constant';
 import useInvite from '@/hooks/useInvite';
 import MyBet from '../MyBet';
 import { MatchStatus } from '@/hooks/types';
+import LeftTime from '../LeftTime';
 
 interface ScoreFormProps {
   value: number;
@@ -171,6 +172,8 @@ export default function Guess(props: GuessOptions) {
   >();
   // 按钮loading
   const [loading, setLoading] = useState(false);
+  // 显示倒计时
+  const [showLeftTime, setShowLeftTime] = useState(false);
   // 总奖池
   const [eachDeposited, setEachDeposited] = useState<BigNumberLike[]>([]);
   const [reward, setReward] = useState<BigNumberLike>(new BigNumber(0));
@@ -222,6 +225,10 @@ export default function Guess(props: GuessOptions) {
           : totalReward;
       }
       setReward(totalReward);
+      // 未开始 按钮显示倒计时
+      if (currentMatch.status === 0) {
+        setShowLeftTime(true);
+      }
     }
   }, [currentMatch]);
 
@@ -408,14 +415,30 @@ export default function Guess(props: GuessOptions) {
                 <label>{$t('{#手續費#}')}</label>
                 <div className={styles.grey}> {toFixed(fee)} TT</div>
               </div>
-              <Button
-                loading={loading}
-                type="primary"
-                className={styles.btn}
-                onClick={handleGuess}
-              >
-                {$t('{#參與競猜#}')}
-              </Button>
+              {
+                showLeftTime
+                  ? <Button
+                    disabled
+                    type="primary"
+                    className={styles.btn}
+                    onClick={handleGuess}
+                  >
+                    <LeftTime
+                      time={currentMatch.matchEndTime.toNumber()}
+                      onEnd={() => setShowLeftTime(false)}
+                    />
+                  </Button>
+                : (
+                  <Button
+                    loading={loading}
+                    type="primary"
+                    className={styles.btn}
+                    onClick={handleGuess}
+                  >
+                    {$t('{#參與競猜#}')}
+                  </Button>
+                )
+              }
             </div>
           )}
 
