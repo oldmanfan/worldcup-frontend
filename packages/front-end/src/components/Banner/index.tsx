@@ -48,8 +48,26 @@ export default function Banner(props: BannerProps) {
     },
   };
   const handleConnect = () => {
-    if (shortAddress) return;
-    connect();
+    if (shortAddress) {
+      // teco钱包，跳转至钱包管理
+      if ((window as any).TECO_postMessage) {
+        (window as any).TECO_postMessage({
+          type: "open_wallet_manage"
+        });
+      }
+      return;
+    }
+    connect().catch(() => {
+      // 链接失败，且在teco钱包中，跳转到创建钱包流程
+      if ((window as any).TECO_postMessage) {
+        (window as any).TECO_postMessage({
+          type: "open_create_wallet"
+        });
+      } else {
+        // 跳转到下载页面
+        location.href = 'https://www.metatdex.com/download'
+      }
+    });
   };
 
   return (
