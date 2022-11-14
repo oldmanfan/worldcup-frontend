@@ -8,6 +8,7 @@ import useWallet from '@/hooks/useWallet';
 import useContractAddress from '@/hooks/useContractAddress';
 import { makeQatarContract } from '@/hooks/useContract';
 import useTranslation from '@/hooks/useTranslation';
+import BannerTop from '@/components/Banner';
 
 export default function Banner() {
   const { playerTotalInfo, getAllMatches } = useMatches();
@@ -37,7 +38,7 @@ export default function Banner() {
       await sleep();
       getAllMatches();
       message.success('Claim Success');
-    } catch (error) {
+    } catch (error: any) {
       message.error(error.message || 'Claim Failed');
     } finally {
       setLoading(false);
@@ -46,6 +47,7 @@ export default function Banner() {
 
   return (
     <>
+      <BannerTop hideBg />
       {playerTotalInfo && (
         <div className={styles.bannerWrap}>
           <div className={styles.totalReward}>
@@ -113,7 +115,7 @@ export default function Banner() {
             <div>
               <label>{$t('{#收益率#}')}</label>
               <span>
-                {toFixed(
+                {toBN(playerTotalInfo.playerWinRate).isNaN() ? '0' : toFixed(
                   toBN(playerTotalInfo.playerWinRate).div(1e18).toString(),
                 )}
               </span>

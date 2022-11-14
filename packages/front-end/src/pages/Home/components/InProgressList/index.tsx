@@ -32,6 +32,9 @@ export default function InProgressList() {
   const navigate = useNavigate();
   const { onGoingMatches } = useMatches();
   const { $t } = useTranslation();
+  if (!onGoingMatches || onGoingMatches.length < 1) {
+    return <div className="no-data"><i /></div>
+  }
   return (
     <List
       dataSource={onGoingMatches}

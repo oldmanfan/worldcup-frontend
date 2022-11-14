@@ -42,21 +42,39 @@ export default function Info(props: InfoProps) {
     <>
       {currentMatch && (
         <div className={styles.info}>
-          <h2 className={styles.h2}>
-            <span>{$t('{#競猜進行中#}')}</span>
-          </h2>
-          <div className={styles.tip}>
-            {$t('{#下注時間#}')}：
-            {formatTime(
-              currentMatch.guessStartTime.toNumber(),
-              locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+          {
+            currentMatch?.status === 3 ? (
+              <>
+                <h2 className={styles.h2}>
+                  <span>{$t('{#比賽已結束#}')}</span>
+                </h2>
+                <div className={styles.tip}>
+                  {$t('{#結束時間#}')}：
+                  {formatTime(
+                    currentMatch.matchEndTime.toNumber(),
+                    locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                  )}
+                </div>
+              </>
+            ) : (
+                <>
+                  <h2 className={styles.h2}>
+                    <span>{currentMatch?.status === 0? $t('{#競猜即將開始#}') : $t('{#競猜進行中#}')}</span>
+                  </h2>
+                  <div className={styles.tip}>
+                    {$t('{#下注時間#}')}：
+                    {formatTime(
+                      currentMatch.guessStartTime.toNumber(),
+                      locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                    )}
+                    -
+                    {formatTime(
+                      currentMatch.guessEndTime.toNumber(),
+                      locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                    )}
+                  </div>
+                </>
             )}
-            -
-            {formatTime(
-              currentMatch.guessEndTime.toNumber(),
-              locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
-            )}
-          </div>
           <div className={styles.detail}>
             <div>
               <label>

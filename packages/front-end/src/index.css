@@ -20,3 +20,15 @@
   min-height: 100vh;
   background-color: #0d132b;
 }
+.no-data {
+  display: flex;
+  justify-content: center;
+  padding-top: 86px;
+}
+.no-data > i {
+  display: inline-block;
+  background: url('@/assets/img/no-data.png');
+  background-size: 100%;
+  width: 100px;
+  height: 78px;
+}

@@ -9,6 +9,10 @@ import { toBN } from '@/utils/bn';
 export default function PastList() {
   const { finishedMatches } = useMatches();
   const { $t } = useTranslation();
+
+  if (!finishedMatches || finishedMatches.length < 1) {
+    return <div className="no-data"><i /></div>
+  }
   return (
     <List
       dataSource={finishedMatches}

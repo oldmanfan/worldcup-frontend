@@ -20,6 +20,7 @@ import useInvite from '@/hooks/useInvite';
 import MyBet from '../MyBet';
 import { MatchStatus } from '@/hooks/types';
 import { makeERC20Contract } from '@/hooks/useContract';
+import LeftTime from '../LeftTime';
 
 interface ScoreFormProps {
   value: number;
@@ -172,6 +173,8 @@ export default function Guess(props: GuessOptions) {
   >();
   // 按钮loading
   const [loading, setLoading] = useState(false);
+  // 显示倒计时
+  const [showLeftTime, setShowLeftTime] = useState(false);
   // 总奖池
   const [eachDeposited, setEachDeposited] = useState<BigNumberLike[]>([]);
   const [reward, setReward] = useState<BigNumberLike>(new BigNumber(0));
@@ -237,6 +240,10 @@ export default function Guess(props: GuessOptions) {
           : totalReward;
       }
       setReward(totalReward);
+      // 未开始 按钮显示倒计时
+      if (currentMatch.status === 0) {
+        setShowLeftTime(true);
+      }
     }
   }, [currentMatch, props.type]);
 
@@ -302,6 +309,7 @@ export default function Guess(props: GuessOptions) {
       await tx.wait();
       message.success('Bet success');
       await sleep();
+      setInputValue('0');
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     } catch (error) {
@@ -343,16 +351,28 @@ export default function Guess(props: GuessOptions) {
         <div className={styles.guess}>
           <h3>{$t('{#輸贏總獎池#}')}</h3>
           <div className={styles.total}>
-            ${' '}
             {props.type === 1
               ? toBN(currentMatch.winlosePool.deposited).div(1e18).toString()
               : toBN(currentMatch.scoreGuessPool.deposited)
                   .div(1e18)
                   .toString()}
           </div>
+          {currentMatch.status === MatchStatus.MATCH_FINISHED && (
+            <div className={styles.winInfo}>
+              <p>{$t('{#盈得#}')}</p>
+              <div>
+                <span>
+                  <strong>812.138 TT</strong>
+                </span>
+                <Button type="primary">
+                  {true ? $t('{#已領取#}') : $t('{#領取獎勵#}')}
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* Form表单 */}
-          {getForm()}
+          {currentMatch.status !== MatchStatus.MATCH_FINISHED && getForm()}
 
           {/* 竞猜操作区域 */}
           {currentMatch.status !== MatchStatus.MATCH_FINISHED && (
@@ -434,14 +454,28 @@ export default function Guess(props: GuessOptions) {
                   {toFixed(fee)} {token?.name}
                 </div>
               </div>
-              <Button
-                loading={loading}
-                type="primary"
-                className={styles.btn}
-                onClick={handleGuess}
-              >
-                {$t('{#參與競猜#}')}
-              </Button>
+              {showLeftTime ? (
+                <Button
+                  disabled
+                  type="primary"
+                  className={styles.btn}
+                  onClick={handleGuess}
+                >
+                  <LeftTime
+                    time={currentMatch.matchEndTime.toNumber()}
+                    onEnd={() => setShowLeftTime(false)}
+                  />
+                </Button>
+              ) : (
+                <Button
+                  loading={loading}
+                  type="primary"
+                  className={styles.btn}
+                  onClick={handleGuess}
+                >
+                  {$t('{#參與競猜#}')}
+                </Button>
+              )}
             </div>
           )}
 
@@ -454,7 +488,9 @@ export default function Guess(props: GuessOptions) {
               {$t('{#連接錢包#}')}
             </Button>
           )}
-          <MyBet active={props.type} />
+          {currentMatch.status !== MatchStatus.MATCH_FINISHED && (
+            <MyBet active={props.type} />
+          )}
         </div>
       )}
     </>

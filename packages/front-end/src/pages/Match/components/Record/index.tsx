@@ -65,7 +65,7 @@ export default function Record(props: RecordProps) {
                 <div className={styles.item} key={index}>
                   <div>
                     <div className={styles.light}>
-                      {account.slice(0, 6)}...${account.slice(-5)}
+                      {account.slice(0, 6)}...{account.slice(-5)}
                     </div>
                     <div className={styles.light}>
                       {/* {Number(item.guessType) === GuessType.GUESS_WINLOSE_A_WIN
@@ -85,7 +85,10 @@ export default function Record(props: RecordProps) {
                       {formatTime(item.betTime.toNumber(), 'MM-DD hh:mm')}
                     </div>
                     <div className={styles.value}
-                      v-html={$t('{#競猜<strong>%s</strong>TT#}').replace('%s', toBN(item.betAmount).div(1e18).toString())}>
+                      dangerouslySetInnerHTML={{
+                        __html: $t('{#競猜<strong>%s</strong>TT#}').replace('%s', toBN(item.betAmount).div(1e18).toString())
+                      }}
+                    >
                     </div>
                   </div>
                 </div>

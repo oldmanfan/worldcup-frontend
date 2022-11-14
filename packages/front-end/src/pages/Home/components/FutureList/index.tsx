@@ -8,6 +8,9 @@ import useTranslation from '@/hooks/useTranslation';
 export default function FutureList() {
   const { notStartMatches } = useMatches();
   const { $t } = useTranslation();
+  if (!notStartMatches || notStartMatches.length < 1) {
+    return <div className="no-data"><i /></div>
+  }
   return (
     <List
       dataSource={notStartMatches}

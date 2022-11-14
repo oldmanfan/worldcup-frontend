@@ -139,6 +139,11 @@
   font-weight: 600 !important;
   color: #FFFFFF;
   margin-top: 10px;
+  &:disabled {
+    background: #27335D !important;
+    border-color: #27335D !important;
+    color: rgb(255, 255, 255, 0.6);
+  }
 }
 
 .winloss-form {
@@ -185,7 +190,7 @@
   border: 1px solid;
   border-image: linear-gradient(180deg, rgba(13, 19, 43, 1), rgba(13, 19, 43, 1)) 1 1;
   padding: 16px 9px;
-  margin: 0 -14px;
+  margin: 0 -14px 16px;
   .title {
     display: flex;
     align-items: center;
@@ -237,6 +242,40 @@
         background: #FF5852;
         border-color: #FF5852;
         border-radius: 4px;
+      }
+    }
+  }
+}
+.winInfo {
+  border-top: solid 1px rgba(41, 52, 83, 0.75);
+  padding: 20px 0 0;
+  > p {
+    margin: 0 0 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 14px;
+  }
+  > div {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 14px;
+    strong {
+      font-size: 20px;
+      font-weight: 600;
+      color: #256EC7;
+      line-height: 24px;
+    }
+    button {
+      min-width: 80px;
+      height: 40px;
+      border-radius: 21px;
+      &:disabled {
+        background: #27335D !important;
+        border-color: #27335D !important;
       }
     }
   }

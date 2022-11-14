@@ -18,7 +18,7 @@ export default function MyPartIn() {
           tabBarStyle={{
             width: '100%',
             height: '44px',
-            backgroundColor: '#27335D',
+            backgroundColor: '#161D31',
             color: 'rgba(255,255,255,0.4)',
           }}
         >
