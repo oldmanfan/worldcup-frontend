@@ -68,11 +68,11 @@ function ScoreForm(props: ScoreFormProps) {
               options.map((item) => {
                 return (
                   <a
-                    key={item.value}
+                    key={item.value as string}
                     className={
                       item.value === props.value ? styles.selected : ''
                     }
-                    onClick={() => props.onChange(item.value, item.label)}
+                    onClick={() => props.onChange(item.value as number, item.label)}
                   >
                     <label>{item.label}</label>
                     <div>{toFixed(toBN(item.desc).div(1e18).toString())}</div>
@@ -141,7 +141,7 @@ function WinLossForm(props: WinLossFormProps) {
               <div
                 key={`key${item.value}`}
                 className={props.value === item.value ? styles.selected : ''}
-                onClick={() => props.onChange(item.value, item.label)}
+                onClick={() => props.onChange(item.value as number, item.label)}
               >
                 <label>{item.label}</label>
                 <div>{toFixed(item.desc)}</div>
@@ -265,7 +265,7 @@ export default function Guess(props: GuessOptions) {
   useEffect(() => {
     // 计算预计可赢得
     const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
-    const reward = toBN(inputValue).multipliedBy(toBN(odd).div(1e18));
+    const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
     // 计算手续费
     const fee = toBN(inputValue).multipliedBy(0.03).toString();
     setInputValue(inputValue);
@@ -331,7 +331,7 @@ export default function Guess(props: GuessOptions) {
       setInputValue('0');
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
-    } catch (error) {
+    } catch (error: any) {
       message.error(error.message || 'bet failed');
     } finally {
       setLoading(false);
