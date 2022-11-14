@@ -12,7 +12,7 @@ async function getAuthParams(): Promise<AuthParams> {
   // const base64 = btoa(code)
   const base64 = await toBase64(code);
   const token = md5(base64).toString().toUpperCase();
-  console.log('base64', code, base64, token);
+  // console.log('base64', code, base64, token);
   return {
     time,
     token,
