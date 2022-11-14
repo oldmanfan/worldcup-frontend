@@ -327,16 +327,28 @@ export default function Guess(props: GuessOptions) {
         <div className={styles.guess}>
           <h3>{$t('{#輸贏總獎池#}')}</h3>
           <div className={styles.total}>
-            ${' '}
             {props.type === 1
               ? toBN(currentMatch.winlosePool.deposited).div(1e18).toString()
               : toBN(currentMatch.scoreGuessPool.deposited)
                   .div(1e18)
                   .toString()}
           </div>
+          {currentMatch.status === MatchStatus.MATCH_FINISHED && (
+            <div className={styles.winInfo}>
+              <p>{$t('{#盈得#}')}</p>
+              <div>
+                <span>
+                  <strong>812.138 TT</strong>
+                </span>
+                <Button type="primary">
+                  {true ? $t('{#已领取#}') : $t('{#領取獎勵#}')}
+                </Button>
+              </div>
+            </div>
+          )}
 
           {/* Form表单 */}
-          {getForm()}
+          {currentMatch.status !== MatchStatus.MATCH_FINISHED && getForm()}
 
           {/* 竞猜操作区域 */}
           {currentMatch.status !== MatchStatus.MATCH_FINISHED && (
@@ -451,7 +463,7 @@ export default function Guess(props: GuessOptions) {
               {$t('{#連接錢包#}')}
             </Button>
           )}
-          <MyBet active={props.type} />
+          {currentMatch.status !== MatchStatus.MATCH_FINISHED && <MyBet active={props.type} />}
         </div>
       )}
     </>
