@@ -67,8 +67,8 @@ export default function Info(props: InfoProps) {
       if (currentMatch?.status === MatchStatus.MATCH_FINISHED) {
         statusLabel = $t('{#比賽已結束#}');
         statusTimeLabel = $t('{#结束時間#}');
-        const scoreA = currentMatch.scoresA.toNumber()
-        const scoreB = currentMatch.scoresB.toNumber()
+        const scoreA = currentMatch.scoresA.toNumber();
+        const scoreB = currentMatch.scoresB.toNumber();
         if (scoreA > scoreB) {
           setIsAWin(true);
           setIsBWin(false);
@@ -89,7 +89,7 @@ export default function Info(props: InfoProps) {
       setStatusTimeLabel(statusTimeLabel);
     }
   }, [currentMatch]);
-  console.log('currentMatch=', currentMatch);
+
   return (
     <>
       {currentMatch && (
@@ -139,11 +139,21 @@ export default function Info(props: InfoProps) {
                   ? CountriesById[currentMatch.countryA.toNumber()].zhName
                   : CountriesById[currentMatch.countryA.toNumber()].enName}
               </label>
-              <div className={cls(styles.nation, { [styles.win]: isAWin, [styles.loss]: isBWin })}>
+              <div
+                className={cls(styles.nation, {
+                  [styles.win]: isAWin,
+                  [styles.loss]: isBWin,
+                })}
+              >
                 <img src={imgs[0]} alt="" />
               </div>
             </div>
-            <div className={cls(styles.vs, { [styles.showText]: currentMatch?.status === MatchStatus.MATCH_FINISHED })}>
+            <div
+              className={cls(styles.vs, {
+                [styles.showText]:
+                  currentMatch?.status === MatchStatus.MATCH_FINISHED,
+              })}
+            >
               <i />
               <div>{vsText}</div>
             </div>
@@ -153,14 +163,21 @@ export default function Info(props: InfoProps) {
                   ? CountriesById[currentMatch.countryB.toNumber()].zhName
                   : CountriesById[currentMatch.countryB.toNumber()].enName}
               </label>
-              <div className={cls(styles.nation, { [styles.win]: isBWin, [styles.loss]: isAWin })}>
+              <div
+                className={cls(styles.nation, {
+                  [styles.win]: isBWin,
+                  [styles.loss]: isAWin,
+                })}
+              >
                 <img src={imgs[1]} alt="" />
               </div>
             </div>
             {currentMatch?.status === MatchStatus.MATCH_FINISHED && (
               <div className={styles.score}>
-              {currentMatch.scoresA.toNumber()}:{currentMatch.scoresB.toNumber()}
-            </div>)}
+                {currentMatch.scoresA.toNumber()}:
+                {currentMatch.scoresB.toNumber()}
+              </div>
+            )}
           </div>
           <div className={styles.tabs}>
             <div

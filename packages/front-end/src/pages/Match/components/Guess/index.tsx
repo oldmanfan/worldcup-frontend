@@ -72,7 +72,9 @@ function ScoreForm(props: ScoreFormProps) {
                     className={
                       item.value === props.value ? styles.selected : ''
                     }
-                    onClick={() => props.onChange(item.value as number, item.label)}
+                    onClick={() =>
+                      props.onChange(item.value as number, item.label)
+                    }
                   >
                     <label>{item.label}</label>
                     <div>{toFixed(toBN(item.desc).div(1e18).toString())}</div>
@@ -190,6 +192,9 @@ export default function Guess(props: GuessOptions) {
   const { getTopNRecords } = useTopNRecords();
   const { setRelationship } = useInvite();
   const [showBetOption, setShowBetOption] = useState(true);
+  const [winloseClaimed, setWinloseClaimed] = useState(toBN(0));
+  const [scoreGuessClaimed, setScoreGuessClaimed] = useState(toBN(0));
+  const [isClaimed, setIsClaimed] = useState(false);
 
   useEffect(() => {
     if (account && provider && contractAddress) {
@@ -259,7 +264,7 @@ export default function Guess(props: GuessOptions) {
         setShowLeftTime(true);
       }
       // 获取价格
-      getPrice().then(setTTPrice)
+      getPrice().then(setTTPrice);
     }
   }, [currentMatch, props.type]);
 
@@ -292,8 +297,28 @@ export default function Guess(props: GuessOptions) {
       if (currentMatch.status === MatchStatus.MATCH_ON_GOING) {
         setShowBetOption(false);
       }
+
+      // 检查奖励是否已领取
+      let winloseClaimed = toBN(0);
+      let scoreGuessClaimed = toBN(0);
+      currentMatch.winloseRecords.map((item) => {
+        winloseClaimed = winloseClaimed.plus(toBN(item.claimedAmount));
+      });
+
+      currentMatch.scoreGuessRecords.map((item) => {
+        scoreGuessClaimed = scoreGuessClaimed.plus(toBN(item.claimedAmount));
+      });
+
+      setWinloseClaimed(winloseClaimed);
+      setScoreGuessClaimed(scoreGuessClaimed);
+
+      if (props.type === 1) {
+        setIsClaimed(winloseClaimed.gt(0));
+      } else {
+        setIsClaimed(scoreGuessClaimed.gt(0));
+      }
     }
-  }, [currentMatch]);
+  }, [currentMatch, props.type]);
 
   const handleGuess = async () => {
     if (!qatarContract) {
@@ -377,11 +402,17 @@ export default function Guess(props: GuessOptions) {
 
   // TODO: 判断是u还是tt, 是tt才需要乘以ttPrice
   //  总奖池
-  const totalPool = currentMatch ? (props.type === 1
-    ? toBN(currentMatch.winlosePool.deposited).div(1e18).multipliedBy(ttPrice || 1).toString()
-    : toBN(currentMatch.scoreGuessPool.deposited)
-      .div(1e18)
-      .multipliedBy(ttPrice || 1).toString()) : '0';
+  const totalPool = currentMatch
+    ? props.type === 1
+      ? toBN(currentMatch.winlosePool.deposited)
+          .div(1e18)
+          .multipliedBy(ttPrice || 1)
+          .toString()
+      : toBN(currentMatch.scoreGuessPool.deposited)
+          .div(1e18)
+          .multipliedBy(ttPrice || 1)
+          .toString()
+    : '0';
 
   return (
     <>
@@ -390,8 +421,12 @@ export default function Guess(props: GuessOptions) {
           <h3>{$t('{#輸贏總獎池#}')}</h3>
           <div className={styles.total}>
             <span style={{ marginRight: 2 }}>$</span>
-            <span>{Number(totalPool) > 0 ? Number(totalPool).toFixed(2) : 0}</span>
+            <span>
+              {Number(totalPool) > 0 ? Number(totalPool).toFixed(2) : 0}
+            </span>
           </div>
+
+          {/* 检查奖励是否已领取 */}
           {currentMatch.status === MatchStatus.MATCH_FINISHED && (
             <div className={styles.winInfo}>
               <p>{$t('{#盈得#}')}</p>
