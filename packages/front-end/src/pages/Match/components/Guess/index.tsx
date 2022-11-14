@@ -11,7 +11,7 @@ import { GuessType } from '@/constant/GuessType';
 import { BigNumberLike, toBN } from '@/utils/bn';
 import BigNumber from 'bignumber.js';
 import { onlyNumber, toFixed, sleep } from '@/utils';
-import useToken from '@/hooks/useToken';
+// import useToken from '@/hooks/useToken';
 import { useMatches, useTopNRecords } from '@/hooks/useLens';
 import { makeQatarContract, QatarContract } from '@/hooks/useContract';
 import useContractAddress from '@/hooks/useContractAddress';
@@ -19,6 +19,7 @@ import { APPROVE_MAX, ScoreList } from '@/constant';
 import useInvite from '@/hooks/useInvite';
 import MyBet from '../MyBet';
 import { MatchStatus } from '@/hooks/types';
+import { makeERC20Contract } from '@/hooks/useContract';
 
 interface ScoreFormProps {
   value: number;
@@ -174,8 +175,9 @@ export default function Guess(props: GuessOptions) {
   // 总奖池
   const [eachDeposited, setEachDeposited] = useState<BigNumberLike[]>([]);
   const [reward, setReward] = useState<BigNumberLike>(new BigNumber(0));
-  const { balance: ttBalance, allowance, contract: ttContract } = useToken();
-  const { currentMatch } = useMatchStore();
+  // const { balance: ttBalance, allowance, contract: ttContract } = useToken();
+  const [ttBalance, setTTBalance] = useState(toBN(0));
+  const { currentMatch, token } = useMatchStore();
   const [inputValue, setInputValue] = useState('0');
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
@@ -193,6 +195,18 @@ export default function Guess(props: GuessOptions) {
   }, [account, provider, contractAddress]);
 
   useEffect(() => {
+    const getData = async () => {
+      if (account && provider && token) {
+        const ttContract = makeERC20Contract(token.address, provider, account);
+        const balance = await ttContract.balanceOf(account);
+        setTTBalance(toBN(balance));
+      }
+    };
+
+    getData();
+  }, [account, provider, token]);
+
+  useEffect(() => {
     if (currentMatch) {
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     }
@@ -200,6 +214,7 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
+      console.log({ currentMatch });
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
       let records = [];
       if (props.type === 1) {
@@ -223,7 +238,7 @@ export default function Guess(props: GuessOptions) {
       }
       setReward(totalReward);
     }
-  }, [currentMatch]);
+  }, [currentMatch, props.type]);
 
   useEffect(() => {
     // 计算预计可赢得
@@ -255,15 +270,24 @@ export default function Guess(props: GuessOptions) {
       message.error('get match info failed');
       return;
     }
+    const ttContract = makeERC20Contract(token?.address, provider, account);
     setLoading(true);
     try {
       // set invitation relationship
       setRelationship(account);
       // bet
       const guessType = props.type === 1 ? Number(winLoss) : score;
-      const amount = toBN(inputValue).multipliedBy(1e18);
+      const amount = toBN(inputValue).multipliedBy(
+        toBN(10).pow(token?.decimals),
+      );
+      console.log({ amount: amount.toString(), decimal: token?.decimals });
       // 检查allowance
-      if (allowance.lt(amount)) {
+      const allowance = await ttContract.allowance(
+        account,
+        qatarContract.address,
+      );
+      // 检查allowance
+      if (toBN(allowance).lt(amount)) {
         const tx = await ttContract?.approve(
           contractAddress.qatar,
           APPROVE_MAX,
@@ -390,7 +414,7 @@ export default function Guess(props: GuessOptions) {
                 <button onClick={handleAll}>ALL</button>
               </div>
               <div className={styles.balance}>
-                {toFixed(ttBalance.div(1e18).toString())} TT
+                {toFixed(ttBalance.div(1e18).toString())} {token?.name}
               </div>
               {/* <div className={styles.error}>
                 <ExclamationCircleFilled />
@@ -400,12 +424,15 @@ export default function Guess(props: GuessOptions) {
               <div className={styles.formItem}>
                 <label>{$t('{#預盈可得#}')}</label>
                 <div className={styles.primary}>
-                  {toFixed(reward.toString())} TT
+                  {toFixed(reward.toString())} {token?.name}
                 </div>
               </div>
               <div className={styles.formItem}>
                 <label>{$t('{#手續費#}')}</label>
-                <div className={styles.grey}> {toFixed(fee)} TT</div>
+                <div className={styles.grey}>
+                  {' '}
+                  {toFixed(fee)} {token?.name}
+                </div>
               </div>
               <Button
                 loading={loading}

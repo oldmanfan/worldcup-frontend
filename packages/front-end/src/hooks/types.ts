@@ -68,3 +68,9 @@ export interface PlayerRecords extends BetRecord {
   winAmount: BigNumberLike;
   matchEndTime: BigNumber; // 开奖时间
 }
+
+export interface Token {
+  name: string;
+  decimals: number;
+  address: string;
+}

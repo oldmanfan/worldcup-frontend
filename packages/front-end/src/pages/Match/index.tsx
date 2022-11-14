@@ -15,6 +15,9 @@ import Guess from './components/Guess';
 import Record from './components/Record';
 import Share from './components/Share';
 import styles from './index.module.less';
+import { makeERC20Contract } from '@/hooks/useContract';
+import useWallet from '@/hooks/useWallet';
+import { Token } from '@/hooks/types';
 
 export default function Match() {
   const { $t } = useTranslation();
@@ -22,7 +25,8 @@ export default function Match() {
   const { getAllMatches, matchMap } = useMatches();
   const [searchParams, setSearchParams] = useSearchParams();
   const [active, setActive] = useState(1);
-  const { currentMatch, setMatch } = useMatchStore();
+  const { currentMatch, setMatch, token, setTokenStore } = useMatchStore();
+  const { account, provider } = useWallet();
   const params = useParams();
   if (!params.matchId) {
     console.log('no match id');
@@ -34,10 +38,30 @@ export default function Match() {
     getAllMatches();
   }, []);
   useEffect(() => {
-    if (matchMap && params.matchId) {
-      const currentMatch = matchMap[params.matchId];
-      setMatch(currentMatch);
-    }
+    const getData = async () => {
+      if (matchMap && params.matchId) {
+        const currentMatch = matchMap[params.matchId];
+        setMatch(currentMatch);
+
+        // 查询payToken的数据
+        const tokenContract = makeERC20Contract(
+          currentMatch.payToken,
+          provider,
+          account,
+        );
+        const [name, decimals] = await Promise.all([
+          tokenContract.name(),
+          tokenContract.decimals(),
+        ]);
+        const token: Token = {
+          name: name,
+          decimals,
+          address: currentMatch.payToken,
+        };
+        setTokenStore(token);
+      }
+    };
+    getData();
   }, [matchMap]);
 
   return (

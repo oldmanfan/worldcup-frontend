@@ -102,7 +102,7 @@ export function toFixed(
   return num.toString(10);
 }
 
-export function sleep(time = 3000) {
+export function sleep(time = 5000) {
   return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
