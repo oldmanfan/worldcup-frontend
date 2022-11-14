@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.less';
-import { ListItemProps, PlayerRecords } from '@/hooks/types';
+import { ListItemProps, PlayerRecords, MatchStatus } from '@/hooks/types';
 import { CountriesById } from '@/constant/Countries';
 import { useMatchStore } from '@/models';
 import { toBN } from '@/utils/bn';
@@ -27,6 +27,7 @@ export default function PlayerListItem(props: IListItemProps) {
     scoresA,
     scoresB,
     win,
+    status,
     rows,
     onClick,
     ...rest
@@ -110,15 +111,19 @@ export default function PlayerListItem(props: IListItemProps) {
         })}
       </div>
       <div className={styles.divider}></div>
-      <div className={styles.recordWrap}>
-        <label>{$t('{#盈得#}')}</label>
-        <span>{toFixed(toBN(winAmount).div(1e18).toString())} TT</span>
-      </div>
-      <i
-        className={`${styles.result} ${
-          win ? styles.iconSuccess : styles.iconError
-        }`}
-      ></i>
+      {win && (
+        <div className={styles.recordWrap}>
+          <label>{$t('{#盈得#}')}</label>
+          <span>{toFixed(toBN(winAmount).div(1e18).toString())} TT</span>
+        </div>
+      )}
+      {status === MatchStatus.MATCH_FINISHED && (
+        <i
+          className={`${styles.result} ${
+            win ? styles.iconSuccess : styles.iconError
+          }`}
+        ></i>
+      )}
     </div>
   );
 }

@@ -18,7 +18,7 @@ import useContractAddress from '@/hooks/useContractAddress';
 import { APPROVE_MAX, ScoreList } from '@/constant';
 import useInvite from '@/hooks/useInvite';
 import MyBet from '../MyBet';
-import { MatchStatus } from '@/hooks/types';
+import { MatchStatus, Token } from '@/hooks/types';
 import { makeERC20Contract } from '@/hooks/useContract';
 import LeftTime from '../LeftTime';
 
@@ -180,7 +180,8 @@ export default function Guess(props: GuessOptions) {
   const [reward, setReward] = useState<BigNumberLike>(new BigNumber(0));
   // const { balance: ttBalance, allowance, contract: ttContract } = useToken();
   const [ttBalance, setTTBalance] = useState(toBN(0));
-  const { currentMatch, token } = useMatchStore();
+  const { currentMatch } = useMatchStore();
+  const [token, setToken] = useState<Token | undefined>();
   const [inputValue, setInputValue] = useState('0');
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
@@ -197,12 +198,14 @@ export default function Guess(props: GuessOptions) {
     }
   }, [account, provider, contractAddress]);
 
+  // 查询账户余额
   useEffect(() => {
     const getData = async () => {
       if (account && provider && token) {
         const ttContract = makeERC20Contract(token.address, provider, account);
         const balance = await ttContract.balanceOf(account);
         setTTBalance(toBN(balance));
+        console.log('get token balance===', balance.toString(), token);
       }
     };
 
@@ -217,7 +220,14 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
-      console.log({ currentMatch });
+      const token: Token = {
+        address: currentMatch.payToken,
+        name: currentMatch.payTokenName,
+        decimals: currentMatch.payTokenDecimals.toNumber(),
+        symbol: currentMatch.payTokenSymbol,
+      };
+      setToken(token);
+
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
       let records = [];
       if (props.type === 1) {
@@ -277,7 +287,11 @@ export default function Guess(props: GuessOptions) {
       message.error('get match info failed');
       return;
     }
-    const ttContract = makeERC20Contract(token?.address, provider, account);
+    if (!token) {
+      message.error('token not get');
+      return;
+    }
+    const ttContract = makeERC20Contract(token.address, provider, account);
     setLoading(true);
     try {
       // set invitation relationship
@@ -285,9 +299,9 @@ export default function Guess(props: GuessOptions) {
       // bet
       const guessType = props.type === 1 ? Number(winLoss) : score;
       const amount = toBN(inputValue).multipliedBy(
-        toBN(10).pow(token?.decimals),
+        toBN(10).pow(token.decimals),
       );
-      console.log({ amount: amount.toString(), decimal: token?.decimals });
+      console.log({ amount: amount.toString(), decimal: token.decimals });
       // 检查allowance
       const allowance = await ttContract.allowance(
         account,

@@ -42,6 +42,9 @@ export interface MatchStatistics {
   scoreGuessPool: GuessPool; // 猜比分奖池金额
   winloseRecords: Array<BetRecord>; // 猜输赢的下单
   scoreGuessRecords: Array<BetRecord>; // 猜比分的下单
+  payTokenName: string; // 支付token的名字
+  payTokenSymbol: string; // 支付token的symbol
+  payTokenDecimals: BigNumber; // 支付token的dicimals
 }
 
 export interface TopNRecords {
@@ -67,10 +70,12 @@ export interface PlayerRecords extends BetRecord {
   scoresB: BigNumber;
   winAmount: BigNumberLike;
   matchEndTime: BigNumber; // 开奖时间
+  status: MatchStatus;
 }
 
 export interface Token {
   name: string;
   decimals: number;
   address: string;
+  symbol: string;
 }
