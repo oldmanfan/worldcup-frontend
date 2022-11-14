@@ -85,7 +85,10 @@ export default function Record(props: RecordProps) {
                       {formatTime(item.betTime.toNumber(), 'MM-DD hh:mm')}
                     </div>
                     <div className={styles.value}
-                      v-html={$t('{#競猜<strong>%s</strong>TT#}').replace('%s', toBN(item.betAmount).div(1e18).toString())}>
+                      dangerouslySetInnerHTML={{
+                        __html: $t('{#競猜<strong>%s</strong>TT#}').replace('%s', toBN(item.betAmount).div(1e18).toString())
+                      }}
+                    >
                     </div>
                   </div>
                 </div>
