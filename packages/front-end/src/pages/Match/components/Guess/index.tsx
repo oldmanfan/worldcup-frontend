@@ -278,6 +278,7 @@ export default function Guess(props: GuessOptions) {
       await tx.wait();
       message.success('Bet success');
       await sleep();
+      setInputValue('0');
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     } catch (error) {
