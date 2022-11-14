@@ -3,6 +3,7 @@ import ListItem from '@/components/ListItem';
 import { useMatches } from '@/hooks/useLens';
 import { formatTime } from '@/utils';
 import useTranslation from '@/hooks/useTranslation';
+import { toBN } from '@/utils/bn';
 
 // 未来赛事
 export default function FutureList() {
@@ -33,7 +34,7 @@ export default function FutureList() {
             {
               name: $t('{#下注時間#}'),
               value: `${formatTime(Number(item.guessStartTime))} - ${formatTime(
-                Number(item.guessEndTime.toString(10)),
+                Number(toBN(item.guessEndTime).toString(10)),
               )}`,
             },
           ]}

@@ -57,7 +57,7 @@ export default function InProgressList() {
             {
               name: $t('{#下注時間#}'),
               value: `${formatTime(Number(item.guessStartTime))} - ${formatTime(
-                Number(item.guessEndTime.toString(10)),
+                Number(toBN(item.guessEndTime).toString(10)),
               )}`,
             },
           ]}
