@@ -105,7 +105,7 @@ export default function MyBet(props: MyBetProps) {
                   {$t('{#參與%sTT，赔率%n倍#}')
                     .replace(
                       '%s',
-                      toFixed(toBN(item.betAmount).div(1e18).toString()),
+                      toFixed(toBN(item.betAmount).div(1e18).toString(10)),
                     )
                     .replace(
                       '%n',

@@ -114,7 +114,7 @@ export default function PlayerListItem(props: IListItemProps) {
       {win && (
         <div className={styles.recordWrap}>
           <label>{$t('{#盈得#}')}</label>
-          <span>{toFixed(toBN(winAmount).div(1e18).toString())} TT</span>
+          <span>{toFixed(toBN(winAmount).div(1e18).toString(10))} TT</span>
         </div>
       )}
       {status === MatchStatus.MATCH_FINISHED && (

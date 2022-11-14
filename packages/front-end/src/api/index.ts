@@ -22,18 +22,19 @@ async function getAuthParams(): Promise<AuthParams> {
 export async function getInviteCode(address: string): Promise<string> {
   const authParams = await getAuthParams();
   const query = queryString.stringify({
-    ...authParams, address,
-  })
+    ...authParams,
+    address,
+  });
   const url = `/api/get_mycode?${query}`;
   const res = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    credentials: "same-origin"
+    credentials: 'same-origin',
   });
   if (res && res.status === 200) {
-    const data = await res.json() || {};
+    const data = (await res.json()) || {};
     if (data.error === 0) {
       return data.myCode;
     }
@@ -44,18 +45,18 @@ export async function getInviteCode(address: string): Promise<string> {
 export async function getPrice(): Promise<number> {
   const authParams = await getAuthParams();
   const query = queryString.stringify({
-    ...authParams
-  })
+    ...authParams,
+  });
   const url = `/api/get_price?${query}`;
   const res = await fetch(url, {
-    method: "GET",
+    method: 'GET',
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    credentials: "same-origin"
+    credentials: 'same-origin',
   });
   if (res && res.status === 200) {
-    const data = await res.json() || {};
+    const data = (await res.json()) || {};
     if (data.error === 0) {
       return data.price;
     }
@@ -63,25 +64,26 @@ export async function getPrice(): Promise<number> {
   return 0;
 }
 
-export async function setRefCode(inviteCode: string, address: string): Promise<boolean> {
+export async function setRefCode(
+  inviteCode: string,
+  address: string,
+): Promise<boolean> {
   const body = {
     referralCode: inviteCode,
     wallet: address,
-  }
+  };
   const url = `/api/bk/refcode`;
   const res = await fetch(url, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(body),
     headers: {
-      "Content-Type": "application/json"
+      'Content-Type': 'application/json',
     },
-    credentials: "same-origin"
+    credentials: 'same-origin',
   });
   if (res && res.status === 200) {
-    const data = await res.json() || {};
+    const data = (await res.json()) || {};
     return data.code === 200;
   }
   return false;
 }
-
-

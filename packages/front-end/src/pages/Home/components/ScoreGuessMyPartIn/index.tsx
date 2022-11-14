@@ -11,7 +11,11 @@ export default function ScoreGuessMyPartIn() {
   const { $t } = useTranslation();
 
   if (!playerScoreGuessRecords || playerScoreGuessRecords.length < 1) {
-    return <div className="no-data"><i /></div>
+    return (
+      <div className="no-data">
+        <i />
+      </div>
+    );
   }
 
   return (
@@ -22,7 +26,9 @@ export default function ScoreGuessMyPartIn() {
           rows={[
             {
               name: $t('{#下注金額#}'),
-              value: `${toFixed(toBN(item.winAmount).div(1e18).toString())} TT`,
+              value: `${toFixed(
+                toBN(item.winAmount).div(1e18).toString(10),
+              )} TT`,
             },
             {
               name: $t('{#開獎時間#}'),

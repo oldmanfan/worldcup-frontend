@@ -33,7 +33,11 @@ export default function InProgressList() {
   const { onGoingMatches } = useMatches();
   const { $t } = useTranslation();
   if (!onGoingMatches || onGoingMatches.length < 1) {
-    return <div className="no-data"><i /></div>
+    return (
+      <div className="no-data">
+        <i />
+      </div>
+    );
   }
   return (
     <List
@@ -43,7 +47,7 @@ export default function InProgressList() {
           rows={[
             {
               name: $t('{#當前獎池金額#}'),
-              value: `$${toBN(item.totalPool).div(1e18).toString()}`,
+              value: `$${toBN(item.totalPool).div(1e18).toString(10)}`,
             },
             {
               name: $t('{#參與人數#}'),
@@ -53,7 +57,7 @@ export default function InProgressList() {
             {
               name: $t('{#下注時間#}'),
               value: `${formatTime(Number(item.guessStartTime))} - ${formatTime(
-                Number(item.guessEndTime.toString()),
+                Number(item.guessEndTime.toString(10)),
               )}`,
             },
           ]}

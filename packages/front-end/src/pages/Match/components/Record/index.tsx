@@ -32,16 +32,20 @@ export default function Record(props: RecordProps) {
   const getRecordLabel = (guessType: number) => {
     if (!currentMatch) return '';
     if (guessType === GuessType.GUESS_WINLOSE_A_WIN) {
-      return $t('{#競猜%s勝#}').replace('%s', locale === 'zh-hk'
-        ? CountriesById[currentMatch.countryA.toNumber()].zhName
-        : CountriesById[currentMatch.countryA.toNumber()].enName
+      return $t('{#競猜%s勝#}').replace(
+        '%s',
+        locale === 'zh-hk'
+          ? CountriesById[currentMatch.countryA.toNumber()].zhName
+          : CountriesById[currentMatch.countryA.toNumber()].enName,
       );
     }
 
     if (guessType === GuessType.GUESS_WINLOSE_B_WIN) {
-      return $t('{#競猜%s勝#}').replace('%s', locale === 'zh-hk'
-        ? CountriesById[currentMatch.countryB.toNumber()].zhName
-        : CountriesById[currentMatch.countryB.toNumber()].enName
+      return $t('{#競猜%s勝#}').replace(
+        '%s',
+        locale === 'zh-hk'
+          ? CountriesById[currentMatch.countryB.toNumber()].zhName
+          : CountriesById[currentMatch.countryB.toNumber()].enName,
       );
     }
 
@@ -84,12 +88,15 @@ export default function Record(props: RecordProps) {
                     <div className={styles.time}>
                       {formatTime(item.betTime.toNumber(), 'MM-DD hh:mm')}
                     </div>
-                    <div className={styles.value}
+                    <div
+                      className={styles.value}
                       dangerouslySetInnerHTML={{
-                        __html: $t('{#競猜<strong>%s</strong>TT#}').replace('%s', toBN(item.betAmount).div(1e18).toString())
+                        __html: $t('{#競猜<strong>%s</strong>TT#}').replace(
+                          '%s',
+                          toBN(item.betAmount).div(1e18).toString(10),
+                        ),
                       }}
-                    >
-                    </div>
+                    ></div>
                   </div>
                 </div>
               );

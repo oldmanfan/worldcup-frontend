@@ -11,7 +11,11 @@ export default function PastList() {
   const { $t } = useTranslation();
 
   if (!finishedMatches || finishedMatches.length < 1) {
-    return <div className="no-data"><i /></div>
+    return (
+      <div className="no-data">
+        <i />
+      </div>
+    );
   }
   return (
     <List
@@ -21,7 +25,7 @@ export default function PastList() {
           rows={[
             {
               name: $t('{#當前獎池金額#}'),
-              value: `$${toFixed(toBN(item.totalPool).div(1e18).toString())}`,
+              value: `$${toFixed(toBN(item.totalPool).div(1e18).toString(10))}`,
             },
             {
               name: $t('{#參與人數#}'),
@@ -31,7 +35,7 @@ export default function PastList() {
             {
               name: $t('{#下注時間#}'),
               value: `${formatTime(Number(item.guessStartTime))} - ${formatTime(
-                Number(item.guessEndTime.toString()),
+                Number(item.guessEndTime.toString(10)),
               )}`,
             },
           ]}

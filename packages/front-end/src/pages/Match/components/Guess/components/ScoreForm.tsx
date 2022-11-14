@@ -58,10 +58,12 @@ export default function ScoreForm(props: ScoreFormProps) {
                     className={
                       item.value === props.value ? styles.selected : ''
                     }
-                    onClick={() => props.onChange(item.value as number, item.label)}
+                    onClick={() =>
+                      props.onChange(item.value as number, item.label)
+                    }
                   >
                     <label>{item.label}</label>
-                    <div>{toFixed(toBN(item.desc).div(1e18).toString())}</div>
+                    <div>{toFixed(toBN(item.desc).div(1e18).toString(10))}</div>
                   </a>
                 );
               })}

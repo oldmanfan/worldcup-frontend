@@ -57,7 +57,7 @@ export default function Banner() {
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalBetAmount)
                     .div(1e18)
-                    .toString(),
+                    .toString(10),
                 )}
               </span>
             </div>
@@ -72,7 +72,7 @@ export default function Banner() {
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalWinAmount)
                     .div(1e18)
-                    .toString(),
+                    .toString(10),
                 )}{' '}
                 TT
               </span>
@@ -83,7 +83,7 @@ export default function Banner() {
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalWithdraw)
                     .div(1e18)
-                    .toString(),
+                    .toString(10),
                 )}{' '}
                 TT
               </span>
@@ -94,7 +94,7 @@ export default function Banner() {
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalUnWithdraw)
                     .div(1e18)
-                    .toString(),
+                    .toString(10),
                 )}{' '}
                 TT
               </span>
@@ -115,9 +115,13 @@ export default function Banner() {
             <div>
               <label>{$t('{#收益率#}')}</label>
               <span>
-                {toBN(playerTotalInfo.playerWinRate).isNaN() ? '0' : toFixed(
-                  toBN(playerTotalInfo.playerWinRate).div(1e18).toString(),
-                )}
+                {toBN(playerTotalInfo.playerWinRate).isNaN()
+                  ? '0'
+                  : toFixed(
+                      toBN(playerTotalInfo.playerWinRate)
+                        .div(1e18)
+                        .toString(10),
+                    )}
               </span>
             </div>
           </div>

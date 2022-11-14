@@ -11,7 +11,11 @@ export default function WinLoseMyPartIn() {
   const { $t } = useTranslation();
 
   if (!playerWinLoseRecords || playerWinLoseRecords.length < 1) {
-    return <div className="no-data"><i /></div>
+    return (
+      <div className="no-data">
+        <i />
+      </div>
+    );
   }
   return (
     <List
@@ -21,7 +25,9 @@ export default function WinLoseMyPartIn() {
           rows={[
             {
               name: $t('{#下注金額#}'),
-              value: `${toFixed(toBN(item.betAmount).div(1e18).toString())} TT`,
+              value: `${toFixed(
+                toBN(item.betAmount).div(1e18).toString(10),
+              )} TT`,
             },
             {
               name: $t('{#開獎時間#}'),

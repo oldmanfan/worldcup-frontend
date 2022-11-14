@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import styles from './index.module.less';
 import useTranslation from '@/hooks/useTranslation';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 import { ExclamationCircleFilled, RightOutlined } from '@ant-design/icons';
 import useWallet from '@/hooks/useWallet';
@@ -60,7 +60,7 @@ export default function Guess(props: GuessOptions) {
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
   const { setRelationship } = useInvite();
-  const [showBetOption, setShowBetOption] = useState(true);
+  const [showBetOption, setShowBetOption] = useState(false);
   const [claimedReward, setClaimedReward] = useState<BetRecord | undefined>();
   const [claimLoading, setClaimLoading] = useState(false);
 
@@ -92,10 +92,25 @@ export default function Guess(props: GuessOptions) {
     if (currentMatch) {
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     }
-  }, [props.type]);
+  }, [props.type, currentMatch]);
 
   useEffect(() => {
     if (currentMatch) {
+      // 检查奖励是否已领取
+      if (props.type === 1) {
+        currentMatch.winloseRecords.map((item) => {
+          if (item.win) {
+            setClaimedReward(item);
+          }
+        });
+      } else {
+        currentMatch.scoreGuessRecords.map((item) => {
+          if (item.win) {
+            setClaimedReward(item);
+          }
+        });
+      }
+
       const token: Token = {
         address: currentMatch.payToken,
         name: currentMatch.payTokenName,
@@ -140,7 +155,7 @@ export default function Guess(props: GuessOptions) {
     const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
     const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
     // 计算手续费
-    const fee = toBN(inputValue).multipliedBy(0.03).toString();
+    const fee = toBN(inputValue).multipliedBy(0.03).toString(10);
     setInputValue(inputValue);
     setReward(reward);
     setFee(fee);
@@ -150,7 +165,7 @@ export default function Guess(props: GuessOptions) {
     const betValue = onlyNumber({
       num: value,
       decimals: 18,
-      max: ttBalance.div(1e18).toString(),
+      max: ttBalance.div(1e18).toString(10),
     });
     setInputValue(betValue);
     setFee(fee);
@@ -158,29 +173,13 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
-      if (currentMatch.status === MatchStatus.MATCH_FINISHED) {
-        setShowBetOption(false);
-      }
-      if (currentMatch.status === MatchStatus.MATCH_ON_GOING) {
-        setShowBetOption(false);
-      }
-
-      // 检查奖励是否已领取
-      if (props.type === 1) {
-        currentMatch.winloseRecords.map((item) => {
-          if (item.win) {
-            setClaimedReward(item);
-          }
-        });
+      if (currentMatch.status === MatchStatus.GUESS_ON_GOING) {
+        setShowBetOption(true);
       } else {
-        currentMatch.scoreGuessRecords.map((item) => {
-          if (item.win) {
-            setClaimedReward(item);
-          }
-        });
+        setShowBetOption(false);
       }
     }
-  }, [currentMatch, props.type]);
+  }, [currentMatch]);
 
   const handleGuess = async () => {
     if (!qatarContract) {
@@ -205,7 +204,6 @@ export default function Guess(props: GuessOptions) {
       const amount = toBN(inputValue).multipliedBy(
         toBN(10).pow(token.decimals),
       );
-      console.log('amount====', amount.toString(10));
       // 检查allowance
       const allowance = await ttContract.allowance(
         account,
@@ -238,7 +236,7 @@ export default function Guess(props: GuessOptions) {
   };
 
   const handleAll = () => {
-    setInputValue(ttBalance.div(1e18).toString());
+    setInputValue(ttBalance.div(1e18).toString(10));
   };
 
   const getForm = () => {
@@ -285,11 +283,11 @@ export default function Guess(props: GuessOptions) {
       ? toBN(currentMatch.winlosePool.deposited)
           .div(1e18)
           .multipliedBy(ttPrice || 1)
-          .toString()
+          .toString(10)
       : toBN(currentMatch.scoreGuessPool.deposited)
           .div(1e18)
           .multipliedBy(ttPrice || 1)
-          .toString()
+          .toString(10)
     : '0';
 
   return (
@@ -358,12 +356,12 @@ export default function Guess(props: GuessOptions) {
                       ? toFixed(
                           toBN(eachDeposited[Number(winLoss) - 27])
                             .div(1e18)
-                            .toString(),
+                            .toString(10),
                         )
                       : toFixed(
                           toBN(eachDeposited[Number(score) - 1])
                             .div(1e18)
-                            .toString(),
+                            .toString(10),
                         )}
                   </div>
                 )}
@@ -377,12 +375,12 @@ export default function Guess(props: GuessOptions) {
                           currentMatch.winlosePool.odds[Number(winLoss) - 27],
                         )
                           .div(1e18)
-                          .toString(),
+                          .toString(10),
                       )
                     : toFixed(
                         toBN(currentMatch.scoreGuessPool.odds[score - 1])
                           .div(1e18)
-                          .toString(),
+                          .toString(10),
                       )}
                 </div>
               </div>
@@ -400,7 +398,7 @@ export default function Guess(props: GuessOptions) {
                 <button onClick={handleAll}>ALL</button>
               </div>
               <div className={styles.balance}>
-                {toFixed(ttBalance.div(1e18).toString())} {token?.symbol}
+                {toFixed(ttBalance.div(1e18).toString(10))} {token?.symbol}
               </div>
               {/* <div className={styles.error}>
                 <ExclamationCircleFilled />
@@ -410,7 +408,7 @@ export default function Guess(props: GuessOptions) {
               <div className={styles.formItem}>
                 <label>{$t('{#預盈可得#}')}</label>
                 <div className={styles.primary}>
-                  {toFixed(reward.toString())} {token?.symbol}
+                  {toFixed(reward.toString(10))} {token?.symbol}
                 </div>
               </div>
               <div className={styles.formItem}>

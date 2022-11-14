@@ -14,7 +14,7 @@ export async function delay(timeout: number): Promise<void> {
 }
 
 export function getTimestamp() {
-  return Date.parse(new Date().toString()) / 1000;
+  return Date.parse(new Date().toString(10)) / 1000;
 }
 
 export function getToken() {

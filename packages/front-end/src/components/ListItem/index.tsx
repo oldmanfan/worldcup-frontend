@@ -127,7 +127,7 @@ export default function ListItem(props: IListItemProps) {
             <span>{totalWinloseReward.toString(10)} TT</span>
           )}
           {showScoreGuessReward && (
-            <span>{totalScoreGuessReward.toString()} TT</span>
+            <span>{totalScoreGuessReward.toString(10)} TT</span>
           )}
         </div>
       )}
