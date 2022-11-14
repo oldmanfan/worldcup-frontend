@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import cls from 'classnames';
 import styles from './index.module.less';
 import useTranslation from '@/hooks/useTranslation';
 import { useMatchStore } from '@/models';
@@ -18,6 +19,9 @@ export default function Info(props: InfoProps) {
   const [imgs, setImgs] = useState<string[]>([]);
   const [statusLabel, setStatusLabel] = useState<string>();
   const [statusTimeLabel, setStatusTimeLabel] = useState<string>();
+  const [isAWin, setIsAWin] = useState<boolean>(false);
+  const [isBWin, setIsBWin] = useState<boolean>(false);
+  const [vsText, setVsText] = useState<string>('');
 
   const change = (key: number) => {
     setActive(key);
@@ -42,6 +46,10 @@ export default function Info(props: InfoProps) {
 
   useEffect(() => {
     if (currentMatch) {
+      // 先重置，防止缓存上一个比赛信息
+      setIsAWin(false);
+      setIsBWin(false);
+      setVsText('');
       let statusLabel = '';
       let statusTimeLabel = '';
       if (currentMatch?.status === MatchStatus.GUESS_NOT_START) {
@@ -59,13 +67,29 @@ export default function Info(props: InfoProps) {
       if (currentMatch?.status === MatchStatus.MATCH_FINISHED) {
         statusLabel = $t('{#比賽已結束#}');
         statusTimeLabel = $t('{#结束時間#}');
+        const scoreA = currentMatch.scoresA.toNumber()
+        const scoreB = currentMatch.scoresB.toNumber()
+        if (scoreA > scoreB) {
+          setIsAWin(true);
+          setIsBWin(false);
+        } else if (scoreA < scoreB) {
+          setIsAWin(false);
+          setIsBWin(true);
+        } else {
+          setIsAWin(false);
+          setIsBWin(false);
+        }
       }
+      // TODO:
+      // setVsText($t('{#恭喜您中奖#}'))
+      // setVsText($t('{#本场未参与#}'))
+      // setVsText($t('{#您未中奖#}'))
 
       setStatusLabel(statusLabel);
       setStatusTimeLabel(statusTimeLabel);
     }
   }, [currentMatch]);
-
+  console.log('currentMatch=', currentMatch);
   return (
     <>
       {currentMatch && (
@@ -115,9 +139,13 @@ export default function Info(props: InfoProps) {
                   ? CountriesById[currentMatch.countryA.toNumber()].zhName
                   : CountriesById[currentMatch.countryA.toNumber()].enName}
               </label>
-              <div className={styles.nation}>
+              <div className={cls(styles.nation, { [styles.win]: isAWin, [styles.loss]: isBWin })}>
                 <img src={imgs[0]} alt="" />
               </div>
+            </div>
+            <div className={cls(styles.vs, { [styles.showText]: currentMatch?.status === MatchStatus.MATCH_FINISHED })}>
+              <i />
+              <div>{vsText}</div>
             </div>
             <div>
               <label>
@@ -125,10 +153,14 @@ export default function Info(props: InfoProps) {
                   ? CountriesById[currentMatch.countryB.toNumber()].zhName
                   : CountriesById[currentMatch.countryB.toNumber()].enName}
               </label>
-              <div className={styles.nation}>
+              <div className={cls(styles.nation, { [styles.win]: isBWin, [styles.loss]: isAWin })}>
                 <img src={imgs[1]} alt="" />
               </div>
             </div>
+            {currentMatch?.status === MatchStatus.MATCH_FINISHED && (
+              <div className={styles.score}>
+              {currentMatch.scoresA.toNumber()}:{currentMatch.scoresB.toNumber()}
+            </div>)}
           </div>
           <div className={styles.tabs}>
             <div
