@@ -9,6 +9,11 @@ import useTranslation from '@/hooks/useTranslation';
 export default function ScoreGuessMyPartIn() {
   const { playerScoreGuessRecords } = useMatchStore();
   const { $t } = useTranslation();
+
+  if (!playerScoreGuessRecords || playerScoreGuessRecords.length < 1) {
+    return <div className="no-data"><i /></div>
+  }
+
   return (
     <List
       dataSource={playerScoreGuessRecords}
