@@ -57,16 +57,38 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 38px;
-  &::before {
-    content: '';
-    width: 68px;
-    height: 32px;
+  .vs {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background: url('@/assets/img/icon-vs.png');
-    background-size: 100%;
+    // width: 68px;
+    // height: 32px;
+    > i {
+      width: 68px;
+      height: 32px;
+      display: block;
+      background: url('@/assets/img/icon-vs.png');
+      background-size: 100%;
+    }
+    > div {
+      display: none;
+    }
+    &.showText {
+      > i {
+        width: 30px;
+        height: 14px;
+        margin-bottom: 5px;
+      }
+      >div {
+        display: block;
+        height: 14px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #FFFFFF;
+        line-height: 14px;
+      }
+    }
   }
   > div {
     display: flex;
@@ -87,11 +109,55 @@
       // background: #F11D2A;
       border: 1px solid #ffffff;
       display: inline-flex;
+      position: relative;
       > img {
         width: 100%;
         height: 100%;
       }
+      &.win{
+        border: 2px solid #ffe874;
+        &::after {
+          content: '';
+          position: absolute;
+          top: -10px;
+          right: -13px;
+          background: url("@/assets/img/icon-win.png");
+          background-size: 100%;
+          width: 27px;
+          height: 27px;
+        }
+      }
+      &.loss {
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0px;
+          right: 0px;
+          bottom: 0px;
+          left: 0px;
+          background: #000000;
+          opacity: 0.6;
+          border-radius: 52px;
+        }
+      }
     }
+  }
+  .score {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 54px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #FFFFFF;
+    background: url("@/assets/img/icon-score.png");
+    background-size: 100%;
+    text-align: center;
+    padding-left: 12px;
+    margin-left: -6px;
   }
 }
 .tabs {

@@ -9,9 +9,9 @@ const { Header, Content, Footer } = Layout;
 
 function DefaultLayout() {
   const { connect, shortAddress } = useWallet();
-  const { navigate } = useNavigate();
+  const navigate = useNavigate();
 
-  const onMenuClick = (e) => {
+  const onMenuClick = (e: any) => {
     console.log('e=', e);
     if (e.key === 'match') {
       navigate('/');

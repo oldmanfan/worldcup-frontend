@@ -83,7 +83,7 @@ export default function SetFeeRatio(props: SetFeeRatioProps) {
     >
       <Form
         {...layout}
-        ref={formRef}
+        ref={formRef as any}
         name="control-ref"
       >
         <Form.Item name="feeRatio" label="手续费率" rules={[{ required: true }]}>

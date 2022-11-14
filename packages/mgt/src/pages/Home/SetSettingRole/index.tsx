@@ -70,7 +70,7 @@ export default function MatchModal(props: MatchModalProps) {
     >
       <Form
         {...layout}
-        ref={formRef}
+        ref={formRef as any}
         name="control-ref"
       >
         <Form.Item name="role" label="address" rules={[{ required: true }]}>

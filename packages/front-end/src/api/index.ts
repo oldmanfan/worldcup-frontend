@@ -46,7 +46,7 @@ export async function getPrice(): Promise<number> {
   const query = queryString.stringify({
     ...authParams
   })
-  const url = `/api/get_mycode?${query}`;
+  const url = `/api/get_price?${query}`;
   const res = await fetch(url, {
     method: "GET",
     headers: {

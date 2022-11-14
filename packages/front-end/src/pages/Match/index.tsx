@@ -30,7 +30,7 @@ export default function Match() {
   if (!params.matchId) {
     console.log('no match id');
     redirect('/');
-    return;
+    return null;
   }
 
   useEffect(() => {

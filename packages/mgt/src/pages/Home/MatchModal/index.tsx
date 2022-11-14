@@ -137,7 +137,7 @@ export default function MatchModal(props: MatchModalProps) {
     >
       <Form
         {...layout}
-        ref={formRef}
+        ref={formRef as any}
         name="control-ref"
       >
         {props.record && <Form.Item label="matchId">

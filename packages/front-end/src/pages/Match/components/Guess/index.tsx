@@ -21,6 +21,7 @@ import MyBet from '../MyBet';
 import { MatchStatus, Token } from '@/hooks/types';
 import { makeERC20Contract } from '@/hooks/useContract';
 import LeftTime from '../LeftTime';
+import { getPrice } from '@/api';
 
 interface ScoreFormProps {
   value: number;
@@ -67,11 +68,11 @@ function ScoreForm(props: ScoreFormProps) {
               options.map((item) => {
                 return (
                   <a
-                    key={item.value}
+                    key={item.value as string}
                     className={
                       item.value === props.value ? styles.selected : ''
                     }
-                    onClick={() => props.onChange(item.value, item.label)}
+                    onClick={() => props.onChange(item.value as number, item.label)}
                   >
                     <label>{item.label}</label>
                     <div>{toFixed(toBN(item.desc).div(1e18).toString())}</div>
@@ -140,7 +141,7 @@ function WinLossForm(props: WinLossFormProps) {
               <div
                 key={`key${item.value}`}
                 className={props.value === item.value ? styles.selected : ''}
-                onClick={() => props.onChange(item.value, item.label)}
+                onClick={() => props.onChange(item.value as number, item.label)}
               >
                 <label>{item.label}</label>
                 <div>{toFixed(item.desc)}</div>
@@ -183,6 +184,8 @@ export default function Guess(props: GuessOptions) {
   const { currentMatch } = useMatchStore();
   const [token, setToken] = useState<Token | undefined>();
   const [inputValue, setInputValue] = useState('0');
+  // tt的价格
+  const [ttPrice, setTTPrice] = useState<number>(0);
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
   const { setRelationship } = useInvite();
@@ -255,13 +258,15 @@ export default function Guess(props: GuessOptions) {
       if (currentMatch.status === 0) {
         setShowLeftTime(true);
       }
+      // 获取价格
+      getPrice().then(setTTPrice)
     }
   }, [currentMatch, props.type]);
 
   useEffect(() => {
     // 计算预计可赢得
     const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
-    const reward = toBN(inputValue).multipliedBy(toBN(odd).div(1e18));
+    const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
     // 计算手续费
     const fee = toBN(inputValue).multipliedBy(0.03).toString();
     setInputValue(inputValue);
@@ -337,7 +342,7 @@ export default function Guess(props: GuessOptions) {
       setInputValue('0');
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
-    } catch (error) {
+    } catch (error: any) {
       message.error(error.message || 'bet failed');
     } finally {
       setLoading(false);
@@ -370,17 +375,22 @@ export default function Guess(props: GuessOptions) {
     );
   };
 
+  // TODO: 判断是u还是tt, 是tt才需要乘以ttPrice
+  //  总奖池
+  const totalPool = currentMatch ? (props.type === 1
+    ? toBN(currentMatch.winlosePool.deposited).div(1e18).multipliedBy(ttPrice || 1).toString()
+    : toBN(currentMatch.scoreGuessPool.deposited)
+      .div(1e18)
+      .multipliedBy(ttPrice || 1).toString()) : '0';
+
   return (
     <>
       {currentMatch && (
         <div className={styles.guess}>
           <h3>{$t('{#輸贏總獎池#}')}</h3>
           <div className={styles.total}>
-            {props.type === 1
-              ? toBN(currentMatch.winlosePool.deposited).div(1e18).toString()
-              : toBN(currentMatch.scoreGuessPool.deposited)
-                  .div(1e18)
-                  .toString()}
+            <span style={{ marginRight: 2 }}>$</span>
+            <span>{Number(totalPool) > 0 ? Number(totalPool).toFixed(2) : 0}</span>
           </div>
           {currentMatch.status === MatchStatus.MATCH_FINISHED && (
             <div className={styles.winInfo}>
