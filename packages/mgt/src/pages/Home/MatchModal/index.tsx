@@ -163,10 +163,10 @@ export default function MatchModal(props: MatchModalProps) {
             options={CountryOptions}
           />
         </Form.Item>
-        <Form.Item name="matchTime" label="比赛开始时间" rules={[{ required: true }]} extra="(北京时间)">
+        <Form.Item name="guessTime" label="竞猜开始时间" rules={[{ required: true }]} extra="(北京时间)">
           <RangePicker showTime locale={locale} />
         </Form.Item>
-        <Form.Item name="guessTime" label="竞猜开始时间" rules={[{ required: true }]} extra="(北京时间)">
+        <Form.Item name="matchTime" label="比赛开始时间" rules={[{ required: true }]} extra="(北京时间)">
           <RangePicker showTime locale={locale} />
         </Form.Item>
         <Form.Item name="payToken" label="payToken" rules={[{ required: true }]}>

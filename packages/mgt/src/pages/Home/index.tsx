@@ -156,24 +156,6 @@ export default function Home() {
       }
     },
     {
-      title: '比赛开始时间',
-      dataIndex: 'matchStartTime',
-      key: 'matchStartTime',
-      render: (value: BigNumber) => {
-        const time = value?.toNumber();
-        return toUtcTime(time);
-      }
-    },
-    {
-      title: '比赛开始时间',
-      dataIndex: 'matchEndTime',
-      key: 'matchEndTime',
-      render: (value: BigNumber) => {
-        const time = value?.toNumber();
-        return toUtcTime(time);
-      }
-    },
-    {
       title: '竞猜开始时间',
       dataIndex: 'guessStartTime',
       key: 'guessStartTime',
@@ -186,6 +168,24 @@ export default function Home() {
       title: '竞猜结束时间',
       dataIndex: 'guessEndTime',
       key: 'guessEndTime',
+      render: (value: BigNumber) => {
+        const time = value?.toNumber();
+        return toUtcTime(time);
+      }
+    },
+    {
+      title: '比赛开始时间',
+      dataIndex: 'matchStartTime',
+      key: 'matchStartTime',
+      render: (value: BigNumber) => {
+        const time = value?.toNumber();
+        return toUtcTime(time);
+      }
+    },
+    {
+      title: '比赛开始时间',
+      dataIndex: 'matchEndTime',
+      key: 'matchEndTime',
       render: (value: BigNumber) => {
         const time = value?.toNumber();
         return toUtcTime(time);
