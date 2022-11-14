@@ -40,24 +40,29 @@
 
 ### 修改PlayToken下拉选择框地址
 
-  修改`packages/mgt/src/constant/index.ts`文件的, 找到PayTokenList将对应的链的PlayToken地址填写到数组中
+  修改`packages/mgt/src/constant/index.ts`文件的, 找到PayTokenList，将对应的链的PlayToken地址填写到数组中
+
   ```ts
   export const PayTokenList = {
+    // bsc测试网
     [ChainIds.BSC_TESTNET]: [
+      // PlayToken地址
       '0x254d2Be5Cd077245E6005Ff54C7f874425d71091',
     ],
+    // heco测试网
     [ChainIds.HECO_TESTNET]: [
       '0x6c633473FBFc289Af5B0a67FF8fb8551608967F8',
     ],
+    // bsc主网，记得部署正式网前面要填写，否则在PlayToken下拉框中没选项
     [ChainIds.BSC_MAINNET]: [
 
     ],
+    // heco主网，记得部署正式网前面要填写，否则在PlayToken下拉框中没选项
     [ChainIds.HECO_MAINNET]: [
 
     ],
   }
   ```
-
 
 ## 本地开发
 
@@ -71,9 +76,10 @@ npm run dev
 ## 编译
 
 ```bash
+# 编译
 npm run build
 
-# preview on local
+# 本地预览编译出来的代码
 npm run preview
 ```
 
