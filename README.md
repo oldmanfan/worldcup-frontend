@@ -10,6 +10,14 @@ npm install
 npm run dev
 ```
 
+### front-end详细配置说明
+
+详细见：./packages/front-end/README.md
+
+### MGT详细配置说明
+
+详细见：./packages/mgt/README.md
+
 ## 后端
 
 ```
