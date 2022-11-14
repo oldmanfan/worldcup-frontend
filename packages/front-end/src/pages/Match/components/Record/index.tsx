@@ -65,7 +65,7 @@ export default function Record(props: RecordProps) {
                 <div className={styles.item} key={index}>
                   <div>
                     <div className={styles.light}>
-                      {account.slice(0, 6)}...${account.slice(-5)}
+                      {account.slice(0, 6)}...{account.slice(-5)}
                     </div>
                     <div className={styles.light}>
                       {/* {Number(item.guessType) === GuessType.GUESS_WINLOSE_A_WIN
