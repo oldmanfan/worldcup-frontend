@@ -1,7 +1,7 @@
 import { toBase64 } from '@/utils';
 import queryString from 'query-string';
 import md5 from 'crypto-js/md5';
-import { MyCodeApi } from '@/constant';
+import { MyCodeApi, GetPriceApi } from '@/constant';
 
 export interface AuthParams {
   time: number;
@@ -48,7 +48,8 @@ export async function getPrice(): Promise<number> {
   const query = queryString.stringify({
     ...authParams,
   });
-  const url = `/api/get_price?${query}`;
+  // const url = `/api/get_price?${query}`;
+  const url = `${GetPriceApi}?${query}`;
   const res = await fetch(url, {
     method: 'GET',
     headers: {
