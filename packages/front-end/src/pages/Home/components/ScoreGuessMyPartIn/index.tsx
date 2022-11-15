@@ -27,7 +27,7 @@ export default function ScoreGuessMyPartIn() {
             {
               name: $t('{#下注金額#}'),
               value: `${toFixed(
-                toBN(item.winAmount)
+                toBN(item.betAmount)
                   .div(toPow(item.token.decimals))
                   .toString(10),
               )} ${item.token.symbol}`,

@@ -21,7 +21,7 @@ import useWallet from '@/hooks/useWallet';
 export default function Match() {
   const { $t } = useTranslation();
   const navigate = useNavigate();
-  const { getAllMatches, matchMap } = useMatches();
+  const { getAllMatches, matchMap, allMatches } = useMatches();
   const [searchParams, setSearchParams] = useSearchParams();
   const [active, setActive] = useState(1);
   const { currentMatch, setMatch } = useMatchStore();
@@ -45,7 +45,7 @@ export default function Match() {
       }
     };
     getData();
-  }, [matchMap]);
+  }, [matchMap, allMatches]);
 
   return (
     <div className={styles.match}>
