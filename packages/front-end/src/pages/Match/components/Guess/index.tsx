@@ -353,7 +353,7 @@ export default function Guess(props: GuessOptions) {
                     {(claimedReward &&
                       toBN(claimedReward.betAmount)
                         .multipliedBy(toBN(claimedReward.odds).div(1e18))
-                        .div(currentMatch.token.decimals)
+                        .div(toPow(currentMatch.token.decimals))
                         .toString()) ||
                       0}{' '}
                     {token && token?.symbol}

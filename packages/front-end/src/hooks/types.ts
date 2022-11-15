@@ -82,3 +82,7 @@ export interface Token {
   address: string;
   symbol: string;
 }
+
+export interface MatchMapProps {
+  [matchId: number]: ListItemProps;
+}
