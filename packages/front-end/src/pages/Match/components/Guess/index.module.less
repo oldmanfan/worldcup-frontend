@@ -260,36 +260,68 @@
 .winInfo {
   border-top: solid 1px rgba(41, 52, 83, 0.75);
   padding: 20px 0 0;
-  > p {
-    margin: 0 0 6px;
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 14px;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   > div {
     display: flex;
-    justify-content: space-between;
-    font-size: 20px;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 14px;
+    flex-direction: column;
+    > p {
+      margin: 0 0 6px;
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 14px;
+    }
     strong {
       font-size: 20px;
       font-weight: 600;
       color: #256ec7;
       line-height: 24px;
     }
-    button {
-      min-width: 80px;
-      height: 40px;
-      border-radius: 21px;
-      &:disabled {
-        background: #27335d !important;
-        border-color: #27335d !important;
-        color: #ffffff !important;
-        opacity: 0.6;
-      }
+  }
+  button {
+    min-width: 80px;
+    height: 40px;
+    border-radius: 21px;
+    &:disabled {
+      background: #27335d !important;
+      border-color: #27335d !important;
+      color: #ffffff !important;
+      opacity: 0.6;
     }
   }
+  // > p {
+  //   margin: 0 0 6px;
+  //   font-size: 14px;
+  //   font-weight: 500;
+  //   color: rgba(255, 255, 255, 0.6);
+  //   line-height: 14px;
+  // }
+  // > div {
+  //   display: flex;
+  //   justify-content: space-between;
+  //   font-size: 20px;
+  //   font-weight: 500;
+  //   color: rgba(255, 255, 255, 0.6);
+  //   line-height: 14px;
+  //   strong {
+  //     font-size: 20px;
+  //     font-weight: 600;
+  //     color: #256ec7;
+  //     line-height: 24px;
+  //   }
+  //   button {
+  //     min-width: 80px;
+  //     height: 40px;
+  //     border-radius: 21px;
+  //     &:disabled {
+  //       background: #27335d !important;
+  //       border-color: #27335d !important;
+  //       color: #ffffff !important;
+  //       opacity: 0.6;
+  //     }
+  //   }
+  // }
 }
