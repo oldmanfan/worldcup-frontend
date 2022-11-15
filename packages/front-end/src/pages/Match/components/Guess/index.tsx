@@ -99,13 +99,19 @@ export default function Guess(props: GuessOptions) {
       setClaimedReward(undefined);
       if (props.type === 1) {
         currentMatch.winloseRecords.map((item) => {
-          if (item.win && item.claimedAmount.eq(0)) {
+          // if (item.win && item.claimedAmount.eq(0)) {
+          //   setClaimedReward(item);
+          // }
+          if (item.win) {
             setClaimedReward(item);
           }
         });
       } else {
         currentMatch.scoreGuessRecords.map((item) => {
-          if (item.win && item.claimedAmount.eq(0)) {
+          // if (item.win && item.claimedAmount.eq(0)) {
+          //   setClaimedReward(item);
+          // }
+          if (item.win) {
             setClaimedReward(item);
           }
         });
