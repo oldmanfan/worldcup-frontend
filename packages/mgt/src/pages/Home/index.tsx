@@ -77,6 +77,9 @@ export default function Home() {
           try {
             // toPause
             const contract = getQatarContract();
+            if (!contract) {
+              throw new Error('获取合约实例失败，请求正确连接钱包。');
+            }
             const tx = await contract.pauseMatch(matId, toPause);
             await tx?.wait();
             await delay(5000);

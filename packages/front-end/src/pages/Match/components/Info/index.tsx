@@ -61,12 +61,12 @@ export default function Info(props: InfoProps) {
         statusTimeLabel = $t('{#下注時間#}');
       }
       if (currentMatch?.status === MatchStatus.MATCH_ON_GOING) {
-        statusLabel = $t('{#竞猜已结束#}');
-        statusTimeLabel = $t('{#比赛時間#}');
+        statusLabel = $t('{#競猜已結束#}');
+        statusTimeLabel = $t('{#比賽時間#}');
       }
       if (currentMatch?.status === MatchStatus.MATCH_FINISHED) {
         statusLabel = $t('{#比賽已結束#}');
-        statusTimeLabel = $t('{#结束時間#}');
+        statusTimeLabel = $t('{#結束時間#}');
         const scoreA = currentMatch.scoresA.toNumber();
         const scoreB = currentMatch.scoresB.toNumber();
         if (scoreA > scoreB) {
@@ -81,11 +81,6 @@ export default function Info(props: InfoProps) {
         }
       }
 
-      // TODO:
-      // setVsText($t('{#恭喜您中奖#}'))
-      // setVsText($t('{#本场未参与#}'))
-      // setVsText($t('{#您未中奖#}'))
-
       if (currentMatch) {
         // 检查奖励是否已领取
         let isWin = false;
@@ -96,10 +91,10 @@ export default function Info(props: InfoProps) {
             }
           });
           isWin
-            ? setVsText($t('{#恭喜您中奖#}'))
-            : setVsText($t('{#您未中奖#}'));
+            ? setVsText($t('{#恭喜您中獎#}'))
+            : setVsText($t('{#您未中獎#}'));
           if (currentMatch.winloseRecords.length === 0) {
-            setVsText($t('{#本场未参与#}'));
+            setVsText($t('{#您未參與#}'));
           }
         } else {
           currentMatch.scoreGuessRecords.map((item) => {
@@ -108,10 +103,10 @@ export default function Info(props: InfoProps) {
             }
           });
           isWin
-            ? setVsText($t('{#恭喜您中奖#}'))
-            : setVsText($t('{#您未中奖#}'));
+            ? setVsText($t('{#恭喜您中獎#}'))
+            : setVsText($t('{#您未中獎#}'));
           if (currentMatch.scoreGuessRecords.length === 0) {
-            setVsText($t('{#本场未参与#}'));
+            setVsText($t('{#您未參與#}'));
           }
         }
       }

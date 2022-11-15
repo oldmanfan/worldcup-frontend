@@ -660,32 +660,6 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_feeRatio",
-        "type": "uint256"
-      }
-    ],
-    "name": "setFeeRatio",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "matId",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMatchFinished",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
         "name": "matId",
         "type": "uint256"
       },
@@ -817,12 +791,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "matchStartTime",
+        "name": "startTime",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "matchEndTime",
+        "name": "endTime",
         "type": "uint256"
       },
       {

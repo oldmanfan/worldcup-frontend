@@ -10,15 +10,17 @@ export default function useQatar() {
   const { contractAddress } = useContractAddress();
 
   const getQatarContract = () => {
-    return makeQatarContract(
-      contractAddress.qatar,
-      provider,
-      account,
-    );
+    if (contractAddress) {
+      return makeQatarContract(
+        contractAddress.qatar,
+        provider,
+        account,
+      );
+    }
   }
   const startMatch = async (data: any) => {
     const qatarContract = getQatarContract();
-    return qatarContract.startMatch(data);
+    return qatarContract?.startMatch(data);
   }
 
   const waitForTransaction = async (hash: string, confirmations?: number, timeout?: number) => {
