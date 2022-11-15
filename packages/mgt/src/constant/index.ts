@@ -6,7 +6,7 @@ export const ChainIds = {
 };
 export const SupportNetworks = [56, 97, 128, 256];
 // 默认chainId
-export const defaultChainId = 97;
+export const defaultChainId = 256;
 
 export interface IContractAddress {
   lens: string;
@@ -20,9 +20,9 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
     lens: "0x82c0D26e7cc49FF92990C40798737a41aBc2Ad3a"
   },
   [ChainIds.HECO_TESTNET]: {
-    tt: "0x6c633473FBFc289Af5B0a67FF8fb8551608967F8",
-    qatar: "0xEF83D8bCb40F89B6dbfA9429439D2851f7e0c5B4",
-    lens: "0xb46E6b32E1F7087cB78e974A59daAfd3dC8c2afC"
+    tt: "0xeb8dB6B48f9F3bA0F83967E3d9b198CAB8335334",
+    qatar: "0x947abaeBC95428c954f2B630c54c56a83B16C86A",
+    lens: "0x34DEaEFF1D932d01E2962D2628c47AC2D6182017"
   },
 
   [ChainIds.BSC_MAINNET]: {
@@ -45,7 +45,7 @@ export const PayTokenList = {
     '0x254d2Be5Cd077245E6005Ff54C7f874425d71091',
   ],
   [ChainIds.HECO_TESTNET]: [
-    '0x6c633473FBFc289Af5B0a67FF8fb8551608967F8',
+    '0xeb8dB6B48f9F3bA0F83967E3d9b198CAB8335334',
   ],
   [ChainIds.BSC_MAINNET]: [
 
