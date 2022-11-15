@@ -1,7 +1,7 @@
 import { toBase64 } from '@/utils';
 import queryString from 'query-string';
 import md5 from 'crypto-js/md5';
-import { MyCodeApi, GetPriceApi, ReportBetApi } from '@/constant';
+import {MyCodeApi, GetPriceApi, ReportBetApi, RefCode} from '@/constant';
 
 export interface AuthParams {
   time: number;
@@ -74,7 +74,7 @@ export async function setRefCode(
     referralCode: inviteCode,
     wallet: address,
   };
-  const url = `/api/bk/refcode`;
+  const url = RefCode;
   const res = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),

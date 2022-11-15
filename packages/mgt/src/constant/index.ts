@@ -15,24 +15,24 @@ export interface IContractAddress {
 }
 export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.BSC_TESTNET]: {
-    tt: "0x254d2Be5Cd077245E6005Ff54C7f874425d71091",
-    qatar: "0xeE2D69e6BDcB446ea9BD61FB8ebE1f7F7b9094e5",
-    lens: "0x82c0D26e7cc49FF92990C40798737a41aBc2Ad3a"
+    tt: "0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de",
+    qatar: "0x00EFb988A2c3096265513210ea8003dAe59c5992",
+    lens: "0xa7c2a3BDaE43fA629Be52218859bc34F0759bDFB"
   },
   [ChainIds.HECO_TESTNET]: {
-    tt: "0x6c633473FBFc289Af5B0a67FF8fb8551608967F8",
-    qatar: "0xEF83D8bCb40F89B6dbfA9429439D2851f7e0c5B4",
-    lens: "0xb46E6b32E1F7087cB78e974A59daAfd3dC8c2afC"
+    tt: "0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2",
+    qatar: "0x1FaBb12cddd6541f278Fa6394b7Af3Feee6f5ed0",
+    lens: "0x00d9C524244A7fa414b732ac4eDd7588787f12A1"
   },
 
   [ChainIds.BSC_MAINNET]: {
     lens: '',
-    tt: '',
+    tt: '0x445cc9518cf7bc7386a2e3aaf510650b0fb05f5f',
     qatar: '',
   },
   [ChainIds.HECO_MAINNET]: {
     lens: '',
-    tt: '',
+    tt: '0x86040C76AAE5CBB322364CAF8820b0E8902e97E5',
     qatar: '',
   },
 };
@@ -42,10 +42,10 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
  */
 export const PayTokenList = {
   [ChainIds.BSC_TESTNET]: [
-    '0x254d2Be5Cd077245E6005Ff54C7f874425d71091',
+    '0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de',
   ],
   [ChainIds.HECO_TESTNET]: [
-    '0x6c633473FBFc289Af5B0a67FF8fb8551608967F8',
+    '0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2',
   ],
   [ChainIds.BSC_MAINNET]: [
 
