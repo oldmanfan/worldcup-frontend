@@ -188,8 +188,7 @@ export function useMatches() {
         });
 
         // 待领取
-        playerTotalUnWithdraw =
-          playerTotalWinAmount.minus(playerTotalWinAmount);
+        playerTotalUnWithdraw = playerTotalWinAmount.minus(playerTotalWithdraw);
         // 收益率
         playerWinRate = playerTotalWinAmount
           .div(playerTotalBetAmount)
