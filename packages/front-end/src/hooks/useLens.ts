@@ -174,15 +174,24 @@ export function useMatches() {
         setAllMatches(allMatches);
         const notStartMatches = allMatches.filter(
           (item) => item.status === MatchStatus.GUESS_NOT_START,
-        );
+        ).sort((a, b) => {
+          // 未来赛事matchId正序排列
+          return a.matchId.toNumber() - b.matchId.toNumber();
+        });
+        // 进行中matchId正序排列
         const onGoingMatches = allMatches.filter(
           (item) =>
             item.status === MatchStatus.GUESS_ON_GOING ||
             item.status === MatchStatus.MATCH_ON_GOING,
-        );
+        ).sort((a, b) => {
+          return a.matchId.toNumber() - b.matchId.toNumber();
+        });
+        // 完成按match倒序
         const finishedMatches = allMatches.filter(
           (item) => item.status === MatchStatus.MATCH_FINISHED,
-        );
+        ).sort((a, b) => {
+          return b.matchId.toNumber() - a.matchId.toNumber();
+        });
 
         setNotStartMatches(notStartMatches);
         setOnGoingMatches(onGoingMatches);
