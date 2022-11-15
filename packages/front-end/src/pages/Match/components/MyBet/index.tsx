@@ -51,7 +51,7 @@ export default function MyBet(props: MyBetProps) {
           country = getCountryName(currentMatch.countryB.toNumber(), locale);
         }
         if (item.guessType.toNumber() === GuessType.GUESS_WINLOSE_DRAW) {
-          country = '平局';
+          country = $t('{#平局#}');
         }
         records.push({
           scoreA: currentMatch.scoresA,

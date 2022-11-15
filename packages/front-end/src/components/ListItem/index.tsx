@@ -89,13 +89,14 @@ export default function ListItem(props: IListItemProps) {
             <img src={imgs[0]} alt="" />
             <img src={imgs[1]} alt="" />
           </i>
-          <span>
+          <span className={styles.vsAB}>
             <span>
               {locale === 'zh-hk'
                 ? CountriesById[countryA.toNumber()].zhName
                 : CountriesById[countryA.toNumber()].enName}
             </span>
-            <strong>VS</strong>
+            {/* <strong>VS</strong> */}
+            <strong className={styles.vs}></strong>
             <span>
               {locale === 'zh-hk'
                 ? CountriesById[countryB.toNumber()].zhName
