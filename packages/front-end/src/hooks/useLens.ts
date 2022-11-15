@@ -3,11 +3,10 @@ import { makeLensContract } from './useContract';
 import useContractAddress from './useContractAddress';
 import {
   MatchStatus,
-  MatchStatistics,
   ListItemProps,
-  TopNRecords,
   PlayerRecords,
   Token,
+  MatchMapProps,
 } from './types';
 import useWallet from './useWallet';
 import { toBN, BigNumberLike } from '@/utils/bn';
@@ -36,11 +35,12 @@ export function useMatches() {
   const [playerTotalInfo, setPlayerTotalInfo] = useState<
     PlayerTotalInfoProps | undefined
   >();
-  const [matchMap, setMatchMap] = useState();
+  // const [matchMap, setMatchMap] = useState<MatchMapProps | undefined>();
   const {
     setPlayerScoreGuessRecordsStore,
     setPlayerWinLoseRecordsStore,
     setTokenStore,
+    setMatchMapStore,
   } = useMatchStore();
 
   useEffect(() => {
@@ -56,7 +56,7 @@ export function useMatches() {
       );
       lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
         console.log('getAllMatches', res);
-        const matchMap: any = {};
+        const matchMap: MatchMapProps = {};
         let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
         let playerTotalWinAmount = toBN(0); // 中奖金额
         let playerTotalWithdraw = toBN(0); // 已提取
@@ -196,7 +196,8 @@ export function useMatches() {
 
         setPlayerScoreGuessRecordsStore([...playerScoreGuessRecords]);
         setPlayerWinLoseRecordsStore(playerWinLoseRecords);
-        setMatchMap(matchMap);
+        // setMatchMap(matchMap);
+        setMatchMapStore(matchMap);
         setAllMatches(allMatches);
         setTokenStore(playToken);
         const notStartMatches = allMatches
@@ -248,7 +249,6 @@ export function useMatches() {
     notStartMatches,
     onGoingMatches,
     finishedMatches,
-    matchMap,
     playerTotalInfo,
   };
 }

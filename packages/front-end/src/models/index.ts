@@ -5,6 +5,7 @@ import {
   TopNRecords,
   PlayerRecords,
   Token,
+  MatchMapProps,
 } from '@/hooks/types';
 
 export const [useMatchStore, MatchStoreProvider] = createStore(() => {
@@ -17,6 +18,7 @@ export const [useMatchStore, MatchStoreProvider] = createStore(() => {
   const [playerScoreGuessRecords, setPlayerScoreGuessRecords] = useState<
     PlayerRecords[]
   >([]);
+  const [matchMap, setMatchMap] = useState<MatchMapProps | undefined>();
 
   function setMatch(match: ListItemProps) {
     setCurrentMatch(match);
@@ -27,6 +29,10 @@ export const [useMatchStore, MatchStoreProvider] = createStore(() => {
 
   function setTokenStore(token: Token) {
     setToken(token);
+  }
+
+  function setMatchMapStore(matchMap: MatchMapProps) {
+    setMatchMap(matchMap);
   }
 
   function setPlayerWinLoseRecordsStore(records: PlayerRecords[]) {
@@ -43,11 +49,13 @@ export const [useMatchStore, MatchStoreProvider] = createStore(() => {
     playerWinLoseRecords,
     playerScoreGuessRecords,
     token,
+    matchMap,
 
     setMatch,
     setRecordStore,
     setTokenStore,
     setPlayerWinLoseRecordsStore,
     setPlayerScoreGuessRecordsStore,
+    setMatchMapStore,
   };
 });
