@@ -5,7 +5,7 @@ import styles from './index.module.less';
 import { ListItemProps, PlayerRecords, MatchStatus } from '@/hooks/types';
 import { CountriesById } from '@/constant/Countries';
 import { useMatchStore } from '@/models';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 import { toFixed } from '@/utils';
 import useTranslation from '@/hooks/useTranslation';
 
@@ -29,6 +29,7 @@ export default function PlayerListItem(props: IListItemProps) {
     win,
     status,
     rows,
+    token,
     onClick,
     ...rest
   } = props;
@@ -114,7 +115,10 @@ export default function PlayerListItem(props: IListItemProps) {
       {win && (
         <div className={styles.recordWrap}>
           <label>{$t('{#盈得#}')}</label>
-          <span>{toFixed(toBN(winAmount).div(1e18).toString(10))} TT</span>
+          <span>
+            {toFixed(toBN(winAmount).div(toPow(token.decimals)).toString(10))}{' '}
+            {token.symbol}
+          </span>
         </div>
       )}
       {status === MatchStatus.MATCH_FINISHED && (

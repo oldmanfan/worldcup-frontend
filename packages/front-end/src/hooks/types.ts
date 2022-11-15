@@ -53,6 +53,7 @@ export interface TopNRecords {
   guessType: number; // 竞猜类型 参考GuessType.sol中的类型
   betAmount: BigNumber; // 下注额
   betTime: BigNumber; // 下注时间
+  token: Token;
 }
 
 export interface ListItemProps extends MatchStatistics {
@@ -60,6 +61,7 @@ export interface ListItemProps extends MatchStatistics {
   totalPlayers: BigNumberLike; // 总的参与人数 winlosePool.playersAmount + scoreGuessPool.playersAmount
   totalWinloseReward: BigNumberLike; // Player总赢得 winloseRecords.odds * betAmount || scoreGuessRecords.odds * betAmount
   totalScoreGuessReward: BigNumberLike;
+  token: Token;
 }
 
 export interface PlayerRecords extends BetRecord {
@@ -71,6 +73,7 @@ export interface PlayerRecords extends BetRecord {
   winAmount: BigNumberLike;
   matchEndTime: BigNumber; // 开奖时间
   status: MatchStatus;
+  token: Token;
 }
 
 export interface Token {

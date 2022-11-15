@@ -4,12 +4,11 @@ import useWallet from './useWallet';
 
 export default function useContractAddress() {
   const { chainId } = useWallet();
-  const [contractAddress, setContractAddress] = useState<IContractAddress>(
-    ContractAddress[defaultChainId],
-  );
+  const [contractAddress, setContractAddress] = useState<
+    IContractAddress | undefined
+  >();
   useEffect(() => {
-    const contractAddress =
-      ContractAddress[Number(chainId)] || ContractAddress[defaultChainId];
+    const contractAddress = ContractAddress[Number(chainId)];
     setContractAddress(contractAddress);
   }, [chainId]);
 

@@ -7,7 +7,7 @@ import { GuessType } from '@/constant/GuessType';
 import { CountriesById, ScoreById } from '@/constant';
 import { formatTime } from '@/utils';
 import { BetRecord } from '@/hooks/types';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 
 export interface RecordProps {
   active: number;
@@ -15,7 +15,7 @@ export interface RecordProps {
 
 export default function Record(props: RecordProps) {
   const { $t, locale } = useTranslation();
-  const { currentMatch, records } = useMatchStore();
+  const { currentMatch, records, token } = useMatchStore();
   const { account } = useWallet();
   const [list, setList] = useState<BetRecord[]>([]);
   useEffect(() => {
@@ -93,7 +93,9 @@ export default function Record(props: RecordProps) {
                       dangerouslySetInnerHTML={{
                         __html: $t('{#競猜<strong>%s</strong>TT#}').replace(
                           '%s',
-                          toBN(item.betAmount).div(1e18).toString(10),
+                          toBN(item.betAmount)
+                            .div(toPow(token?.decimals || 18))
+                            .toString(10),
                         ),
                       }}
                     ></div>

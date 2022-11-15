@@ -40,6 +40,7 @@ export default function Match() {
     const getData = async () => {
       if (matchMap && params.matchId) {
         const currentMatch = matchMap[params.matchId];
+        console.log({ currentMatch });
         setMatch(currentMatch);
       }
     };

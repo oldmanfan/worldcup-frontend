@@ -1,7 +1,7 @@
 import styles from './index.module.less';
 import { useMatches } from '@/hooks/useLens';
 import { toFixed, sleep } from '@/utils';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 import { Button, message } from 'antd';
 import { useState } from 'react';
 import useWallet from '@/hooks/useWallet';
@@ -25,6 +25,10 @@ export default function Banner() {
     try {
       if (toBN(playerTotalInfo?.playerTotalUnWithdraw).eq(0)) {
         message.error('There are no extractable rewards');
+        return;
+      }
+      if (!contractAddress) {
+        message.error('Get contract address failed');
         return;
       }
       setLoading(true);
@@ -56,7 +60,7 @@ export default function Banner() {
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalBetAmount)
-                    .div(1e18)
+                    .div(toPow(playerTotalInfo.token.decimals))
                     .toString(10),
                 )}
               </span>
@@ -71,10 +75,10 @@ export default function Banner() {
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalWinAmount)
-                    .div(1e18)
+                    .div(toPow(playerTotalInfo.token.decimals))
                     .toString(10),
                 )}{' '}
-                TT
+                {playerTotalInfo.token.symbol}
               </span>
             </div>
             <div>
@@ -82,10 +86,10 @@ export default function Banner() {
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalWithdraw)
-                    .div(1e18)
+                    .div(toPow(playerTotalInfo.token.decimals))
                     .toString(10),
                 )}{' '}
-                TT
+                {playerTotalInfo.token.symbol}
               </span>
             </div>
             <div>
@@ -93,10 +97,10 @@ export default function Banner() {
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalUnWithdraw)
-                    .div(1e18)
+                    .div(toPow(playerTotalInfo.token.decimals))
                     .toString(10),
                 )}{' '}
-                TT
+                {playerTotalInfo.token.symbol}
               </span>
             </div>
           </div>
@@ -118,10 +122,9 @@ export default function Banner() {
                 {toBN(playerTotalInfo.playerWinRate).isNaN()
                   ? '0'
                   : toFixed(
-                      toBN(playerTotalInfo.playerWinRate)
-                        .div(1e18)
-                        .toString(10),
-                    )}
+                      toBN(playerTotalInfo.playerWinRate).toString(10),
+                    )}{' '}
+                %
               </span>
             </div>
           </div>
