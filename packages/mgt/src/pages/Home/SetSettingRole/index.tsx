@@ -55,7 +55,7 @@ export default function MatchModal(props: MatchModalProps) {
   return (
     <Modal
       width={850}
-      title="设置比分"
+      title="设置操作员角色"
       open={props.visible}
       onOk={handleOk}
       onCancel={props.onClose}
