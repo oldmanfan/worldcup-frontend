@@ -334,7 +334,7 @@ export default function Guess(props: GuessOptions) {
       {currentMatch && (
         <div className={styles.guess}>
           <h3>
-            {props.type === 1 ? $t('{#輸贏總獎池#}') : $t('{#比分總獎池#}')}
+            {props.type === 1 ? $t('{#猜輸贏總獎池#}') : $t('{#猜比分總獎池#}')}
           </h3>
           <div className={styles.total}>
             <span style={{ marginRight: 2 }}>$</span>
