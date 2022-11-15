@@ -223,6 +223,21 @@
             "internalType": "bool",
             "name": "isPaused",
             "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "payTokenName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "payTokenSymbol",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "payTokenDecimals",
+            "type": "uint256"
           }
         ],
         "internalType": "struct WorldCupLens.MatchStatistics[]",
@@ -457,6 +472,21 @@
             "internalType": "bool",
             "name": "isPaused",
             "type": "bool"
+          },
+          {
+            "internalType": "string",
+            "name": "payTokenName",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "payTokenSymbol",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "payTokenDecimals",
+            "type": "uint256"
           }
         ],
         "internalType": "struct WorldCupLens.MatchStatistics",
