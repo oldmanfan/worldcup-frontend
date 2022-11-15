@@ -99,13 +99,19 @@ export default function Guess(props: GuessOptions) {
       setClaimedReward(undefined);
       if (props.type === 1) {
         currentMatch.winloseRecords.map((item) => {
-          if (item.win && item.claimedAmount.eq(0)) {
+          // if (item.win && item.claimedAmount.eq(0)) {
+          //   setClaimedReward(item);
+          // }
+          if (item.win) {
             setClaimedReward(item);
           }
         });
       } else {
         currentMatch.scoreGuessRecords.map((item) => {
-          if (item.win && item.claimedAmount.eq(0)) {
+          // if (item.win && item.claimedAmount.eq(0)) {
+          //   setClaimedReward(item);
+          // }
+          if (item.win) {
             setClaimedReward(item);
           }
         });
@@ -324,10 +330,10 @@ export default function Guess(props: GuessOptions) {
           </div>
 
           {/* 检查奖励是否已领取 */}
-          {currentMatch.status === MatchStatus.MATCH_FINISHED && (
+          {currentMatch.status === MatchStatus.MATCH_FINISHED && claimedReward && (
             <div className={styles.winInfo}>
-              <p>{$t('{#盈得#}')}</p>
               <div>
+                <p>{$t('{#盈得#}')}</p>
                 <span>
                   <strong>
                     {(claimedReward &&
@@ -339,7 +345,34 @@ export default function Guess(props: GuessOptions) {
                     {token && token?.symbol}
                   </strong>
                 </span>
-                {/* 选中输赢奖池 */}
+              </div>
+              {claimedReward && claimedReward.claimedAmount.eq(0) ? (
+                <Button
+                  type="primary"
+                  onClick={handleClaim}
+                  loading={claimLoading}
+                >
+                  {$t('{#領取獎勵#}')}
+                </Button>
+              ) : (
+                <Button type="primary" disabled>
+                  {$t('{#已領取#}')}
+                </Button>
+              )}
+              {/* <p>{$t('{#盈得#}')}</p> */}
+              {/* <div>
+                <span>
+                  <strong>
+                    {(claimedReward &&
+                      toBN(claimedReward.betAmount)
+                        .multipliedBy(toBN(claimedReward.odds).div(1e18))
+                        .div(1e18)
+                        .toString()) ||
+                      0}{' '}
+                    {token && token?.symbol}
+                  </strong>
+                </span>
+
                 {claimedReward && claimedReward.claimedAmount.eq(0) ? (
                   <Button
                     type="primary"
@@ -353,7 +386,7 @@ export default function Guess(props: GuessOptions) {
                     {$t('{#已領取#}')}
                   </Button>
                 )}
-              </div>
+              </div> */}
             </div>
           )}
 
