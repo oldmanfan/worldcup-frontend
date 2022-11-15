@@ -48,10 +48,10 @@ export const PayTokenList = {
     '0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2',
   ],
   [ChainIds.BSC_MAINNET]: [
-
+    '0x445cc9518cf7bc7386a2e3aaf510650b0fb05f5f'
   ],
   [ChainIds.HECO_MAINNET]: [
-
+    '0x86040C76AAE5CBB322364CAF8820b0E8902e97E5'
   ],
 }
 
