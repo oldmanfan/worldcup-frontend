@@ -1,43 +1,59 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
-import { setRefCode } from '@/api';
+import { setRefCode, saveBetRecord } from '@/api';
+import type { BatRecord } from '@/api';
 import queryString from 'query-string';
 
+const ReferralCodeKey = 'referral_code'
 
 export default function useInvite() {
   const location = useLocation();
 
-  const setInviteCode = (invite: string) => {
-    sessionStorage.setItem('invite', invite);
+  const setReferralCode = (invite: string) => {
+    sessionStorage.setItem(ReferralCodeKey, invite);
   }
 
-  const getInvite = (): string => {
-    return sessionStorage.getItem('invite') || '';
+  const getReferralCode = (): string => {
+    return sessionStorage.getItem(ReferralCodeKey) || '';
   }
 
   useEffect(() => {
     const { invite } = queryString.parse(location.search);
     if (invite) {
-      setInviteCode(invite as string);
+      setReferralCode(invite as string);
     }
   }, []);
 
-  const setRelationship = async (address: string) => {
-    const code = getInvite();
-    if (!code || !address) {
+  // const setRelationship = async (address: string) => {
+  //   const code = getReferralCode();
+  //   if (!code || !address) {
+  //     return;
+  //   }
+  //   try {
+  //     const result = await setRefCode(code, address);
+  //     if (result === true) {
+  //       setReferralCode('');
+  //     }
+  //   } catch (e) {
+  //     console.error('setRelationship error:', e);
+  //   }
+  // }
+
+  const reportBet = async (record: BatRecord) => {
+    const code = getReferralCode();
+    if (!code) {
       return;
     }
+    record.referralCode = code;
     try {
-      const result = await setRefCode(code, address);
-      if (result === true) {
-        setInviteCode('');
-      }
+      await saveBetRecord(record);
     } catch (e) {
-      console.error('setRelationship error:', e);
+      console.error('save bet err:', e);
     }
   }
 
   return {
-    setRelationship,
+    reportBet,
+    // setRelationship,
   };
 }

@@ -1,7 +1,7 @@
 import { toBase64 } from '@/utils';
 import queryString from 'query-string';
 import md5 from 'crypto-js/md5';
-import { MyCodeApi, GetPriceApi } from '@/constant';
+import { MyCodeApi, GetPriceApi, ReportBetApi } from '@/constant';
 
 export interface AuthParams {
   time: number;
@@ -78,6 +78,35 @@ export async function setRefCode(
   const res = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'same-origin',
+  });
+  if (res && res.status === 200) {
+    const data = (await res.json()) || {};
+    return data.code === 200;
+  }
+  return false;
+}
+
+export interface BatRecord {
+  chainId: number,
+  wallet: string;
+  matchId: string;
+  guessType: string;
+  betAmount: string;
+  betTime: string;
+  referralCode: string;
+  txHash: string;
+}
+
+export async function saveBetRecord(batRecord: BatRecord): Promise<boolean> {
+  // const url = `/api/bk/bet`;
+  const url = ReportBetApi;
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(batRecord),
     headers: {
       'Content-Type': 'application/json',
     },

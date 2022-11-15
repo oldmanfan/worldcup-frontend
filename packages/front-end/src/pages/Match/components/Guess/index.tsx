@@ -24,7 +24,6 @@ import LeftTime from '../LeftTime';
 import { getPrice } from '@/api';
 import ScoreForm from './components/ScoreForm';
 import WinLossForm from './components/WinLossForm';
-
 export interface GuessOptions {
   type: number;
 }
@@ -38,7 +37,7 @@ export default function Guess(props: GuessOptions) {
   const [selectedLabel, setSelectedLabel] = useState('');
   const [score, setScore] = useState<number>(1);
   const { getAllMatches } = useMatches();
-  const { connect, account, provider } = useWallet();
+  const { connect, account, provider, chainId } = useWallet();
   const { contractAddress } = useContractAddress();
   const [qatarContract, setQatarContract] = useState<
     QatarContract | undefined
@@ -59,7 +58,7 @@ export default function Guess(props: GuessOptions) {
   const [ttPrice, setTTPrice] = useState<number>(0);
   const [fee, setFee] = useState('0');
   const { getTopNRecords } = useTopNRecords();
-  const { setRelationship } = useInvite();
+  const { reportBet } = useInvite();
   const [showBetOption, setShowBetOption] = useState(false);
   const [claimedReward, setClaimedReward] = useState<BetRecord | undefined>();
   const [claimLoading, setClaimLoading] = useState(false);
@@ -199,8 +198,6 @@ export default function Guess(props: GuessOptions) {
     const ttContract = makeERC20Contract(token.address, provider, account);
     setLoading(true);
     try {
-      // set invitation relationship
-      setRelationship(account);
       // bet
       const guessType = props.type === 1 ? Number(winLoss) : score;
       const amount = toBN(inputValue).multipliedBy(
@@ -226,6 +223,18 @@ export default function Guess(props: GuessOptions) {
       );
       await tx.wait();
       message.success('Bet success');
+      // 上报记录
+      reportBet({
+        chainId: chainId || 0,
+        wallet: account,
+        matchId: currentMatch?.matchId.toNumber().toString(),
+        guessType: guessType?.toString() || '',
+        betAmount: amount.toString(10),
+        betTime: tx.timestamp?.toString() || Date.now().toString(),
+        // 逻辑里面处理，是否存在referralCode，没丢弃
+        referralCode: '',
+        txHash: tx.hash,
+      });
       await sleep();
       setInputValue('0');
       getAllMatches();
