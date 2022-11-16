@@ -64,7 +64,11 @@ export default function Record(props: RecordProps) {
             <span>{$t('{#本場輸贏競猜參與記錄#}')}</span>
           </h2>
           <div className={styles.list}>
-            {records.map((item, index) => {
+            {records.length < 1 ? (
+              <div className="no-data" style={{ paddingTop: 0 }}>
+              <i />
+            </div>): (
+            records.map((item, index) => {
               return (
                 <div className={styles.item} key={index}>
                   <div>
@@ -102,7 +106,8 @@ export default function Record(props: RecordProps) {
                   </div>
                 </div>
               );
-            })}
+            }))
+            }
             {/* TODO: 有数据的时候这里要删除掉 */}
             {/* <div className={styles.item}>
               <div>
