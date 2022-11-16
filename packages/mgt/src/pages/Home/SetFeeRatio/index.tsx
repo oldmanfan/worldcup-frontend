@@ -32,7 +32,7 @@ export default function SetFeeRatio(props: SetFeeRatioProps) {
       setLoading(true);
       const contract = getQatarContract();
       console.log("setFeeRatio, params=", params);
-      const tx = await contract.setFeeRatio(...params);
+      const tx = await contract?.setFeeRatio(...params);
       await tx?.wait();
       props.onOk();
     } catch (e: any) {
@@ -47,7 +47,7 @@ export default function SetFeeRatio(props: SetFeeRatioProps) {
   useEffect(() => {
     const queryFeeRatio = async () => {
       const contract = getQatarContract();
-      const result = await contract.feeRatio();
+      const result = await contract?.feeRatio();
       const feeRatio = toBN(result).div(1e18);
       console.log("queryFeeRatio, feeRatio=", feeRatio);
       formRef.current?.setFieldsValue({

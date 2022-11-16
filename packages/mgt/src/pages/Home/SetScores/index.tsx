@@ -1,14 +1,14 @@
-import { useEffect, useState, useRef } from 'react';
-import type { FormInstance } from 'antd/es/form';
-import { Modal, Button, Form, InputNumber, message, Space } from 'antd';
-import locale from 'antd/es/date-picker/locale/zh_CN';
-import moment from 'moment';
-import 'moment/locale/zh-cn';
-import { CountriesById } from '@/constant/Countries';
-import { ListItemProps } from '@/hooks/types';
-import useQatar from '@/hooks/useQatar';
-import { toUtcTime } from '@/utils'
-import { getErrorMsg } from '@/utils';
+import { useEffect, useState, useRef } from "react";
+import type { FormInstance } from "antd/es/form";
+import { Modal, Button, Form, InputNumber, message, Space } from "antd";
+import locale from "antd/es/date-picker/locale/zh_CN";
+import moment from "moment";
+import "moment/locale/zh-cn";
+import { CountriesById } from "@/constant/Countries";
+import { ListItemProps } from "@/hooks/types";
+import useQatar from "@/hooks/useQatar";
+import { toUtcTime } from "@/utils";
+import { getErrorMsg } from "@/utils";
 
 export interface MatchModalProps {
   visible: boolean;
@@ -25,33 +25,29 @@ export default function MatchModal(props: MatchModalProps) {
   const handleOk = async () => {
     const data = await formRef.current?.validateFields();
 
-    console.log('data=', data);
+    console.log("data=", data);
     // uint256 matchId,
     // uint256 scoreA,
     // uint256 scoreB,
     const { scoreA, scoreB } = data;
-    const params = [
-      props.record.matchId,
-      scoreA,
-      scoreB,
-    ];
+    const params = [props.record.matchId, scoreA, scoreB];
 
     try {
       setLoading(true);
       const contract = getQatarContract();
-      console.log('setScores, params=', params);
-      const tx = await contract.setScores(...params);
+      console.log("setScores, params=", params);
+      const tx = await contract?.setScores(...params);
       // console.log('setScores, tx=', tx);
       await tx?.wait();
       props.onOk();
     } catch (e: any) {
-      console.error('err=', e);
+      console.error("err=", e);
       const msg = getErrorMsg(e);
       message.error(msg);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (props.record) {
@@ -87,41 +83,44 @@ export default function MatchModal(props: MatchModalProps) {
         <Button key="back" onClick={props.onClose}>
           取消
         </Button>,
-        <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+        <Button
+          key="submit"
+          type="primary"
+          loading={loading}
+          onClick={handleOk}
+        >
           确定
         </Button>,
       ]}
     >
-      <Form
-        {...layout}
-        ref={formRef as any}
-        name="control-ref"
-      >
-        {props.record && <>
-          <Form.Item label="matchId">
-            {props.record?.matchId.toNumber()}
-          </Form.Item>
-          <Form.Item label="比赛时间">
-            <Space>
-              <span>{toUtcTime(props.record.matchStartTime.toNumber())}</span>
-              <span>~</span>
-              <span>{toUtcTime(props.record.matchEndTime.toNumber())}</span>
-            </Space>
-          </Form.Item>
-          <Form.Item label="竞猜时间">
-            <Space>
-              <span>{toUtcTime(props.record.guessStartTime.toNumber())}</span>
-              <span>~</span>
-              <span>{toUtcTime(props.record.guessEndTime.toNumber())}</span>
-            </Space>
-          </Form.Item>
-          <Form.Item label="countryA">
-            {CountriesById[props.record?.countryA.toNumber()].zhName}
-          </Form.Item>
-          <Form.Item label="countryB">
-            {CountriesById[props.record?.countryB.toNumber()].zhName}
-          </Form.Item>
-        </>}
+      <Form {...layout} ref={formRef as any} name="control-ref">
+        {props.record && (
+          <>
+            <Form.Item label="matchId">
+              {props.record?.matchId.toNumber()}
+            </Form.Item>
+            <Form.Item label="比赛时间">
+              <Space>
+                <span>{toUtcTime(props.record.matchStartTime.toNumber())}</span>
+                <span>~</span>
+                <span>{toUtcTime(props.record.matchEndTime.toNumber())}</span>
+              </Space>
+            </Form.Item>
+            <Form.Item label="竞猜时间">
+              <Space>
+                <span>{toUtcTime(props.record.guessStartTime.toNumber())}</span>
+                <span>~</span>
+                <span>{toUtcTime(props.record.guessEndTime.toNumber())}</span>
+              </Space>
+            </Form.Item>
+            <Form.Item label="countryA">
+              {CountriesById[props.record?.countryA.toNumber()].zhName}
+            </Form.Item>
+            <Form.Item label="countryB">
+              {CountriesById[props.record?.countryB.toNumber()].zhName}
+            </Form.Item>
+          </>
+        )}
         <Form.Item name="scoreA" label="scoreA" rules={[{ required: true }]}>
           <InputNumber width={200} />
         </Form.Item>
