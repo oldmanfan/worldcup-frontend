@@ -1,17 +1,17 @@
-import { useEffect, useState, useRef } from 'react';
-import type { FormInstance } from 'antd/es/form';
-import { Modal, Button, Form, Input, Select, DatePicker, message } from 'antd';
-import locale from 'antd/es/date-picker/locale/zh_CN';
-import moment from 'moment';
-import 'moment/locale/zh-cn';
-import useWallet from '@/hooks/useWallet';
-import { CountryOptions } from '@/constant/Countries';
-import { getUtcTime, toUtcTime } from '@/utils';
+import { useEffect, useState, useRef } from "react";
+import type { FormInstance } from "antd/es/form";
+import { Modal, Button, Form, Input, Select, DatePicker, message } from "antd";
+import locale from "antd/es/date-picker/locale/zh_CN";
+import moment from "moment";
+import "moment/locale/zh-cn";
+import useWallet from "@/hooks/useWallet";
+import { CountryOptions } from "@/constant/Countries";
+import { getUtcTime, toUtcTime } from "@/utils";
 const { RangePicker } = DatePicker;
-import { MatchStatus, MatchStatistics, ListItemProps } from '@/hooks/types';
-import useQatar from '@/hooks/useQatar';
-import { getErrorMsg } from '@/utils';
-import { PayToken } from '@/hooks/usePlayToken'
+import { MatchStatus, MatchStatistics, ListItemProps } from "@/hooks/types";
+import useQatar from "@/hooks/useQatar";
+import { getErrorMsg } from "@/utils";
+import { PayToken } from "@/hooks/usePlayToken";
 
 export interface MatchModalProps {
   visible: boolean;
@@ -27,7 +27,7 @@ export default function MatchModal(props: MatchModalProps) {
 
   const handleOk = async () => {
     const data = await formRef.current?.validateFields();
-    console.log('data=', data);
+    console.log("data=", data);
     // uint256 matchId, -- updateMatch
     // uint256 countryA,
     // uint256 countryB,
@@ -56,26 +56,29 @@ export default function MatchModal(props: MatchModalProps) {
       const contract = getQatarContract();
       // console.log('contract=', contract);
       if (props.record) {
-        console.log('params=', [props.record.matchId.toNumber(), ...params]);
-        const tx = await contract.updateMatch(props.record.matchId.toNumber(), ...params);
-        console.log('update match, tx=', tx);
+        console.log("params=", [props.record.matchId.toNumber(), ...params]);
+        const tx = await contract?.updateMatch(
+          props.record.matchId.toNumber(),
+          ...params
+        );
+        console.log("update match, tx=", tx);
         await tx?.wait();
       } else {
-        console.log('params=', params);
-        const tx = await contract.startMatch(...params);
-        console.log('start match, tx=', tx);
+        console.log("params=", params);
+        const tx = await contract?.startMatch(...params);
+        console.log("start match, tx=", tx);
         await tx?.wait();
         // await waitForTransaction(tx.hash);
       }
       props.onOk();
     } catch (e: any) {
-      console.error('err=', e);
+      console.error("err=", e);
       const msg = getErrorMsg(e);
       message.error(msg);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     formRef.current?.resetFields();
@@ -102,14 +105,15 @@ export default function MatchModal(props: MatchModalProps) {
     }
   }, [props.visible]);
 
-  console.log('props.payTokens=', props.payTokens);
+  console.log("props.payTokens=", props.payTokens);
 
-  const playTokenOptions = props.payTokens?.map(item => {
-    return {
-      value: item.address,
-      label: `${item.name}-${item.address}`,
-    }
-  }) || [];
+  const playTokenOptions =
+    props.payTokens?.map((item) => {
+      return {
+        value: item.address,
+        label: `${item.name}-${item.address}`,
+      };
+    }) || [];
 
   // const navigate = useNavigate();
   // const { add, setAdd } = useState();
@@ -122,7 +126,7 @@ export default function MatchModal(props: MatchModalProps) {
   return (
     <Modal
       width={850}
-      title={props.record ? "更新比赛信息": "新增一场比赛"}
+      title={props.record ? "更新比赛信息" : "新增一场比赛"}
       open={props.visible}
       onOk={handleOk}
       onCancel={props.onClose}
@@ -130,52 +134,77 @@ export default function MatchModal(props: MatchModalProps) {
         <Button key="back" onClick={props.onClose}>
           取消
         </Button>,
-        <Button key="submit" type="primary" loading={loading} onClick={handleOk}>
+        <Button
+          key="submit"
+          type="primary"
+          loading={loading}
+          onClick={handleOk}
+        >
           确定
         </Button>,
       ]}
     >
-      <Form
-        {...layout}
-        ref={formRef as any}
-        name="control-ref"
-      >
-        {props.record && <Form.Item label="matchId">
-          {props.record.matchId.toNumber()}
-        </Form.Item>}
-        <Form.Item name="countryA" label="countryA" rules={[{ required: true }]}>
+      <Form {...layout} ref={formRef as any} name="control-ref">
+        {props.record && (
+          <Form.Item label="matchId">
+            {props.record.matchId.toNumber()}
+          </Form.Item>
+        )}
+        <Form.Item
+          name="countryA"
+          label="countryA"
+          rules={[{ required: true }]}
+        >
           <Select
             showSearch
             allowClear
             filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
             options={CountryOptions}
           />
         </Form.Item>
-        <Form.Item name="countryB" label="countryB" rules={[{ required: true }]}>
+        <Form.Item
+          name="countryB"
+          label="countryB"
+          rules={[{ required: true }]}
+        >
           <Select
             showSearch
             allowClear
             filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
             options={CountryOptions}
           />
         </Form.Item>
-        <Form.Item name="guessTime" label="竞猜开始时间" rules={[{ required: true }]} extra="(北京时间)">
+        <Form.Item
+          name="guessTime"
+          label="竞猜开始时间"
+          rules={[{ required: true }]}
+          extra="(北京时间)"
+        >
           <RangePicker showTime locale={locale} />
         </Form.Item>
-        <Form.Item name="matchTime" label="比赛开始时间" rules={[{ required: true }]} extra="(北京时间)">
+        <Form.Item
+          name="matchTime"
+          label="比赛开始时间"
+          rules={[{ required: true }]}
+          extra="(北京时间)"
+        >
           <RangePicker showTime locale={locale} />
         </Form.Item>
-        <Form.Item name="payToken" label="payToken" rules={[{ required: true }]}>
+        <Form.Item
+          name="payToken"
+          label="payToken"
+          rules={[{ required: true }]}
+        >
           {/* <Input /> */}
           <Select
             showSearch
             allowClear
             filterOption={(input, option) =>
-              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
             }
             options={playTokenOptions}
           />
