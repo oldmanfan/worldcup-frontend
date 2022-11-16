@@ -11,6 +11,7 @@ import {
 import useWallet from './useWallet';
 import { toBN, BigNumberLike } from '@/utils/bn';
 import { useMatchStore } from '@/models';
+import {message} from "antd";
 
 // 玩家个人统计数据
 interface PlayerTotalInfoProps {
@@ -39,17 +40,35 @@ export function useMatches() {
     useMatchStore();
 
   useEffect(() => {
-    getAllMatches();
-  }, [chainId, account, provider]);
+    try {
+      getAllMatches();
+    } catch (e: any) {
+      message.success(JSON.stringify(e));
+    }
+    console.log(chainId)
+    console.log(account)
+    console.log(provider)
+    console.log(window.ethereum)
+  }, [chainId, account, provider, window.ethereum]);
 
-  function getAllMatches() {
+  async function getAllMatches() {
     if (provider && account) {
+      // message.success('allmatch');
       const lensContract = makeLensContract(
         contractAddress.lens,
         provider,
         account,
       );
-      lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
+      // message.success(lensContract.getAllMatches.toString());
+      let res:any = []
+      try {
+        res = await lensContract.getAllMatches(contractAddress.qatar, account)
+      } catch (e:any) {
+        message.success(e.toString());
+      }
+        // .then((res) => {
+      message.success(res?.length);
+        // message.success(res.length);
         const matchMap: any = {};
         let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
         let playerTotalWinAmount = toBN(0); // 中奖金额
@@ -61,7 +80,7 @@ export function useMatches() {
 
         let playerWinLoseRecords: PlayerRecords[] = [];
         let playerScoreGuessRecords: PlayerRecords[] = [];
-        const allMatches = res.map((item) => {
+        const allMatches = res.map((item: any) => {
           const { winlosePool, scoreGuessPool, winloseRecords } = item;
           const totalPool = toBN(winlosePool.deposited).plus(
             toBN(scoreGuessPool.deposited),
@@ -170,26 +189,27 @@ export function useMatches() {
 
         setPlayerScoreGuessRecordsStore(playerScoreGuessRecords);
         setPlayerWinLoseRecordsStore(playerWinLoseRecords);
+        // message.success(allMatches.length);
         setMatchMap(matchMap);
         setAllMatches(allMatches);
         const notStartMatches = allMatches.filter(
-          (item) => item.status === MatchStatus.GUESS_NOT_START,
-        ).sort((a, b) => {
+          (item: any) => item.status === MatchStatus.GUESS_NOT_START,
+        ).sort((a: any, b: any) => {
           // 未来赛事matchId正序排列
           return a.matchId.toNumber() - b.matchId.toNumber();
         });
         // 进行中matchId正序排列
         const onGoingMatches = allMatches.filter(
-          (item) =>
+          (item: any) =>
             item.status === MatchStatus.GUESS_ON_GOING ||
             item.status === MatchStatus.MATCH_ON_GOING,
-        ).sort((a, b) => {
+        ).sort((a:any, b:any) => {
           return a.matchId.toNumber() - b.matchId.toNumber();
         });
         // 完成按match倒序
         const finishedMatches = allMatches.filter(
-          (item) => item.status === MatchStatus.MATCH_FINISHED,
-        ).sort((a, b) => {
+          (item:any) => item.status === MatchStatus.MATCH_FINISHED,
+        ).sort((a:any, b:any) => {
           return b.matchId.toNumber() - a.matchId.toNumber();
         });
 
@@ -207,7 +227,9 @@ export function useMatches() {
           playerTotalWinTimes,
           playerWinRate,
         });
-      });
+      // }).catch(e => {
+      //   message.success(e);
+      // });
     }
   }
 
