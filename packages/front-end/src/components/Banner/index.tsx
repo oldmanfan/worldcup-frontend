@@ -2,7 +2,6 @@ import { Tabs } from 'antd';
 import styles from './index.module.less';
 import cls from 'classnames';
 import useWallet from '@/hooks/useWallet';
-import { DownOutlined } from '@ant-design/icons';
 import { Button, Dropdown, message, Space, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import useTranslation from '@/hooks/useTranslation';
@@ -100,7 +99,7 @@ export default function Banner(props: BannerProps) {
                       <span>English</span>
                     </>
                   )}
-                  <DownOutlined />
+                    <i className={styles.icon} />
                 </Space>
               </Button>
             </Dropdown>
