@@ -10,7 +10,7 @@ import { CountriesById } from '@/constant/Countries';
 import { GuessType } from '@/constant/GuessType';
 import { BigNumberLike, toBN, toPow } from '@/utils/bn';
 import BigNumber from 'bignumber.js';
-import { onlyNumber, toFixed, sleep } from '@/utils';
+import { onlyNumber, toFixed } from '@/utils';
 // import useToken from '@/hooks/useToken';
 import { useMatches, useTopNRecords } from '@/hooks/useLens';
 import { makeQatarContract, QatarContract } from '@/hooks/useContract';
@@ -249,7 +249,6 @@ export default function Guess(props: GuessOptions) {
         referralCode: '',
         txHash: tx.hash,
       });
-      await sleep();
       setInputValue('0');
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
