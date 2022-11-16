@@ -85,7 +85,12 @@ export default function Banner(props: BannerProps) {
     >
       <div>
         <div className={styles.address} onClick={handleConnect}>
-          <i className={cls(styles['icon-chain'], `chain-${chainId}`)} />
+          <i
+            className={cls(
+              styles['icon-chain'],
+              styles[`chain-${Number(chainId)}`],
+            )}
+          />
           <span>{shortAddress ? shortAddress : $t('{#連接錢包#}')}</span>
         </div>
         {props.rule ? (
