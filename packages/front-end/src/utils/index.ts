@@ -35,7 +35,7 @@ export async function toBase64(str: string) {
   return base64.replace('data:text/plain;base64,', '');
 }
 
-export function formatTime(time: number, formatr = 'MM.DD hh:mm') {
+export function formatTime(time: number, formatr = 'MM.DD HH:mm') {
   return moment(time * 1000).format(formatr);
 }
 

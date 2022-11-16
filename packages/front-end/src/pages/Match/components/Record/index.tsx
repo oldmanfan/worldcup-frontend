@@ -86,7 +86,7 @@ export default function Record(props: RecordProps) {
                   </div>
                   <div>
                     <div className={styles.time}>
-                      {formatTime(item.betTime.toNumber(), 'MM-DD hh:mm')}
+                      {formatTime(item.betTime.toNumber(), 'MM-DD HH:mm')}
                     </div>
                     <div
                       className={styles.value}

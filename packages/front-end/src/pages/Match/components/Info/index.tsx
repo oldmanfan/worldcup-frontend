@@ -129,7 +129,7 @@ export default function Info(props: InfoProps) {
                 {$t('{#結束時間#}')}：
                 {formatTime(
                   currentMatch.matchEndTime.toNumber(),
-                  locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                  locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
                 )}
               </div>
             </>
@@ -148,12 +148,12 @@ export default function Info(props: InfoProps) {
                 {statusTimeLabel}：
                 {formatTime(
                   currentMatch.guessStartTime.toNumber(),
-                  locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                  locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
                 )}
                 -
                 {formatTime(
                   currentMatch.guessEndTime.toNumber(),
-                  locale === 'zh-hk' ? 'MM月DD日 hh:mm' : 'MM.DD hh:mm',
+                  locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
                 )}
               </div>
             </>
