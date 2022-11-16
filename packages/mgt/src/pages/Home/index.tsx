@@ -183,7 +183,7 @@ export default function Home() {
       },
     },
     {
-      title: "比赛开始时间",
+      title: "比赛结束时间",
       dataIndex: "matchEndTime",
       key: "matchEndTime",
       render: (value: BigNumber) => {
