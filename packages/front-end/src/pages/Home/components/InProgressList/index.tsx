@@ -3,29 +3,8 @@ import { List } from 'antd';
 import ListItem from '@/components/ListItem';
 import { useMatches } from '@/hooks/useLens';
 import { formatTime } from '@/utils';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 import useTranslation from '@/hooks/useTranslation';
-
-const data = [
-  {
-    currentReward: '1381213.38',
-    userCount: 2342,
-    startTime: '10.28 18:42',
-    endTime: '10.29 20:55',
-  },
-  {
-    currentReward: '1381213.38',
-    userCount: 2342,
-    startTime: '10.28 18:42',
-    endTime: '10.29 20:55',
-  },
-  {
-    currentReward: '1381213.38',
-    userCount: 2342,
-    startTime: '10.28 18:42',
-    endTime: '10.29 20:55',
-  },
-];
 
 // 正在进行
 export default function InProgressList() {
@@ -47,7 +26,9 @@ export default function InProgressList() {
           rows={[
             {
               name: $t('{#當前獎池金額#}'),
-              value: `$${toBN(item.totalPool).div(1e18).toString(10)}`,
+              value: `$${toBN(item.totalPool)
+                .div(toPow(item.payTokenDecimals.toNumber()))
+                .toString(10)}`,
             },
             {
               name: $t('{#參與人數#}'),

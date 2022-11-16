@@ -15,7 +15,7 @@ export default function useLens() {
   // const [matchMap, setMatchMap] = useState({});
 
   function getAllMatches() {
-    if (provider && account) {
+    if (provider && account && contractAddress) {
       console.log('-====', provider, account, contractAddress);
       const lensContract = makeLensContract(
         contractAddress.lens,
@@ -62,9 +62,9 @@ export default function useLens() {
 
         // setMatchMap(matchMap);
         // 倒序
-        setAllMatches(allMatches.sort((a, b) => {
+        setAllMatches([...allMatches.sort((a, b) => {
           return b.matchId.toNumber() - a.matchId.toNumber();
-        }));
+        })]);
         const notStartMatches = allMatches.filter(
           (item) => item.status === MatchStatus.GUESS_NOT_START,
         );
@@ -88,14 +88,15 @@ export default function useLens() {
     }
   }
   useEffect(() => {
+    console.log('useEffect chainId==', chainId, account, contractAddress)
     getAllMatches();
-  }, [chainId, account, provider]);
+  }, [chainId, account, provider, contractAddress]);
 
   return {
     account,
     getAllMatches,
 
-    allMatches,
+    allMatches: [...allMatches],
     // notStartMatches,
     // onGoingMatches,
     // finishedMatches,

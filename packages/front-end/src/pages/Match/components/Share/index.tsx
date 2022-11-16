@@ -57,7 +57,7 @@ export default function Share() {
           <i className={styles.close} onClick={() => setShowShare(false)} />
           <div className={cls(styles.bg, { [styles.en]: locale !== 'zh-hk' })} />
           <p><label>{$t('{#參與入口#}')}: </label>{shareUrl}</p>
-          <button onClick={() => onCopy()}>{$t('{#複製鏈接#}')}</button>
+          <button onClick={() => onCopy()}><span>{$t('{#複製鏈接#}')}</span></button>
           {showToast && <div className={styles.toast}>{$t('{#複製成功，快去分享吧#}')}</div>}
         </div>
       </div>)}

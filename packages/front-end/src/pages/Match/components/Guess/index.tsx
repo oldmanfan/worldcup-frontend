@@ -8,9 +8,9 @@ import useWallet from '@/hooks/useWallet';
 import { useMatchStore } from '@/models';
 import { CountriesById } from '@/constant/Countries';
 import { GuessType } from '@/constant/GuessType';
-import { BigNumberLike, toBN } from '@/utils/bn';
+import { BigNumberLike, toBN, toPow } from '@/utils/bn';
 import BigNumber from 'bignumber.js';
-import { onlyNumber, toFixed, sleep } from '@/utils';
+import { onlyNumber, toFixed } from '@/utils';
 // import useToken from '@/hooks/useToken';
 import { useMatches, useTopNRecords } from '@/hooks/useLens';
 import { makeQatarContract, QatarContract } from '@/hooks/useContract';
@@ -161,7 +161,7 @@ export default function Guess(props: GuessOptions) {
     // 计算预计可赢得
     const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
     const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
-    // 计算手续费
+    // 计算手续费  TODO: 这里改成链上获取
     const fee = toBN(inputValue).multipliedBy(0.03).toString(10);
     setInputValue(inputValue);
     setReward(reward);
@@ -169,10 +169,14 @@ export default function Guess(props: GuessOptions) {
   }, [inputValue, winLoss, score]);
 
   const handleInput = (value: string) => {
+    if (!currentMatch) {
+      message.error('Get token info failed');
+      return;
+    }
     const betValue = onlyNumber({
       num: value,
-      decimals: 18,
-      max: ttBalance.div(1e18).toString(10),
+      decimals: currentMatch.token.decimals,
+      max: ttBalance.div(toPow(currentMatch?.token.decimals)).toString(10),
     });
     setInputValue(betValue);
     setFee(fee);
@@ -199,6 +203,10 @@ export default function Guess(props: GuessOptions) {
     }
     if (!token) {
       message.error('token not get');
+      return;
+    }
+    if (!contractAddress) {
+      message.error('Get contract address failed');
       return;
     }
     const ttContract = makeERC20Contract(token.address, provider, account);
@@ -241,7 +249,6 @@ export default function Guess(props: GuessOptions) {
         referralCode: '',
         txHash: tx.hash,
       });
-      await sleep();
       setInputValue('0');
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
@@ -253,7 +260,13 @@ export default function Guess(props: GuessOptions) {
   };
 
   const handleAll = () => {
-    setInputValue(ttBalance.div(1e18).toString(10));
+    if (!currentMatch) {
+      message.error('Get token info failed');
+      return;
+    }
+    setInputValue(
+      ttBalance.div(toPow(currentMatch?.token.decimals)).toString(10),
+    );
   };
 
   const getForm = () => {
@@ -306,11 +319,11 @@ export default function Guess(props: GuessOptions) {
   const totalPool = currentMatch
     ? props.type === 1
       ? toBN(currentMatch.winlosePool.deposited)
-          .div(1e18)
+          .div(toPow(currentMatch.token.decimals))
           .multipliedBy(ttPrice || 1)
           .toString(10)
       : toBN(currentMatch.scoreGuessPool.deposited)
-          .div(1e18)
+          .div(toPow(currentMatch.token.decimals))
           .multipliedBy(ttPrice || 1)
           .toString(10)
     : '0';
@@ -320,7 +333,7 @@ export default function Guess(props: GuessOptions) {
       {currentMatch && (
         <div className={styles.guess}>
           <h3>
-            {props.type === 1 ? $t('{#輸贏總獎池#}') : $t('{#比分總獎池#}')}
+            {props.type === 1 ? $t('{#猜輸贏總獎池#}') : $t('{#猜比分總獎池#}')}
           </h3>
           <div className={styles.total}>
             <span style={{ marginRight: 2 }}>$</span>
@@ -339,7 +352,7 @@ export default function Guess(props: GuessOptions) {
                     {(claimedReward &&
                       toBN(claimedReward.betAmount)
                         .multipliedBy(toBN(claimedReward.odds).div(1e18))
-                        .div(1e18)
+                        .div(toPow(currentMatch.token.decimals))
                         .toString()) ||
                       0}{' '}
                     {token && token?.symbol}
@@ -359,34 +372,6 @@ export default function Guess(props: GuessOptions) {
                   {$t('{#已領取#}')}
                 </Button>
               )}
-              {/* <p>{$t('{#盈得#}')}</p> */}
-              {/* <div>
-                <span>
-                  <strong>
-                    {(claimedReward &&
-                      toBN(claimedReward.betAmount)
-                        .multipliedBy(toBN(claimedReward.odds).div(1e18))
-                        .div(1e18)
-                        .toString()) ||
-                      0}{' '}
-                    {token && token?.symbol}
-                  </strong>
-                </span>
-
-                {claimedReward && claimedReward.claimedAmount.eq(0) ? (
-                  <Button
-                    type="primary"
-                    onClick={handleClaim}
-                    loading={claimLoading}
-                  >
-                    {$t('{#領取獎勵#}')}
-                  </Button>
-                ) : (
-                  <Button type="primary" disabled>
-                    {$t('{#已領取#}')}
-                  </Button>
-                )}
-              </div> */}
             </div>
           )}
 
@@ -410,12 +395,12 @@ export default function Guess(props: GuessOptions) {
                     {props.type === 1
                       ? toFixed(
                           toBN(eachDeposited[Number(winLoss) - 27])
-                            .div(1e18)
+                            .div(toPow(currentMatch.token.decimals))
                             .toString(10),
                         )
                       : toFixed(
                           toBN(eachDeposited[Number(score) - 1])
-                            .div(1e18)
+                            .div(toPow(currentMatch.token.decimals))
                             .toString(10),
                         )}
                   </div>
@@ -424,6 +409,7 @@ export default function Guess(props: GuessOptions) {
               <div className={styles.formItem}>
                 <label>{$t('{#回報率#}')}:</label>
                 <div>
+                  {/* odds不需要除以token的dicimals精度 */}
                   {props.type === 1
                     ? toFixed(
                         toBN(
@@ -453,7 +439,12 @@ export default function Guess(props: GuessOptions) {
                 <button onClick={handleAll}>ALL</button>
               </div>
               <div className={styles.balance}>
-                {toFixed(ttBalance.div(1e18).toString(10))} {token?.symbol}
+                {toFixed(
+                  ttBalance
+                    .div(toPow(currentMatch.token.decimals))
+                    .toString(10),
+                )}{' '}
+                {token?.symbol}
               </div>
               {/* <div className={styles.error}>
                 <ExclamationCircleFilled />

@@ -10,7 +10,7 @@ export const ChainIds = {
 };
 export const SupportNetworks = [56, 97, 128, 256];
 // 默认chainId
-export const defaultChainId = 97;
+export const defaultChainId = 256;
 
 export interface IContractAddress {
   lens: string;
@@ -26,7 +26,7 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.HECO_TESTNET]: {
     tt: "0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2",
     qatar: "0x439C8A24aae828e15e472dc5F3636A30258d63F9",
-    lens: "0x45DEEA9865E2D9A6f9608948AF795C54c7A60547"
+    lens: "0x45DEEA9865E2D9A6f9608948AF795C54c7A60547",
   },
 
   [ChainIds.BSC_MAINNET]: {
@@ -43,7 +43,6 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
 
 export const APPROVE_MAX =
   '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-
 
 /**
  * 获取验证码的服务地址，

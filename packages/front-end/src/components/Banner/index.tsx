@@ -6,6 +6,7 @@ import { Button, Dropdown, message, Space, Tooltip } from 'antd';
 import type { MenuProps } from 'antd';
 import useTranslation from '@/hooks/useTranslation';
 import { NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export interface BannerProps {
   rule?: boolean;
@@ -51,7 +52,7 @@ export default function Banner(props: BannerProps) {
       // teco钱包，跳转至钱包管理
       if ((window as any).TECO_postMessage) {
         (window as any).TECO_postMessage({
-          type: "open_wallet_manage"
+          type: 'open_wallet_manage',
         });
       }
       return;
@@ -60,23 +61,36 @@ export default function Banner(props: BannerProps) {
       // 链接失败，且在teco钱包中，跳转到创建钱包流程
       if ((window as any).TECO_postMessage) {
         (window as any).TECO_postMessage({
-          type: "open_create_wallet"
+          type: 'open_create_wallet',
         });
       } else {
         // 跳转到下载页面
-        location.href = 'https://www.metatdex.com/download'
+        location.href = 'https://www.metatdex.com/download';
       }
     });
   };
 
+  useEffect(() => {
+    if (chainId && !shortAddress) {
+      connect();
+    }
+  }, [chainId, shortAddress]);
+
   return (
-    <div className={cls(styles.banner, {
-      [styles.en]: locale !== 'zh-hk',
-      [styles.hideBg]: props.hideBg,
-    })}>
+    <div
+      className={cls(styles.banner, {
+        [styles.en]: locale !== 'zh-hk',
+        [styles.hideBg]: props.hideBg,
+      })}
+    >
       <div>
         <div className={styles.address} onClick={handleConnect}>
-          <i className={cls(styles['icon-chain'], `chain-${chainId}`)} />
+          <i
+            className={cls(
+              styles['icon-chain'],
+              styles[`chain-${Number(chainId)}`],
+            )}
+          />
           <span>{shortAddress ? shortAddress : $t('{#連接錢包#}')}</span>
         </div>
         {props.rule ? (
@@ -99,7 +113,7 @@ export default function Banner(props: BannerProps) {
                       <span>English</span>
                     </>
                   )}
-                    <i className={styles.icon} />
+                  <i className={styles.icon} />
                 </Space>
               </Button>
             </Dropdown>

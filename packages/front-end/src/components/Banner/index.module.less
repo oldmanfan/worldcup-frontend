@@ -23,7 +23,7 @@
   height: 30px;
   background: rgba(72, 72, 72, 0.6);
   border-radius: 20px;
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 14px;
   display: inline-flex;
   align-items: center;
@@ -36,7 +36,10 @@
   display: inline-block;
   width: 24px;
   height: 24px;
-  background: url('~@/assets/img/chain-heco.png') center no-repeat;
+  // background: url('~@/assets/img/chain-heco.png') center no-repeat;
+  background-image: url('~@/assets/img/chain-heco.png');
+  background-position: center;
+  background-repeat: no-repeat;
   background-size: 100%;
   margin-right: 7px;
 
@@ -47,10 +50,20 @@
 
   &.chain-56,
   &.chain-97 {
-    // background-image: url('~@/assets/img/chain-bsc.png');
+    background-image: url('~@/assets/img/chain-bsc.png');
   }
 }
+// :global {
+//   .chain-128,
+//   .chain-256 {
+//     background-image: url('~@/assets/img/chain-heco.png');
+//   }
 
+//   .chain-56,
+//   .chain-97 {
+//     background-image: url('~@/assets/img/chain-bsc.png');
+//   }
+// }
 
 //  lang
 .lang {
@@ -59,13 +72,13 @@
   top: 18px;
   display: flex;
 
-  >button {
+  > button {
     height: 27px;
     background: rgba(72, 72, 72, 0.6) !important;
     border-radius: 14px;
     border-color: rgba(72, 72, 72, 0.6) !important;
     font-size: 14px;
-    color: #FFFFFF !important;
+    color: #ffffff !important;
     width: 108px;
     padding: 0;
   }
@@ -82,12 +95,17 @@
 .popup {
   :global {
     .ant-dropdown-menu {
-      background: #161D31 !important;
-      border-image: linear-gradient(180deg, rgba(13, 19, 43, 1), rgba(39, 73, 146, 1)) 1 1;
+      background: #161d31 !important;
+      border-image: linear-gradient(
+          180deg,
+          rgba(13, 19, 43, 1),
+          rgba(39, 73, 146, 1)
+        )
+        1 1;
 
       .ant-dropdown-menu-item,
       .ant-dropdown-menu-submenu-title {
-        background: #161D31 !important;
+        background: #161d31 !important;
         color: #fff;
       }
     }
@@ -102,11 +120,11 @@
   align-items: center;
   // width: 68px;
   height: 26px;
-  background: #256EC7;
-  border: 1px solid #0D3EA9;
+  background: #256ec7;
+  border: 1px solid #0d3ea9;
   border-radius: 26px 0 0 26px;
   font-size: 12px;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   padding: 7px 10px;
 }

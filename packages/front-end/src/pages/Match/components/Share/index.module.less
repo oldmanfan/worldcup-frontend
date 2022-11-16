@@ -68,6 +68,9 @@
       color: #FADC34;
       line-height: 20px;
       margin-bottom: 10px;
+      padding: 0 30px;
+      text-align: center;
+      word-break: break-all;
     }
     button {
       width: 200px;
@@ -81,8 +84,12 @@
       font-weight: 600;
       color: #D13918;
       line-height: 20px;
+      > span {
+        transform: translateY(-2px);
+        display: inline-block;
+      }
       &:active {
-        opacity: 0.75;
+        opacity: 0.85;
       }
     }
     .toast {

@@ -3,7 +3,7 @@ import ListItem from '@/components/ListItem';
 import { useMatches } from '@/hooks/useLens';
 import { formatTime } from '@/utils';
 import useTranslation from '@/hooks/useTranslation';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 
 // 未来赛事
 export default function FutureList() {
@@ -24,7 +24,9 @@ export default function FutureList() {
           rows={[
             {
               name: $t('{#當前獎池金額#}'),
-              value: `$${item.totalPool}`,
+              value: `$${toBN(item.totalPool)
+                .div(toPow(item.payTokenDecimals.toNumber()))
+                .toString(10)}`,
             },
             {
               name: $t('{#參與人數#}'),

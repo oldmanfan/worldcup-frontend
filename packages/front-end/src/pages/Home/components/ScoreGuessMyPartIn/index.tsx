@@ -2,7 +2,7 @@ import { List } from 'antd';
 import { formatTime, toFixed } from '@/utils';
 import PlayerListItem from '@/components/PlayerListItem';
 import { useMatchStore } from '@/models';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 import useTranslation from '@/hooks/useTranslation';
 
 // 往期赛事
@@ -27,8 +27,10 @@ export default function ScoreGuessMyPartIn() {
             {
               name: $t('{#下注金額#}'),
               value: `${toFixed(
-                toBN(item.winAmount).div(1e18).toString(10),
-              )} TT`,
+                toBN(item.betAmount)
+                  .div(toPow(item.token.decimals))
+                  .toString(10),
+              )} ${item.token.symbol}`,
             },
             {
               name: $t('{#開獎時間#}'),

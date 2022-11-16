@@ -94,6 +94,7 @@ export interface QatarContract extends Contract {
   ) => Promise<ContractTransaction>;
   claimReward: (matId: string, betId: string) => Promise<ContractTransaction>;
   claimAllRewards: () => Promise<ContractTransaction>;
+  feeRatio: () => Promise<BigNumber>; // 手续费率
 }
 
 export function makeQatarContract(

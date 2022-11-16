@@ -3,10 +3,10 @@ import { makeLensContract } from './useContract';
 import useContractAddress from './useContractAddress';
 import {
   MatchStatus,
-  MatchStatistics,
   ListItemProps,
-  TopNRecords,
   PlayerRecords,
+  Token,
+  MatchMapProps,
 } from './types';
 import useWallet from './useWallet';
 import { toBN, BigNumberLike } from '@/utils/bn';
@@ -22,6 +22,7 @@ interface PlayerTotalInfoProps {
   playerTotalPartIn: BigNumberLike; // 总参与次数
   playerTotalWinTimes: BigNumberLike; // 总的中奖次数
   playerWinRate: BigNumberLike; // 收益率
+  token: Token;
 }
 
 export function useMatches() {
@@ -35,17 +36,26 @@ export function useMatches() {
   const [playerTotalInfo, setPlayerTotalInfo] = useState<
     PlayerTotalInfoProps | undefined
   >();
-  const [matchMap, setMatchMap] = useState();
-  const { setPlayerScoreGuessRecordsStore, setPlayerWinLoseRecordsStore } =
-    useMatchStore();
+  // const [matchMap, setMatchMap] = useState<MatchMapProps | undefined>();
+  const {
+    setPlayerScoreGuessRecordsStore,
+    setPlayerWinLoseRecordsStore,
+    setTokenStore,
+    setMatchMapStore,
+  } = useMatchStore();
 
   useEffect(() => {
     getAllMatches();
-  }, [chainId, account, provider]);
+  }, [chainId, account, provider, contractAddress]);
 
+<<<<<<< HEAD
   async function getAllMatches() {
     if (provider && account) {
       // message.success('allmatch');
+=======
+  function getAllMatches() {
+    if (provider && account && contractAddress) {
+>>>>>>> fix-token-decimals
       const lensContract = makeLensContract(
         contractAddress.lens,
         provider,
@@ -53,9 +63,14 @@ export function useMatches() {
       );
       // message.success(lensContract.getAllMatches.toString());
       lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
+<<<<<<< HEAD
       // message.success(res?.length);
         // message.success(res.length);
         const matchMap: any = {};
+=======
+        console.log('getAllMatches', res);
+        const matchMap: MatchMapProps = {};
+>>>>>>> fix-token-decimals
         let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
         let playerTotalWinAmount = toBN(0); // 中奖金额
         let playerTotalWithdraw = toBN(0); // 已提取
@@ -63,10 +78,28 @@ export function useMatches() {
         let playerTotalPartIn = toBN(0);
         let playerTotalWinTimes = toBN(0); // 中奖次数
         let playerWinRate = toBN(0);
+        //假设一个默认值
+        let playToken: Token = {
+          name: 'TT',
+          symbol: 'TT',
+          address: '',
+          decimals: 18,
+        };
 
         let playerWinLoseRecords: PlayerRecords[] = [];
         let playerScoreGuessRecords: PlayerRecords[] = [];
+<<<<<<< HEAD
         const allMatches = res.map((item: any) => {
+=======
+        const allMatches = res.map((item) => {
+          const token: Token = {
+            name: item.payTokenName,
+            symbol: item.payTokenSymbol,
+            decimals: item.payTokenDecimals.toNumber(),
+            address: item.payToken,
+          };
+          playToken = token;
+>>>>>>> fix-token-decimals
           const { winlosePool, scoreGuessPool, winloseRecords } = item;
           const totalPool = toBN(winlosePool.deposited).plus(
             toBN(scoreGuessPool.deposited),
@@ -99,6 +132,7 @@ export function useMatches() {
               countryA: item.countryA,
               countryB: item.countryB,
               status: item.status,
+              token,
             });
 
             if (winlose.win) {
@@ -138,11 +172,14 @@ export function useMatches() {
               countryA: item.countryA,
               countryB: item.countryB,
               status: item.status,
+              token,
             });
 
             if (scoreGuess.win) {
               playerTotalWinAmount = playerTotalWinAmount.plus(
-                toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)).div(1e18),
+                toBN(scoreGuess.odds)
+                  .multipliedBy(toBN(scoreGuess.betAmount))
+                  .div(1e18),
               );
               totalScoreGuessReward = totalScoreGuessReward.plus(
                 toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)),
@@ -161,6 +198,7 @@ export function useMatches() {
             totalPlayers,
             totalWinloseReward,
             totalScoreGuessReward,
+            token,
             ...item,
           } as ListItemProps;
           matchMap[item.matchId.toNumber()] = newItem;
@@ -168,13 +206,15 @@ export function useMatches() {
         });
 
         // 待领取
-        playerTotalUnWithdraw =
-          playerTotalWinAmount.minus(playerTotalWinAmount);
+        playerTotalUnWithdraw = playerTotalWinAmount.minus(playerTotalWithdraw);
         // 收益率
-        playerWinRate = playerTotalWinAmount.div(playerTotalBetAmount);
+        playerWinRate = playerTotalWinAmount
+          .div(playerTotalBetAmount)
+          .multipliedBy(100);
 
-        setPlayerScoreGuessRecordsStore(playerScoreGuessRecords);
+        setPlayerScoreGuessRecordsStore([...playerScoreGuessRecords]);
         setPlayerWinLoseRecordsStore(playerWinLoseRecords);
+<<<<<<< HEAD
         // message.success(allMatches.length);
         setMatchMap(matchMap);
         setAllMatches(allMatches);
@@ -198,6 +238,34 @@ export function useMatches() {
         ).sort((a:any, b:any) => {
           return b.matchId.toNumber() - a.matchId.toNumber();
         });
+=======
+        // setMatchMap(matchMap);
+        setMatchMapStore(matchMap);
+        setAllMatches(allMatches);
+        setTokenStore(playToken);
+        const notStartMatches = allMatches
+          .filter((item) => item.status === MatchStatus.GUESS_NOT_START)
+          .sort((a, b) => {
+            // 未来赛事matchId正序排列
+            return a.matchId.toNumber() - b.matchId.toNumber();
+          });
+        // 进行中matchId正序排列
+        const onGoingMatches = allMatches
+          .filter(
+            (item) =>
+              item.status === MatchStatus.GUESS_ON_GOING ||
+              item.status === MatchStatus.MATCH_ON_GOING,
+          )
+          .sort((a, b) => {
+            return a.matchId.toNumber() - b.matchId.toNumber();
+          });
+        // 完成按match倒序
+        const finishedMatches = allMatches
+          .filter((item) => item.status === MatchStatus.MATCH_FINISHED)
+          .sort((a, b) => {
+            return b.matchId.toNumber() - a.matchId.toNumber();
+          });
+>>>>>>> fix-token-decimals
 
         setNotStartMatches(notStartMatches);
         setOnGoingMatches(onGoingMatches);
@@ -212,6 +280,7 @@ export function useMatches() {
           playerTotalPartIn,
           playerTotalWinTimes,
           playerWinRate,
+          token: playToken,
         });
       // }).catch(e => {
       //   message.success(e);
@@ -226,7 +295,6 @@ export function useMatches() {
     notStartMatches,
     onGoingMatches,
     finishedMatches,
-    matchMap,
     playerTotalInfo,
   };
 }
@@ -237,14 +305,20 @@ export function useTopNRecords() {
   const { setRecordStore } = useMatchStore();
 
   async function getTopNRecords(matchId: number, poolType: number) {
-    const contract = makeLensContract(contractAddress.lens, provider, account);
-    const records = await contract.getTopNRecords(
-      contractAddress.qatar,
-      matchId,
-      poolType,
-      100,
-    );
-    setRecordStore(records);
+    if (contractAddress && provider && account) {
+      const contract = makeLensContract(
+        contractAddress.lens,
+        provider,
+        account,
+      );
+      const records = await contract.getTopNRecords(
+        contractAddress.qatar,
+        matchId,
+        poolType,
+        100,
+      );
+      setRecordStore(records);
+    }
   }
 
   return {

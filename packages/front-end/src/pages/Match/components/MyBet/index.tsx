@@ -12,7 +12,7 @@ import {
 } from '@/constant';
 import { formatTime, toFixed } from '@/utils';
 import { BetRecord } from '@/hooks/types';
-import { toBN } from '@/utils/bn';
+import { toBN, toPow } from '@/utils/bn';
 import { BigNumber } from 'ethers';
 
 export interface MyBetProps {
@@ -51,7 +51,7 @@ export default function MyBet(props: MyBetProps) {
           country = getCountryName(currentMatch.countryB.toNumber(), locale);
         }
         if (item.guessType.toNumber() === GuessType.GUESS_WINLOSE_DRAW) {
-          country = '平局';
+          country = $t('{#平局#}');
         }
         records.push({
           scoreA: currentMatch.scoresA,
@@ -105,7 +105,11 @@ export default function MyBet(props: MyBetProps) {
                   {$t('{#參與%sTT，赔率%n倍#}')
                     .replace(
                       '%s',
-                      toFixed(toBN(item.betAmount).div(1e18).toString(10)),
+                      toFixed(
+                        toBN(item.betAmount)
+                          .div(toPow(currentMatch.token.decimals))
+                          .toString(10),
+                      ),
                     )
                     .replace(
                       '%n',

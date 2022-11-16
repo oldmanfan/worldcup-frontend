@@ -10,7 +10,7 @@ export default function useToken() {
   const { contractAddress } = useContractAddress();
 
   const loadData = async () => {
-    if (account && provider) {
+    if (account && provider && contractAddress) {
       const contract = makeERC20Contract(contractAddress.tt, provider, account);
       const balance = await contract.balanceOf(account);
 
