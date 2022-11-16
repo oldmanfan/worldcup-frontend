@@ -42,16 +42,20 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
  */
 export const PayTokenList = {
   [ChainIds.BSC_TESTNET]: [
-    '0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de',
+    '0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de', //tt
+    '0xA53DBF0C7b8B3e361395b9772dCEb2eB8697A5b4', //u
   ],
   [ChainIds.HECO_TESTNET]: [
-    '0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2',
+    '0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2', //tt
+    '0x881151D0074F439b6529A53969F949A441797974', //u
   ],
   [ChainIds.BSC_MAINNET]: [
-    '0x445cc9518cf7bc7386a2e3aaf510650b0fb05f5f'
+    '0x445cc9518cf7bc7386a2e3aaf510650b0fb05f5f', //tt
+    '0x55d398326f99059fF775485246999027B3197955', //u
   ],
   [ChainIds.HECO_MAINNET]: [
-    '0x86040C76AAE5CBB322364CAF8820b0E8902e97E5'
+    '0x86040C76AAE5CBB322364CAF8820b0E8902e97E5', //tt
+    '0xa71edc38d189767582c38a3145b5873052c3e47a', //u
   ],
 }
 
