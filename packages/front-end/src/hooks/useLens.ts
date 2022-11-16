@@ -40,16 +40,8 @@ export function useMatches() {
     useMatchStore();
 
   useEffect(() => {
-    try {
-      getAllMatches();
-    } catch (e: any) {
-      message.success(JSON.stringify(e));
-    }
-    console.log(chainId)
-    console.log(account)
-    console.log(provider)
-    console.log(window.ethereum)
-  }, [chainId, account, provider, window.ethereum]);
+    getAllMatches();
+  }, [chainId, account, provider]);
 
   async function getAllMatches() {
     if (provider && account) {

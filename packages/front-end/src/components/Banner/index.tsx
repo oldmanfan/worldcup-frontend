@@ -79,7 +79,6 @@ export default function Banner(props: BannerProps) {
           <i className={cls(styles['icon-chain'], `chain-${chainId}`)} />
           <span>{shortAddress ? shortAddress : $t('{#連接錢包#}')}</span>
         </div>
-        { typeof(chainId) }
         {props.rule ? (
           <NavLink className={styles.rule} to="/rule">
             {$t('{#活動規則#}')}
