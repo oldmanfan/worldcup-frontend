@@ -35,7 +35,7 @@ export default function PlayerListItem(props: IListItemProps) {
   } = props;
   const { setMatch } = useMatchStore();
   const navigate = useNavigate();
-  const { $t, locale } = useTranslation();
+  const { $t, locale, isZH } = useTranslation();
   const [imgs, setImgs] = useState<string[]>([]);
   const [scoreVisible, setScoreVisible] = useState(false);
 
@@ -122,13 +122,20 @@ export default function PlayerListItem(props: IListItemProps) {
           </span>
         </div>
       )}
-      {status === MatchStatus.MATCH_FINISHED && (
-        <i
-          className={`${styles.result} ${
-            win ? styles.iconSuccess : styles.iconError
-          }`}
-        ></i>
-      )}
+      {status === MatchStatus.MATCH_FINISHED &&
+        (isZH ? (
+          <i
+            className={`${styles.result} ${
+              win ? styles.iconSuccess : styles.iconError
+            }`}
+          ></i>
+        ) : (
+          <i
+            className={`${styles.result} ${
+              win ? styles.iconSuccessEn : styles.iconErrorEn
+            }`}
+          ></i>
+        ))}
     </div>
   );
 }
