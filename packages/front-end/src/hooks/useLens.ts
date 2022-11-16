@@ -52,14 +52,8 @@ export function useMatches() {
         account,
       );
       // message.success(lensContract.getAllMatches.toString());
-      let res:any = []
-      try {
-        res = await lensContract.getAllMatches(contractAddress.qatar, account)
-      } catch (e:any) {
-        message.success(e.toString());
-      }
-        // .then((res) => {
-      message.success(res?.length);
+      lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
+      // message.success(res?.length);
         // message.success(res.length);
         const matchMap: any = {};
         let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
@@ -221,7 +215,7 @@ export function useMatches() {
         });
       // }).catch(e => {
       //   message.success(e);
-      // });
+      });
     }
   }
 

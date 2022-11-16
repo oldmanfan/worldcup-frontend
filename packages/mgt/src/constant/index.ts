@@ -17,7 +17,7 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.BSC_TESTNET]: {
     tt: "0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de",
     qatar: "0x5840EB8fa17a6990fDd061d46D581741D248a3F9",
-    lens: "0x45DEEA9865E2D9A6f9608948AF795C54c7A60547"
+    lens: "0xc380BC66499f133DA372dAf3efE9d5CcA0f6274F"
   },
   [ChainIds.HECO_TESTNET]: {
     tt: "0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2",
