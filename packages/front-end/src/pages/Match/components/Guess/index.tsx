@@ -24,6 +24,7 @@ import LeftTime from '../LeftTime';
 import { getPrice } from '@/api';
 import ScoreForm from './components/ScoreForm';
 import WinLossForm from './components/WinLossForm';
+import useQatarContract from '@/hooks/useQatarContract';
 export interface GuessOptions {
   type: number;
 }
@@ -62,6 +63,7 @@ export default function Guess(props: GuessOptions) {
   const [showBetOption, setShowBetOption] = useState(false);
   const [claimedReward, setClaimedReward] = useState<BetRecord | undefined>();
   const [claimLoading, setClaimLoading] = useState(false);
+  const { feeRatio } = useQatarContract();
 
   useEffect(() => {
     if (account && provider && contractAddress) {
@@ -162,7 +164,7 @@ export default function Guess(props: GuessOptions) {
     const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
     const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
     // 计算手续费  TODO: 这里改成链上获取
-    const fee = toBN(inputValue).multipliedBy(0.03).toString(10);
+    const fee = toBN(inputValue).multipliedBy(feeRatio).toString(10);
     setInputValue(inputValue);
     setReward(reward);
     setFee(fee);
