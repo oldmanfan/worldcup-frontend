@@ -19,6 +19,7 @@ export default function Info(props: InfoProps) {
   const [imgs, setImgs] = useState<string[]>([]);
   const [statusLabel, setStatusLabel] = useState<string>();
   const [statusTimeLabel, setStatusTimeLabel] = useState<string>();
+  const [showMatchTime, setShowMatchTime] = useState<boolean>(false);
   const [isAWin, setIsAWin] = useState<boolean>(false);
   const [isBWin, setIsBWin] = useState<boolean>(false);
   const [vsText, setVsText] = useState<string>('');
@@ -52,17 +53,26 @@ export default function Info(props: InfoProps) {
       setVsText('');
       let statusLabel = '';
       let statusTimeLabel = '';
+      let showMatchTime = false;
       if (currentMatch?.status === MatchStatus.GUESS_NOT_START) {
         statusLabel = $t('{#競猜即將開始#}');
         statusTimeLabel = $t('{#下注時間#}');
       }
       if (currentMatch?.status === MatchStatus.GUESS_ON_GOING) {
-        statusLabel = $t('{#競猜進行中#}');
-        statusTimeLabel = $t('{#下注時間#}');
+        if (currentMatch.guessEndTime.toNumber() * 1000 > Date.now()) {
+          statusLabel = $t('{#競猜進行中#}');
+          statusTimeLabel = $t('{#下注時間#}');
+        } else {
+          // 过来竞猜时间了
+          statusLabel = $t('{#競猜已結束#}');
+          statusTimeLabel = $t('{#比賽時間#}');
+          showMatchTime = true;
+        }
       }
       if (currentMatch?.status === MatchStatus.MATCH_ON_GOING) {
         statusLabel = $t('{#競猜已結束#}');
         statusTimeLabel = $t('{#比賽時間#}');
+        showMatchTime = true;
       }
       if (currentMatch?.status === MatchStatus.MATCH_FINISHED) {
         statusLabel = $t('{#比賽已結束#}');
@@ -113,6 +123,7 @@ export default function Info(props: InfoProps) {
 
       setStatusLabel(statusLabel);
       setStatusTimeLabel(statusTimeLabel);
+      setShowMatchTime(showMatchTime);
     }
   }, [currentMatch, props.active]);
 
@@ -120,7 +131,7 @@ export default function Info(props: InfoProps) {
     <>
       {currentMatch && (
         <div className={styles.info}>
-          {currentMatch?.status === 3 ? (
+          {currentMatch?.status === MatchStatus.MATCH_FINISHED ? (
             <>
               <h2 className={styles.h2}>
                 <span>{$t('{#比賽已結束#}')}</span>
@@ -143,19 +154,33 @@ export default function Info(props: InfoProps) {
                   {statusLabel}
                 </span>
               </h2>
-              <div className={styles.tip}>
-                {/* {$t('{#下注時間#}')}： */}
+              {showMatchTime ? (<div className={styles.tip}>
+                {/* 比赛时间 */}
                 {statusTimeLabel}：
                 {formatTime(
-                  currentMatch.guessStartTime.toNumber(),
+                  currentMatch.matchStartTime.toNumber(),
                   locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
                 )}
                 -
                 {formatTime(
-                  currentMatch.guessEndTime.toNumber(),
+                  currentMatch.matchEndTime.toNumber(),
                   locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
                 )}
-              </div>
+                </div>) : (
+                <div className={styles.tip}>
+                  {/* 下注時間 */}
+                  {statusTimeLabel}：
+                  {formatTime(
+                    currentMatch.guessStartTime.toNumber(),
+                    locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
+                  )}
+                  -
+                  {formatTime(
+                    currentMatch.guessEndTime.toNumber(),
+                    locale === 'zh-hk' ? 'MM月DD日 HH:mm' : 'MM.DD HH:mm',
+                  )}
+                </div>
+              )}
             </>
           )}
           <div className={styles.detail}>

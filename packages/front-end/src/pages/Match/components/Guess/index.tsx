@@ -186,7 +186,9 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
-      if (currentMatch.status === MatchStatus.GUESS_ON_GOING) {
+      // 状态为竞猜中，且在竞猜结束时间前
+      if (currentMatch.status === MatchStatus.GUESS_ON_GOING
+        && currentMatch.guessEndTime.toNumber() * 1000 > Date.now()) {
         setShowBetOption(true);
       } else {
         setShowBetOption(false);
