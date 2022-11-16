@@ -107,3 +107,15 @@ export function sleep(time = 5000) {
     setTimeout(resolve, time);
   });
 }
+
+export function getErrorMsg(err: any, fallback: string) {
+  const msg =
+    err?.error?.data?.message ||
+    err?.error?.message ||
+    err?.reason ||
+    err?.message ||
+    fallback;
+    // ||
+    // "request error";
+  return msg;
+}
