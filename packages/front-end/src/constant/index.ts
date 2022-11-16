@@ -20,13 +20,13 @@ export interface IContractAddress {
 export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.BSC_TESTNET]: {
     tt: "0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de",
-    qatar: "0x00EFb988A2c3096265513210ea8003dAe59c5992",
-    lens: "0xa7c2a3BDaE43fA629Be52218859bc34F0759bDFB"
+    qatar: "0x5840EB8fa17a6990fDd061d46D581741D248a3F9",
+    lens: "0x45DEEA9865E2D9A6f9608948AF795C54c7A60547"
   },
   [ChainIds.HECO_TESTNET]: {
     tt: "0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2",
-    qatar: "0x1FaBb12cddd6541f278Fa6394b7Af3Feee6f5ed0",
-    lens: "0x00d9C524244A7fa414b732ac4eDd7588787f12A1"
+    qatar: "0x439C8A24aae828e15e472dc5F3636A30258d63F9",
+    lens: "0x45DEEA9865E2D9A6f9608948AF795C54c7A60547"
   },
 
   [ChainIds.BSC_MAINNET]: {
