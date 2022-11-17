@@ -61,7 +61,7 @@ export default function Record(props: RecordProps) {
       {currentMatch && (
         <div className={styles.record}>
           <h2 className={styles.h2}>
-            <span>{$t('{#本場輸贏競猜參與記錄#}')}</span>
+            <span>{props.active === 1 ? $t('{#本場輸贏競猜參與記錄#}') : $t('{#本場比分競猜參與記錄#}')}</span>
           </h2>
           <div className={styles.list}>
             {records.length < 1 ? (

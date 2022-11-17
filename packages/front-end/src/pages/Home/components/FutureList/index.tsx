@@ -29,7 +29,7 @@ export default function FutureList() {
                 .toString(10)}`,
             },
             {
-              name: $t('{#參與人數#}'),
+              name: $t('{#參與人次#}'),
               value: $t('{#%s 人#}').replace('%s', item.totalPlayers as string),
               // value: `${item.totalPlayers} 人`,
             },
