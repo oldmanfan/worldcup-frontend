@@ -190,7 +190,7 @@ export function useMatches() {
         // 待领取
         playerTotalUnWithdraw = playerTotalWinAmount.minus(playerTotalWithdraw);
         // 收益率
-        playerWinRate = playerTotalWinAmount
+        playerWinRate = playerTotalWinAmount.minus(playerTotalBetAmount)
           .div(playerTotalBetAmount)
           .multipliedBy(100);
 
