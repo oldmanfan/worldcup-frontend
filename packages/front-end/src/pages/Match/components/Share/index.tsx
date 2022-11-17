@@ -14,7 +14,7 @@ export default function Share() {
   const [inviteCode, setInviteCode] = useState<string>('');
   const { account } = useWallet();
 
-  const shareUrl = `${location.origin}?invite=${inviteCode}`;
+  const shareUrl = inviteCode ? `${location.origin}?invite=${inviteCode}` : location.origin;
 
   useEffect(() => {
     const queryCode = async () => {
