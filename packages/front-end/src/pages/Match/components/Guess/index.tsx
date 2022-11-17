@@ -441,7 +441,7 @@ export default function Guess(props: GuessOptions) {
               <div className={styles.split} />
               <div className={styles.input}>
                 <div>
-                  <i />
+                  <i className={currentMatch && currentMatch.payTokenSymbol && currentMatch.payTokenSymbol.toUpperCase() === 'USDT' ? styles.usdt: ''} />
                 </div>
                 <input
                   type="text"
