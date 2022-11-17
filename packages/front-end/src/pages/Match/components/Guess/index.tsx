@@ -155,7 +155,11 @@ export default function Guess(props: GuessOptions) {
         setShowLeftTime(true);
       }
       // 获取价格
-      getPrice().then(setTTPrice);
+      if (currentMatch.payTokenSymbol.toUpperCase() === 'USDT') {
+        setTTPrice(1);
+      } else {
+        getPrice().then(setTTPrice);
+      }
     }
   }, [currentMatch, props.type]);
 
@@ -163,7 +167,7 @@ export default function Guess(props: GuessOptions) {
     // 计算预计可赢得
     const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
     const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
-    // 计算手续费  TODO: 这里改成链上获取
+    // 计算手续费
     const fee = toBN(inputValue).multipliedBy(feeRatio).toString(10);
     setInputValue(inputValue);
     setReward(reward);
@@ -187,8 +191,10 @@ export default function Guess(props: GuessOptions) {
   useEffect(() => {
     if (currentMatch) {
       // 状态为竞猜中，且在竞猜结束时间前
-      if (currentMatch.status === MatchStatus.GUESS_ON_GOING
-        && currentMatch.guessEndTime.toNumber() * 1000 > Date.now()) {
+      if (
+        currentMatch.status === MatchStatus.GUESS_ON_GOING &&
+        currentMatch.guessEndTime.toNumber() * 1000 > Date.now()
+      ) {
         setShowBetOption(true);
       } else {
         setShowBetOption(false);
