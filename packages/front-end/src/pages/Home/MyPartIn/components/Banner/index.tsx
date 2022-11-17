@@ -57,7 +57,7 @@ export default function Banner() {
         <div className={styles.bannerWrap}>
           <div className={styles.totalReward}>
             <div>
-              <label>{$t('{#累計競猜價值#}')}(TT)</label>
+              <label>{$t('{#累計競猜價值#}')}({playerTotalInfo.token.symbol})</label>
               <span>
                 {toFixed(
                   toBN(playerTotalInfo.playerTotalBetAmount)
