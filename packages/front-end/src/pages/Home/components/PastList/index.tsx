@@ -33,7 +33,7 @@ export default function PastList() {
             },
             {
               name: $t('{#參與人次#}'),
-              value: $t('{#%s 人#}').replace('%s', item.totalPlayers as string),
+              value: item.totalPlayers as string,
               // value: `${item.totalPlayers} 人`,
             },
             {
