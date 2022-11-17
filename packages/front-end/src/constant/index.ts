@@ -19,9 +19,9 @@ export interface IContractAddress {
 }
 export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.BSC_TESTNET]: {
-    tt: "0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de",
-    qatar: "0x38acf7B15E9a506aeFaA3fa80c96530488Fe3895",
-    lens: "0xc380BC66499f133DA372dAf3efE9d5CcA0f6274F"
+    tt: "0x0bDBF5aB4E87C417292eA70947bE29CFD3018d7F",
+    qatar: "0x4e5ECDC99Dae2F29C13482F2467a4b2557B2a32C",
+    lens: "0x4C9f0825CAD89aEf3427e89af2f3B5e810a93563"
   },
   [ChainIds.HECO_TESTNET]: {
     tt: "0x0BA5BD9C265dFD6F4A76807F65881cEb0C6e0CB2",
@@ -31,7 +31,7 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
 
   [ChainIds.BSC_MAINNET]: {
     lens: '',
-    tt: '0x445cc9518cf7bc7386a2e3aaf510650b0fb05f5f',
+    tt: '0x55d398326f99059fF775485246999027B3197955',
     qatar: '',
   },
   [ChainIds.HECO_MAINNET]: {
