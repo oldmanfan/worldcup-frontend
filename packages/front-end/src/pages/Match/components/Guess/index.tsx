@@ -164,15 +164,55 @@ export default function Guess(props: GuessOptions) {
   }, [currentMatch, props.type]);
 
   useEffect(() => {
-    // 计算预计可赢得
-    const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
-    const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
+    if (props.type !== 1) return; // 不在猜比分页上
+    // 计算猜胜负预盈可得
+    const index = Number(score) - 27;
+
     // 计算手续费
-    const fee = toBN(inputValue).multipliedBy(feeRatio).toString(10);
+    const decimals = toPow(currentMatch?.payTokenDecimals?.toNumber()!);
+    const rawInput = toBN(inputValue).multipliedBy(decimals);
+    const fee = rawInput.multipliedBy(feeRatio);
+
+    const input = rawInput.minus(fee);
+
+    const totalDeposit =  toBN(currentMatch?.winlosePool.deposited!);
+    const poolDeposit = toBN(currentMatch?.winlosePool.eachDeposited[index]!);
+
+    const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
+
+    const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
+
+
     setInputValue(inputValue);
     setReward(reward);
-    setFee(fee);
-  }, [inputValue, winLoss, score]);
+    setFee(fee.div(decimals).toString(10));
+  }, [inputValue, winLoss]);
+
+  useEffect(() => {
+    if (props.type === 1) return; // 在猜比分页上
+
+    // 计算猜比分预盈可得
+    const index = Number(score);
+
+    // 计算手续费
+    const decimals = toPow(currentMatch?.payTokenDecimals?.toNumber()!);
+    const rawInput = toBN(inputValue).multipliedBy(decimals);
+    const fee = rawInput.multipliedBy(feeRatio);
+
+    const input = rawInput.minus(fee);
+
+    const totalDeposit =  toBN(currentMatch?.scoreGuessPool.deposited!);
+    const poolDeposit = toBN(currentMatch?.scoreGuessPool.eachDeposited[index]!);
+
+    const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
+
+    const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
+    // console.log(`score gussing: input: ${input.toString(10)}, odd: ${odd.toString(10)} reward: ${reward.toString(10)}`)
+
+    setInputValue(inputValue);
+    setReward(reward);
+    setFee(fee.div(decimals).toString(10));
+  }, [inputValue, score]);
 
   const handleInput = (value: string) => {
     if (!currentMatch) {
