@@ -20,7 +20,7 @@ export interface IContractAddress {
 export const ContractAddress: { [chainId: number]: IContractAddress } = {
   [ChainIds.BSC_TESTNET]: {
     tt: "0xb9ba5c1c99ac58bcb2cc2b8c51e814e4a4e122de",
-    qatar: "0x5840EB8fa17a6990fDd061d46D581741D248a3F9",
+    qatar: "0x38acf7B15E9a506aeFaA3fa80c96530488Fe3895",
     lens: "0xc380BC66499f133DA372dAf3efE9d5CcA0f6274F"
   },
   [ChainIds.HECO_TESTNET]: {
