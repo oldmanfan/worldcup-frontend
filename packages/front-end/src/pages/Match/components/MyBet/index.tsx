@@ -114,7 +114,7 @@ export default function MyBet(props: MyBetProps) {
                     .replace(
                       '%n',
                       toFixed(toBN(item.odds).div(1e18).toNumber()),
-                    )}
+                  ).replace('TT', currentMatch.payTokenSymbol.toUpperCase() === 'USDT' ? 'USDT' : 'TT')}
                 </p>
               </div>
             );
