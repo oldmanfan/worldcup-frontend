@@ -117,7 +117,7 @@ export function useMatches() {
               token,
             });
 
-            if (winlose.win) {
+            if (item.status == MatchStatus.MATCH_FINISHED && winlose.win) {
               // odds默认有1e18
               playerTotalWinAmount = playerTotalWinAmount.plus(
                 toBN(winlose.odds)
@@ -157,7 +157,7 @@ export function useMatches() {
               token,
             });
 
-            if (scoreGuess.win) {
+            if (item.status == MatchStatus.MATCH_FINISHED && scoreGuess.win) {
               playerTotalWinAmount = playerTotalWinAmount.plus(
                 toBN(scoreGuess.odds)
                   .multipliedBy(toBN(scoreGuess.betAmount))
