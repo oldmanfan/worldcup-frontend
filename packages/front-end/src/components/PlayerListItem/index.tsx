@@ -55,7 +55,7 @@ export default function PlayerListItem(props: IListItemProps) {
   }, [countryA, countryB]);
 
   useEffect(() => {
-    if (!(toBN(scoresA).eq(255) && toBN(scoresB).eq(255))) {
+    if (status == MatchStatus.MATCH_FINISHED) {
       setScoreVisible(true);
     }
   }, []);
