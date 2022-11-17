@@ -95,6 +95,7 @@ export interface BatRecord {
   wallet: string;
   matchId: string;
   guessType: string;
+  payToken: string;
   betAmount: string;
   betTime: string;
   referralCode: string;

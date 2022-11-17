@@ -235,6 +235,7 @@ export default function Guess(props: GuessOptions) {
         wallet: account,
         matchId: currentMatch?.matchId.toNumber().toString(),
         guessType: guessType?.toString() || '',
+        payToken: currentMatch.payToken || '',
         betAmount: amount.toString(10),
         betTime: tx.timestamp?.toString() || Date.now().toString(),
         // 逻辑里面处理，是否存在referralCode，没丢弃
