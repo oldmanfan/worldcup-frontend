@@ -61,3 +61,13 @@ body {
   width: 100px;
   height: 78px;
 }
+
+.ant-message-notice .ant-message-notice-content {
+  background: #3E414A;
+  color: rgba(255, 255, 255, 0.6);
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+.ant-message-notice .ant-message-notice-content .anticon {
+  display: none;
+}
