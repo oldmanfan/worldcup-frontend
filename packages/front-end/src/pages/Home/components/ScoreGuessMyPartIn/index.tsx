@@ -34,7 +34,7 @@ export default function ScoreGuessMyPartIn() {
             },
             {
               name: $t('{#開獎時間#}'),
-              value: `${formatTime(toBN(item.matchEndTime).toNumber() * 1000)}`,
+              value: `${formatTime(toBN(item.matchEndTime).toNumber())}`,
             },
           ]}
           {...item}

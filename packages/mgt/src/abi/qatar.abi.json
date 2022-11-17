@@ -574,24 +574,6 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
-        "name": "guessType",
-        "type": "uint256"
-      }
-    ],
-    "name": "nobodyWin",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "matId",
-        "type": "uint256"
-      },
-      {
         "internalType": "bool",
         "name": "toPause",
         "type": "bool"
@@ -652,6 +634,32 @@
       }
     ],
     "name": "revokeRole",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_feeRatio",
+        "type": "uint256"
+      }
+    ],
+    "name": "setFeeRatio",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "matId",
+        "type": "uint256"
+      }
+    ],
+    "name": "setMatchFinished",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -791,12 +799,12 @@
       },
       {
         "internalType": "uint256",
-        "name": "startTime",
+        "name": "matchStartTime",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "endTime",
+        "name": "matchEndTime",
         "type": "uint256"
       },
       {

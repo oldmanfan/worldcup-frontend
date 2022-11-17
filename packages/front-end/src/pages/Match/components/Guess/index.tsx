@@ -10,7 +10,7 @@ import { CountriesById } from '@/constant/Countries';
 import { GuessType } from '@/constant/GuessType';
 import { BigNumberLike, toBN, toPow } from '@/utils/bn';
 import BigNumber from 'bignumber.js';
-import { onlyNumber, toFixed } from '@/utils';
+import { onlyNumber, toFixed, getErrorMsg } from '@/utils';
 // import useToken from '@/hooks/useToken';
 import { useMatches, useTopNRecords } from '@/hooks/useLens';
 import { makeQatarContract, QatarContract } from '@/hooks/useContract';
@@ -186,7 +186,9 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
-      if (currentMatch.status === MatchStatus.GUESS_ON_GOING) {
+      // 状态为竞猜中，且在竞猜结束时间前
+      if (currentMatch.status === MatchStatus.GUESS_ON_GOING
+        && currentMatch.guessEndTime.toNumber() * 1000 > Date.now()) {
         setShowBetOption(true);
       } else {
         setShowBetOption(false);
@@ -255,7 +257,8 @@ export default function Guess(props: GuessOptions) {
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     } catch (error: any) {
-      message.error(error.message || 'bet failed');
+      const msg = getErrorMsg(error, 'Bet failed');
+      message.error(msg);
     } finally {
       setLoading(false);
     }
@@ -310,7 +313,8 @@ export default function Guess(props: GuessOptions) {
         setClaimedReward(undefined);
       }
     } catch (error) {
-      message.error('Claim Failed');
+      const msg = getErrorMsg(error, 'Claim Failed');
+      message.error(msg);
     } finally {
       setClaimLoading(false);
     }

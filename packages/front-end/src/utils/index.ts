@@ -35,7 +35,7 @@ export async function toBase64(str: string) {
   return base64.replace('data:text/plain;base64,', '');
 }
 
-export function formatTime(time: number, formatr = 'MM.DD hh:mm') {
+export function formatTime(time: number, formatr = 'MM.DD HH:mm') {
   return moment(time * 1000).format(formatr);
 }
 
@@ -106,4 +106,16 @@ export function sleep(time = 5000) {
   return new Promise((resolve) => {
     setTimeout(resolve, time);
   });
+}
+
+export function getErrorMsg(err: any, fallback: string) {
+  const msg =
+    err?.error?.data?.message ||
+    err?.error?.message ||
+    err?.reason ||
+    err?.message ||
+    fallback;
+    // ||
+    // "request error";
+  return msg;
 }

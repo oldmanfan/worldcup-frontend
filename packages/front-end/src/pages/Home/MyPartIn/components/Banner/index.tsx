@@ -1,6 +1,6 @@
 import styles from './index.module.less';
 import { useMatches } from '@/hooks/useLens';
-import { toFixed, sleep } from '@/utils';
+import { toFixed, sleep, getErrorMsg } from '@/utils';
 import { toBN, toPow } from '@/utils/bn';
 import { Button, message } from 'antd';
 import { useState } from 'react';
@@ -43,7 +43,8 @@ export default function Banner() {
       getAllMatches();
       message.success('Claim Success');
     } catch (error: any) {
-      message.error(error.message || 'Claim Failed');
+      const msg = getErrorMsg(error, 'Claim Failed');
+      message.error(msg);
     } finally {
       setLoading(false);
     }

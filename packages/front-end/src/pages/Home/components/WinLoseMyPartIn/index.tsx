@@ -33,7 +33,7 @@ export default function WinLoseMyPartIn() {
             },
             {
               name: $t('{#開獎時間#}'),
-              value: `${formatTime(toBN(item.matchEndTime).toNumber() * 1000)}`,
+              value: `${formatTime(item.matchEndTime.toNumber())}`,
             },
           ]}
           {...item}
