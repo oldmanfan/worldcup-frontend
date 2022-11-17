@@ -4,6 +4,7 @@ import PlayerListItem from '@/components/PlayerListItem';
 import { useMatchStore } from '@/models';
 import { toBN, toPow } from '@/utils/bn';
 import useTranslation from '@/hooks/useTranslation';
+import { ScoreById } from '@/constant';
 
 // 往期赛事
 export default function ScoreGuessMyPartIn() {
@@ -21,25 +22,32 @@ export default function ScoreGuessMyPartIn() {
   return (
     <List
       dataSource={playerScoreGuessRecords}
-      renderItem={(item, index) => (
-        <PlayerListItem
-          rows={[
-            {
-              name: $t('{#下注金額#}'),
-              value: `${toFixed(
-                toBN(item.betAmount)
-                  .div(toPow(item.token.decimals))
-                  .toString(10),
-              )} ${item.token.symbol}`,
-            },
-            {
-              name: $t('{#開獎時間#}'),
-              value: `${formatTime(toBN(item.matchEndTime).toNumber())}`,
-            },
-          ]}
-          {...item}
-        />
-      )}
+      renderItem={(item, index) => {
+        const guessDesc = ScoreById[item.guessType.toNumber()].label;
+        return (
+          <PlayerListItem
+            rows={[
+              {
+                name: $t('{#我的競猜#}'),
+                value: guessDesc,
+              },
+              {
+                name: $t('{#下注金額#}'),
+                value: `${toFixed(
+                  toBN(item.betAmount)
+                    .div(toPow(item.token.decimals))
+                    .toString(10),
+                )} ${item.token.symbol}`,
+              },
+              {
+                name: $t('{#開獎時間#}'),
+                value: `${formatTime(toBN(item.matchEndTime).toNumber())}`,
+              },
+            ]}
+            {...item}
+          />
+        )
+      }}
     ></List>
   );
 }
