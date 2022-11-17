@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RightOutlined } from '@ant-design/icons';
+import { ConsoleSqlOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.less';
 import { ListItemProps } from '@/hooks/types';
@@ -112,10 +112,16 @@ export default function ListItem(props: IListItemProps) {
       </div>
       <div className={styles.detail}>
         {rows.map((item, index) => {
+          // console.log('item.value=', item.value, typeof item.value);
           return (
             <p key={index}>
               <label>{item.name}</label>
-              <span>{item.value}</span>
+              <span>{
+                // object时候为BigNumber
+                typeof item.value === 'object'
+                  ? toBN(item.value).toString()
+                  : item.value
+              }</span>
             </p>
           );
         })}
