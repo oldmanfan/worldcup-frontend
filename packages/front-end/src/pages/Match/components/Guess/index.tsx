@@ -416,17 +416,15 @@ export default function Guess(props: GuessOptions) {
             <div className={styles.winInfo}>
               <div>
                 <p>{$t('{#盈得#}')}</p>
-                <span>
-                  <strong>
-                    {(claimedReward &&
-                      toBN(claimedReward.betAmount)
-                        .multipliedBy(toBN(claimedReward.odds).div(1e18))
-                        .div(toPow(currentMatch.token.decimals))
-                        .toString()) ||
-                      0}{' '}
-                    {token && token?.symbol}
-                  </strong>
-                </span>
+                <strong>
+                  {(claimedReward &&
+                    toBN(claimedReward.betAmount)
+                      .multipliedBy(toBN(claimedReward.odds).div(1e18))
+                      .div(toPow(currentMatch.token.decimals))
+                      .toString()) ||
+                    0}{' '}
+                  {token && token?.symbol}
+                </strong>
               </div>
               {claimedReward && claimedReward.claimedAmount.eq(0) ? (
                 <Button
