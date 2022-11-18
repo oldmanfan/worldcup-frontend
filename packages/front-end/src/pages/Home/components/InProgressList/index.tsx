@@ -31,8 +31,8 @@ export default function InProgressList() {
                 .toString(10)}`,
             },
             {
-              name: $t('{#參與人數#}'),
-              value: $t('{#%s 人#}').replace('%s', item.totalPlayers as string),
+              name: $t('{#參與人次#}'),
+              value: item.totalPlayers as string,
               // value  `${item.totalPlayers} 人`,
             },
             {

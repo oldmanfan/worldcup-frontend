@@ -48,6 +48,11 @@ export default function LocaleContextWrapper(props: LocaleContextWrapperProps) {
   };
   useEffect(() => {
     fetchLocaleMessage(locale);
+    if (locale === 'zh-hk') {
+      document.title = '點燃激情 狂歡世界盃';
+    } else {
+      document.title = 'World Cup Betshootting';
+    }
   }, [locale]);
 
   return (

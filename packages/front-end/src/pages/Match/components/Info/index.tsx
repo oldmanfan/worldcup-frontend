@@ -38,7 +38,7 @@ export default function Info(props: InfoProps) {
         const b = await import(
           `../../../../assets/img/countries/${currentMatch.countryB.toNumber()}@2x.png`
         );
-        console.log('import countries img=', a.default);
+        // console.log('import countries img=', a.default);
         setImgs([a.default, b.default]);
       }
     };

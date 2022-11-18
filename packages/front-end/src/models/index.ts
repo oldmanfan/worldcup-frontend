@@ -36,11 +36,19 @@ export const [useMatchStore, MatchStoreProvider] = createStore(() => {
   }
 
   function setPlayerWinLoseRecordsStore(records: PlayerRecords[]) {
-    setPlayerWinLoseRecords(records);
+    // 下注betTime倒序排列
+    setPlayerWinLoseRecords(records.sort((a, b) => {
+      return b.betTime.toNumber() - a.betTime.toNumber();
+    }));
+    // setPlayerWinLoseRecords(records);
   }
 
   function setPlayerScoreGuessRecordsStore(records: PlayerRecords[]) {
-    setPlayerScoreGuessRecords(records);
+    // 下注betTime倒序排列
+    setPlayerScoreGuessRecords(records.sort((a, b) => {
+      return b.betTime.toNumber() - a.betTime.toNumber();
+    }));
+    // setPlayerScoreGuessRecords(records);
   }
 
   return {
