@@ -91,10 +91,10 @@ export default function MyBet(props: MyBetProps) {
             return (
               <div className={styles.item} key={index}>
                 <div>
-                  <label>
-                    {$t('{#已競猜#}')}
+                  {!!item.label && <label>
+                    {/* {$t('{#已競猜#}')} */}
                     {item.label}
-                  </label>
+                  </label>}
                   <strong>{item.hightlightLabel}</strong>
                   <span>
                     <i />
