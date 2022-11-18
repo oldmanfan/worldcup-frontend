@@ -197,6 +197,15 @@ export default function Home() {
       key: "payToken",
     },
     {
+      title: "比分",
+      dataIndex: "scores",
+      key: "scores",
+      render: (_:any,  record: ListItemProps) => {
+        if (record.scoresA.toNumber() == 255) return `-- : --`;
+        else return `${record.scoresA} : ${record.scoresB}`
+      },
+    },
+    {
       title: "状态",
       dataIndex: "status",
       key: "status",
@@ -205,14 +214,14 @@ export default function Home() {
       },
     },
     {
-      title: "启用",
+      title: "暂停",
       dataIndex: "isPaused",
       key: "isPaused",
       render: (value: boolean, record: ListItemProps) => {
         return (
           <Switch
-            checkedChildren="开启"
-            unCheckedChildren="关闭"
+            checkedChildren="未暂停"
+            unCheckedChildren="已暂停"
             checked={!value}
             disabled={record.status === 5}
             onChange={(checked: boolean) => {
