@@ -43,7 +43,11 @@ export default function Banner() {
       getAllMatches();
       message.success('Claim Success');
     } catch (error: any) {
-      const msg = getErrorMsg(error, 'Claim Failed');
+      let msg = 'Something went wrong, try again later';
+      if (error.code === 'ACTION_REJECTED') {
+        msg = 'Transaction denied, please try again'
+      }
+      // const msg = getErrorMsg(error, 'Claim Failed');
       message.error(msg);
     } finally {
       setLoading(false);

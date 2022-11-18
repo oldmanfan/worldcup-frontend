@@ -310,7 +310,11 @@ export default function Guess(props: GuessOptions) {
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     } catch (error: any) {
-      const msg = getErrorMsg(error, 'Bet failed');
+      let msg = 'Something went wrong, try again later';
+      if (error.code === 'ACTION_REJECTED') {
+        msg = 'Transaction denied, please try again'
+      }
+      // const msg = getErrorMsg(error, 'Bet failed');
       message.error(msg);
     } finally {
       setLoading(false);
@@ -365,8 +369,12 @@ export default function Guess(props: GuessOptions) {
         message.success('claim success');
         setClaimedReward(undefined);
       }
-    } catch (error) {
-      const msg = getErrorMsg(error, 'Claim Failed');
+    } catch (error: any) {
+      // const msg = getErrorMsg(error, 'Claim Failed');
+      let msg = 'Something went wrong, try again later';
+      if (error.code === 'ACTION_REJECTED') {
+        msg = 'Transaction denied, please try again'
+      }
       message.error(msg);
     } finally {
       setClaimLoading(false);
