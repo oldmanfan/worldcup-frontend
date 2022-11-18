@@ -1,16 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './index.module.less';
 import useTranslation from '@/hooks/useTranslation';
 
-type keyType = 'worldcup' | 'mypartin';
+export type keyType = 'worldcup' | 'mypartin';
 
 interface TabBarProps {
+  active: keyType;
   onSelected: (selected: keyType) => void;
 }
 export default function TabBar(props: TabBarProps) {
   const { onSelected } = props;
-  const [selected, setSelected] = useState<keyType>('worldcup');
+  const [selected, setSelected] = useState<keyType>(props.active || 'worldcup');
   const { $t } = useTranslation();
+
+  useEffect(() => {
+    setSelected(props.active || 'worldcup')
+  }, [props.active]);
 
   const tabs = [
     {
