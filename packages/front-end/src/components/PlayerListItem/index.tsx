@@ -70,7 +70,7 @@ export default function PlayerListItem(props: IListItemProps) {
       onClick();
       return;
     }
-    navigate(`/match/${matchId.toNumber()}`);
+    navigate(`/match/${matchId.toNumber()}?betId=${match.betId?.toString()}`);
   };
 
   return (

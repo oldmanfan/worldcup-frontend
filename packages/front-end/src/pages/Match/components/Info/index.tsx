@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import cls from 'classnames';
+import queryString from 'query-string';
 import styles from './index.module.less';
 import useTranslation from '@/hooks/useTranslation';
 import { useMatchStore } from '@/models';
@@ -92,11 +93,13 @@ export default function Info(props: InfoProps) {
       }
 
       if (currentMatch) {
+        const { betId } = queryString.parse(location.search);
+        // console.log('betId===', betId, props.active);
         // 检查奖励是否已领取
         let isWin = false;
         if (props.active === 1) {
           currentMatch.winloseRecords.map((item) => {
-            if (item.win) {
+            if (item.win && item.betId.toString() === betId) {
               isWin = true;
             }
           });
@@ -108,7 +111,7 @@ export default function Info(props: InfoProps) {
           }
         } else {
           currentMatch.scoreGuessRecords.map((item) => {
-            if (item.win) {
+            if (item.win && item.betId.toString() === betId) {
               isWin = true;
             }
           });

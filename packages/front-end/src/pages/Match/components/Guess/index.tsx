@@ -4,6 +4,7 @@ import useTranslation from '@/hooks/useTranslation';
 import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 import { ExclamationCircleFilled, RightOutlined } from '@ant-design/icons';
+import queryString from 'query-string';
 import useWallet from '@/hooks/useWallet';
 import { useMatchStore } from '@/models';
 import { CountriesById } from '@/constant/Countries';
@@ -97,6 +98,7 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
+      const { betId } = queryString.parse(location.search);
       // 检查奖励是否已领取
       setClaimedReward(undefined);
       if (props.type === 1) {
@@ -104,7 +106,7 @@ export default function Guess(props: GuessOptions) {
           // if (item.win && item.claimedAmount.eq(0)) {
           //   setClaimedReward(item);
           // }
-          if (item.win) {
+          if (item.win && item.betId.toString() === betId) {
             setClaimedReward(item);
           }
         });
@@ -113,7 +115,7 @@ export default function Guess(props: GuessOptions) {
           // if (item.win && item.claimedAmount.eq(0)) {
           //   setClaimedReward(item);
           // }
-          if (item.win) {
+          if (item.win && item.betId.toString() === betId) {
             setClaimedReward(item);
           }
         });
