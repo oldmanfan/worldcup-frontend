@@ -251,6 +251,12 @@ export default function Guess(props: GuessOptions) {
       message.error('get match info failed');
       return;
     }
+
+    if (currentMatch.isPaused) {
+      message.error('Paused, please try again later');
+      return;
+    }
+
     if (!token) {
       message.error('token not get');
       return;
