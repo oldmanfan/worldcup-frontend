@@ -12,7 +12,7 @@ export const Countries: {
   Ecuador: { id: 4, zhName: '厄瓜多尔' },
   England: { id: 5, zhName: '英格兰' },
   Iran: { id: 6, zhName: '伊朗' },
-  Usa: { id: 7, zhName: '美国' },
+  USA: { id: 7, zhName: '美国' },
   Welsh: { id: 8, zhName: '威尔士' },
   Argentina: { id: 9, zhName: '阿根廷' },
   Saudi: { id: 10, zhName: '沙特' },
