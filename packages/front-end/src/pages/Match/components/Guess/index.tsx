@@ -499,7 +499,7 @@ export default function Guess(props: GuessOptions) {
                 </div>
                 <input
                   type="text"
-                  placeholder={$t('{#輸入TT參與競猜#}')}
+                  placeholder={$t('{#輸入數額參與競猜#}')}
                   value={inputValue}
                   onChange={(value) => handleInput(value.target.value)}
                 />
