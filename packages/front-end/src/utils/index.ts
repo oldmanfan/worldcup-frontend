@@ -119,3 +119,25 @@ export function getErrorMsg(err: any, fallback: string) {
     // "request error";
   return msg;
 }
+
+export function isFullScreen () {
+  let isNewIphone = window && testUA('iPhone') && window.screen.height >= 812 && window.devicePixelRatio >= 2;
+
+  return isNewIphone || judgeBigScreen()
+
+  function testUA (str: string) {
+    return navigator.userAgent.indexOf(str) > -1
+  }
+
+  function  judgeBigScreen() {
+    let result = false;
+    const rate = window.screen.height / window.screen.width;
+    let limit =  window.screen.height === window.screen.availHeight ? 1.8 : 1.65; // 临界判断值
+    // window.screen.height为屏幕高度
+    //  window.screen.availHeight 为浏览器 可用高度
+    if (rate > limit) {
+      result = true;
+    }
+    return result;
+  }
+}

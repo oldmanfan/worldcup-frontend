@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styles from './index.module.less';
 import useTranslation from '@/hooks/useTranslation';
-
+import {isFullScreen} from "@/utils";
+import cls from 'classnames';
 export type keyType = 'worldcup' | 'mypartin';
 
 interface TabBarProps {
@@ -36,7 +37,11 @@ export default function TabBar(props: TabBarProps) {
   };
 
   return (
-    <div className={styles.tabbar}>
+    <div
+      className={cls(
+        styles.tabbar, `${isFullScreen() ? styles.fullscreen : ''}`
+      )}
+    >
       <ul>
         {tabs.map((item, index) => {
           return (

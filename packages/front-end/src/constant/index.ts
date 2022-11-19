@@ -53,8 +53,8 @@ export const APPROVE_MAX =
  *
  * 请按实际地址填写，否则将获取不到验证码（切记如果非同域下：接口需要为https,且允许跨域访问）
  */
-export const MyCodeApi = `http://18.141.222.213/api/get_mycode`;
-// export const MyCodeApi = `https://config.tdex.cz/api/get_mycode`;
+// export const MyCodeApi = `http://18.141.222.213/api/get_mycode`;
+export const MyCodeApi = `https://config.tdex.cz/api/get_mycode`;
 
 /**
  * 获取TT价格的服务地址，
@@ -65,8 +65,8 @@ export const MyCodeApi = `http://18.141.222.213/api/get_mycode`;
  *
  * 请按实际地址填写，否则将获取不到价格（切记如果非同域下：接口需要为https,且允许跨域访问）
  */
-export const GetPriceApi = `http://18.141.222.213/api/get_price`;
-// export const GetPriceApi = `https://config.tdex.cz/api/get_price`;
+// export const GetPriceApi = `http://18.141.222.213/api/get_price`;
+export const GetPriceApi = `https://config.tdex.cz/api/get_price`;
 
 /**
  * 上报bet记录
@@ -77,8 +77,8 @@ export const GetPriceApi = `http://18.141.222.213/api/get_price`;
  *
  * 请按实际地址填写，否则将获取不到价格（切记如果非同域下：接口需要为https,且允许跨域访问）
  */
-export const ReportBetApi = `http://18.141.222.213:3000/bet`;
-// export const ReportBetApi = `https://api.worldcup.direct/bet`;
+// export const ReportBetApi = `http://18.141.222.213:3000/bet`;
+export const ReportBetApi = `https://api.worldcup.direct/bet`;
 
-export const RefCode = `http://18.141.222.213:3000/refcode`;
-// export const RefCode = `https://api.worldcup.direct/refcode`;
+// export const RefCode = `http://18.141.222.213:3000/refcode`;
+export const RefCode = `https://api.worldcup.direct/refcode`;
