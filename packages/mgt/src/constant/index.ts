@@ -26,14 +26,14 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
   },
 
   [ChainIds.BSC_MAINNET]: {
-    lens: '',
     tt: '0x55d398326f99059fF775485246999027B3197955',
-    qatar: '',
+    qatar: '0xB63f53EEFaB0c86128669Ad2f374839f11c0D898',
+    lens: '0x320d4A38A5d45946d6B6568157B844C8a19cB3f6',
   },
   [ChainIds.HECO_MAINNET]: {
-    lens: '',
     tt: '0x86040C76AAE5CBB322364CAF8820b0E8902e97E5',
-    qatar: '',
+    qatar: '0xE844D1889294da61055000482f70B30009569B0A',
+    lens: '0x6245a750F750e79Afe183E92fc8A3a11bf873216',
   },
 };
 

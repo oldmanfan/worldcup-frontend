@@ -30,14 +30,14 @@ export const ContractAddress: { [chainId: number]: IContractAddress } = {
   },
 
   [ChainIds.BSC_MAINNET]: {
-    lens: '',
     tt: '0x55d398326f99059fF775485246999027B3197955',
-    qatar: '',
+    qatar: '0xB63f53EEFaB0c86128669Ad2f374839f11c0D898',
+    lens: '0x320d4A38A5d45946d6B6568157B844C8a19cB3f6',
   },
   [ChainIds.HECO_MAINNET]: {
-    lens: '',
     tt: '0x86040C76AAE5CBB322364CAF8820b0E8902e97E5',
-    qatar: '',
+    qatar: '0xE844D1889294da61055000482f70B30009569B0A',
+    lens: '0x6245a750F750e79Afe183E92fc8A3a11bf873216',
   },
 };
 
@@ -54,6 +54,7 @@ export const APPROVE_MAX =
  * 请按实际地址填写，否则将获取不到验证码（切记如果非同域下：接口需要为https,且允许跨域访问）
  */
 export const MyCodeApi = `http://18.141.222.213/api/get_mycode`;
+// export const MyCodeApi = `https://config.tdex.cz/api/get_mycode`;
 
 /**
  * 获取TT价格的服务地址，
@@ -65,6 +66,7 @@ export const MyCodeApi = `http://18.141.222.213/api/get_mycode`;
  * 请按实际地址填写，否则将获取不到价格（切记如果非同域下：接口需要为https,且允许跨域访问）
  */
 export const GetPriceApi = `http://18.141.222.213/api/get_price`;
+// export const GetPriceApi = `https://config.tdex.cz/api/get_price`;
 
 /**
  * 上报bet记录
@@ -76,5 +78,7 @@ export const GetPriceApi = `http://18.141.222.213/api/get_price`;
  * 请按实际地址填写，否则将获取不到价格（切记如果非同域下：接口需要为https,且允许跨域访问）
  */
 export const ReportBetApi = `http://18.141.222.213:3000/bet`;
+// export const ReportBetApi = `https://api.worldcup.direct/bet`;
 
 export const RefCode = `http://18.141.222.213:3000/refcode`;
+// export const RefCode = `https://api.worldcup.direct/refcode`;
