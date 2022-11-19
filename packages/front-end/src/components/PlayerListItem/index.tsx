@@ -55,7 +55,7 @@ export default function PlayerListItem(props: IListItemProps) {
   }, [countryA, countryB]);
 
   useEffect(() => {
-    if (!(toBN(scoresA).eq(255) && toBN(scoresB).eq(255))) {
+    if (status == MatchStatus.MATCH_FINISHED) {
       setScoreVisible(true);
     }
   }, []);
@@ -70,7 +70,7 @@ export default function PlayerListItem(props: IListItemProps) {
       onClick();
       return;
     }
-    navigate(`/match/${matchId.toNumber()}`);
+    navigate(`/match/${matchId.toNumber()}?betId=${match.betId?.toString()}`);
   };
 
   return (

@@ -4,6 +4,7 @@ import useTranslation from '@/hooks/useTranslation';
 import { useNavigate, useSearchParams, useParams } from 'react-router-dom';
 import { Button, message } from 'antd';
 import { ExclamationCircleFilled, RightOutlined } from '@ant-design/icons';
+import queryString from 'query-string';
 import useWallet from '@/hooks/useWallet';
 import { useMatchStore } from '@/models';
 import { CountriesById } from '@/constant/Countries';
@@ -97,6 +98,7 @@ export default function Guess(props: GuessOptions) {
 
   useEffect(() => {
     if (currentMatch) {
+      const { betId } = queryString.parse(location.search);
       // 检查奖励是否已领取
       setClaimedReward(undefined);
       if (props.type === 1) {
@@ -104,7 +106,7 @@ export default function Guess(props: GuessOptions) {
           // if (item.win && item.claimedAmount.eq(0)) {
           //   setClaimedReward(item);
           // }
-          if (item.win) {
+          if (item.win && item.betId.toString() === betId) {
             setClaimedReward(item);
           }
         });
@@ -113,7 +115,7 @@ export default function Guess(props: GuessOptions) {
           // if (item.win && item.claimedAmount.eq(0)) {
           //   setClaimedReward(item);
           // }
-          if (item.win) {
+          if (item.win && item.betId.toString() === betId) {
             setClaimedReward(item);
           }
         });
@@ -164,15 +166,55 @@ export default function Guess(props: GuessOptions) {
   }, [currentMatch, props.type]);
 
   useEffect(() => {
-    // 计算预计可赢得
-    const odd = currentMatch?.winlosePool.odds[Number(winLoss) - 27];
-    const reward = odd ? toBN(inputValue).multipliedBy(toBN(odd).div(1e18)) : 0;
+    if (props.type !== 1) return; // 不在猜比分页上
+    // 计算猜胜负预盈可得
+    const index = Number(score) - 27;
+
     // 计算手续费
-    const fee = toBN(inputValue).multipliedBy(feeRatio).toString(10);
+    const decimals = toPow(currentMatch?.payTokenDecimals?.toNumber()!);
+    const rawInput = toBN(inputValue).multipliedBy(decimals);
+    const fee = rawInput.multipliedBy(feeRatio);
+
+    const input = rawInput.minus(fee);
+
+    const totalDeposit =  toBN(currentMatch?.winlosePool.deposited!);
+    const poolDeposit = toBN(currentMatch?.winlosePool.eachDeposited[index]!);
+
+    const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
+
+    const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
+
+
     setInputValue(inputValue);
     setReward(reward);
-    setFee(fee);
-  }, [inputValue, winLoss, score]);
+    setFee(fee.div(decimals).toString(10));
+  }, [inputValue, winLoss]);
+
+  useEffect(() => {
+    if (props.type === 1) return; // 在猜比分页上
+
+    // 计算猜比分预盈可得
+    const index = Number(score);
+
+    // 计算手续费
+    const decimals = toPow(currentMatch?.payTokenDecimals?.toNumber()!);
+    const rawInput = toBN(inputValue).multipliedBy(decimals);
+    const fee = rawInput.multipliedBy(feeRatio);
+
+    const input = rawInput.minus(fee);
+
+    const totalDeposit =  toBN(currentMatch?.scoreGuessPool.deposited!);
+    const poolDeposit = toBN(currentMatch?.scoreGuessPool.eachDeposited[index]!);
+
+    const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
+
+    const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
+    // console.log(`score gussing: input: ${input.toString(10)}, odd: ${odd.toString(10)} reward: ${reward.toString(10)}`)
+
+    setInputValue(inputValue);
+    setReward(reward);
+    setFee(fee.div(decimals).toString(10));
+  }, [inputValue, score]);
 
   const handleInput = (value: string) => {
     if (!currentMatch) {
@@ -211,6 +253,12 @@ export default function Guess(props: GuessOptions) {
       message.error('get match info failed');
       return;
     }
+
+    if (currentMatch.isPaused) {
+      message.error('Paused, please try again later');
+      return;
+    }
+
     if (!token) {
       message.error('token not get');
       return;
@@ -264,7 +312,11 @@ export default function Guess(props: GuessOptions) {
       getAllMatches();
       getTopNRecords(currentMatch.matchId.toNumber(), props.type - 1);
     } catch (error: any) {
-      const msg = getErrorMsg(error, 'Bet failed');
+      let msg = 'Something went wrong, try again later';
+      if (error.code === 'ACTION_REJECTED') {
+        msg = 'Transaction denied, please try again'
+      }
+      // const msg = getErrorMsg(error, 'Bet failed');
       message.error(msg);
     } finally {
       setLoading(false);
@@ -319,8 +371,12 @@ export default function Guess(props: GuessOptions) {
         message.success('claim success');
         setClaimedReward(undefined);
       }
-    } catch (error) {
-      const msg = getErrorMsg(error, 'Claim Failed');
+    } catch (error: any) {
+      // const msg = getErrorMsg(error, 'Claim Failed');
+      let msg = 'Something went wrong, try again later';
+      if (error.code === 'ACTION_REJECTED') {
+        msg = 'Transaction denied, please try again'
+      }
       message.error(msg);
     } finally {
       setClaimLoading(false);
@@ -360,17 +416,15 @@ export default function Guess(props: GuessOptions) {
             <div className={styles.winInfo}>
               <div>
                 <p>{$t('{#盈得#}')}</p>
-                <span>
-                  <strong>
-                    {(claimedReward &&
-                      toBN(claimedReward.betAmount)
-                        .multipliedBy(toBN(claimedReward.odds).div(1e18))
-                        .div(toPow(currentMatch.token.decimals))
-                        .toString()) ||
-                      0}{' '}
-                    {token && token?.symbol}
-                  </strong>
-                </span>
+                <strong>
+                  {(claimedReward &&
+                    toBN(claimedReward.betAmount)
+                      .multipliedBy(toBN(claimedReward.odds).div(1e18))
+                      .div(toPow(currentMatch.token.decimals))
+                      .toString()) ||
+                    0}{' '}
+                  {token && token?.symbol}
+                </strong>
               </div>
               {claimedReward && claimedReward.claimedAmount.eq(0) ? (
                 <Button

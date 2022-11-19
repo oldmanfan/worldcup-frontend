@@ -42,6 +42,7 @@ export interface MatchStatistics {
   scoreGuessPool: GuessPool; // 猜比分奖池金额
   winloseRecords: Array<BetRecord>; // 猜输赢的下单
   scoreGuessRecords: Array<BetRecord>; // 猜比分的下单
+  isPaused: boolean;
   payTokenName: string; // 支付token的名字
   payTokenSymbol: string; // 支付token的symbol
   payTokenDecimals: BigNumber; // 支付token的dicimals
