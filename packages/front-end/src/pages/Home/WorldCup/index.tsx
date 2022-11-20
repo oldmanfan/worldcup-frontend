@@ -23,6 +23,12 @@ export default function WorldCup() {
     }
   }, [onGoingMatches])
 
+  // useEffect(() => {
+  //   if (selected === '11' && onGoingMatches.length === 0) {
+  //     setSelected('12')
+  //   }
+  // }, [selected])
+
   useEffect(() => {
     setSelected(getTab(searchParams.get('tab') || ''))
   }, [searchParams]);

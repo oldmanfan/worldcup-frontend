@@ -16,7 +16,7 @@ export default function Rule() {
           <h2>下注时间：</h2>
           <p>
             开始下注时间：开赛前六个小时；<br />
-            结束下注时间：开赛前十分钟；<br />
+            结束下注时间：开赛前10秒截止；<br />
             开奖时间：以实际时间为准；
           </p>
           <h2>赔率怎么计算？</h2>
@@ -47,7 +47,7 @@ export default function Rule() {
             <h2>Betting time:</h2>
             <p>
               Start betting time: six hours before the start of the game;<br />
-              End betting time: 10 minutes before the game starts;<br />
+              End betting time: 10 seconds before the game starts;<br />
               Draw time: right after the end of the competition;
             </p>
             <h2>How to calculate the odds?</h2>
