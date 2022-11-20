@@ -45,7 +45,7 @@ export default function InProgressList() {
               value: `$${toBN(item.totalPool)
                 .div(toPow(item.payTokenDecimals.toNumber()))
                 .multipliedBy(ttPrice || 1)
-                .toString(10)}`,
+                .toFixed(2, 1)}`,
             },
             {
               name: $t('{#參與人次#}'),

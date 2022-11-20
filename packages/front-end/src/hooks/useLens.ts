@@ -48,7 +48,9 @@ export function useMatches() {
     getAllMatches();
   }, [chainId, account, provider, contractAddress]);
 
+
   function getAllMatches() {
+    console.log('getAllMatches')
     if (provider && account && contractAddress) {
       const lensContract = makeLensContract(
         contractAddress.lens,
@@ -57,7 +59,7 @@ export function useMatches() {
       );
       // message.success(lensContract.getAllMatches.toString());
       lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
-        console.log('getAllMatches', res);
+        // console.log('getAllMatches', res);
         const matchMap: MatchMapProps = {};
         let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
         let playerTotalWinAmount = toBN(0); // 中奖金额
@@ -241,6 +243,7 @@ export function useMatches() {
           playerWinRate,
           token: playToken,
         });
+
       // }).catch(e => {
       //   message.success(e);
       });
