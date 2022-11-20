@@ -4,6 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import WinLoseMyPartIn from '../components/WinLoseMyPartIn';
 import ScoreGuessMyPartIn from '../components/ScoreGuessMyPartIn';
 import Banner from './components/Banner';
+import MyCode from './components/MyCode';
 import styles from './index.module.less';
 import useTranslation from '@/hooks/useTranslation';
 
@@ -45,6 +46,7 @@ export default function MyPartIn() {
           </Tabs.TabPane>
         </Tabs>
       </div>
+      <MyCode />
     </div>
   );
 }

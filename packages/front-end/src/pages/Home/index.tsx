@@ -29,7 +29,7 @@ export default function Home() {
       <TabBar
         active={selected}
         onSelected={(key) => {
-          setSearchParams({ tab: key === 'mypartin' ? '21' : '' });
+          setSearchParams({ tab: key === 'mypartin' ? '21' : '11' });
         }}
       />
     </div>
