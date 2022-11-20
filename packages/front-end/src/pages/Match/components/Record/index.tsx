@@ -95,7 +95,7 @@ export default function Record(props: RecordProps) {
                     <div
                       className={styles.value}
                       dangerouslySetInnerHTML={{
-                        __html: $t('{#競猜<strong>%s</strong>TT#}').replace(
+                        __html: $t('{#競猜<strong>%s</strong>' + token?.symbol + '#}').replace(
                           '%s',
                           toBN(item.betAmount)
                             .div(toPow(token?.decimals || 18))
