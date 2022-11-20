@@ -2,12 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { List } from 'antd';
 import ListItem from '@/components/ListItem';
 import { useMatches } from '@/hooks/useLens';
-import { formatTime } from '@/utils';
+import { formatTime, toFixed } from '@/utils';
 import { toBN, toPow } from '@/utils/bn';
 import useTranslation from '@/hooks/useTranslation';
-import {useEffect, useState} from "react";
-import {getPrice} from "@/api";
-import {useMatchStore} from "@/models";
+import { useEffect, useState } from 'react';
+import { getPrice } from '@/api';
+import { useMatchStore } from '@/models';
 
 // 正在进行
 export default function InProgressList() {
@@ -25,7 +25,7 @@ export default function InProgressList() {
     } else {
       getPrice().then(setTTPrice);
     }
-  }, [])
+  }, []);
 
   if (!onGoingMatches || onGoingMatches.length < 1) {
     return (
@@ -42,10 +42,11 @@ export default function InProgressList() {
           rows={[
             {
               name: $t('{#當前獎池金額#}'),
-              value: `$${toBN(item.totalPool)
-                .div(toPow(item.payTokenDecimals.toNumber()))
-                .multipliedBy(ttPrice || 1)
-                .toFixed(2, 1)}`,
+              value: `$${toFixed(
+                toBN(item.totalPool)
+                  .div(toPow(item.payTokenDecimals.toNumber()))
+                  .multipliedBy(ttPrice || 1),
+              )}`,
             },
             {
               name: $t('{#參與人次#}'),
