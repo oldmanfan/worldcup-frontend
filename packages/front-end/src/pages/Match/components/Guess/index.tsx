@@ -168,33 +168,45 @@ export default function Guess(props: GuessOptions) {
   useEffect(() => {
     if (props.type !== 1) return; // 不在猜比分页上
     // 计算猜胜负预盈可得
-    const index = Number(score) - 27;
+    // console.log(winLoss)
+    // console.log(props.type)
+    const index = Number(winLoss) - 27;
 
     // 计算手续费
     const decimals = toPow(currentMatch?.payTokenDecimals?.toNumber()!);
+    // console.log(decimals.toString())
     const rawInput = toBN(inputValue).multipliedBy(decimals);
+    // console.log(rawInput.toString())
     const fee = rawInput.multipliedBy(feeRatio);
 
     const input = rawInput.minus(fee);
-
+    // console.log(fee.toString())
+    // console.log(input.toString())
+    // console.log(toBN(currentMatch?.winlosePool.deposited!).toString())
     const totalDeposit =  toBN(currentMatch?.winlosePool.deposited!);
     const poolDeposit = toBN(currentMatch?.winlosePool.eachDeposited[index]!);
-
-    const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
-
-    const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
-
-
+    // console.log(toBN(currentMatch?.winlosePool.eachDeposited[index]!).toString())
+    // console.log(currentMatch?.winlosePool.eachDeposited)
+    // console.log(totalDeposit.div(poolDeposit).toString())
+    // console.log(index)
+    console.log(poolDeposit.toString())
+    console.log(totalDeposit.toString())
+    // const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
+    // const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
+    const reward = input.div(poolDeposit.plus(input)).multipliedBy(totalDeposit.plus(input)).div(decimals)
+    // console.log(reward.toString())
     setInputValue(inputValue);
     setReward(reward);
-    setFee(fee.div(decimals).toString(10));
-  }, [inputValue, winLoss]);
+    const feestr = fee.div(decimals).toString(10)
+    // console.log(feestr)
+    setFee(feestr);
+  }, [inputValue, winLoss, props]);
 
   useEffect(() => {
     if (props.type === 1) return; // 在猜比分页上
 
     // 计算猜比分预盈可得
-    const index = Number(score);
+    const index = Number(score) - 1;
 
     // 计算手续费
     const decimals = toPow(currentMatch?.payTokenDecimals?.toNumber()!);
@@ -205,16 +217,24 @@ export default function Guess(props: GuessOptions) {
 
     const totalDeposit =  toBN(currentMatch?.scoreGuessPool.deposited!);
     const poolDeposit = toBN(currentMatch?.scoreGuessPool.eachDeposited[index]!);
+    // console.log(currentMatch?.scoreGuessPool.eachDeposited)
+    // console.log(toBN(currentMatch?.scoreGuessPool.eachDeposited[index]!).toString())
+    console.log(poolDeposit.toString())
+    // console.log(index)
+    // console.log(input.toString())
+    console.log(totalDeposit.toString())
 
-    const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
+    // const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
 
-    const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
+    // const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
     // console.log(`score gussing: input: ${input.toString(10)}, odd: ${odd.toString(10)} reward: ${reward.toString(10)}`)
+    const reward = input.div(poolDeposit.plus(input)).multipliedBy(totalDeposit.plus(input)).div(decimals)
+    console.log(reward.toString())
 
     setInputValue(inputValue);
     setReward(reward);
     setFee(fee.div(decimals).toString(10));
-  }, [inputValue, score]);
+  }, [inputValue, score, props]);
 
   const handleInput = (value: string) => {
     if (!currentMatch) {
@@ -463,11 +483,13 @@ export default function Guess(props: GuessOptions) {
                       ? toFixed(
                           toBN(eachDeposited[Number(winLoss) - 27])
                             .div(toPow(currentMatch.token.decimals))
+                            .multipliedBy(ttPrice || 1)
                             .toString(10),
                         )
                       : toFixed(
                           toBN(eachDeposited[Number(score) - 1])
                             .div(toPow(currentMatch.token.decimals))
+                            .multipliedBy(ttPrice || 1)
                             .toString(10),
                         )}
                   </div>
@@ -521,14 +543,14 @@ export default function Guess(props: GuessOptions) {
               <div className={styles.formItem}>
                 <label>{$t('{#預盈可得#}')}</label>
                 <div className={styles.primary}>
-                  {toFixed(reward.toString(10))} {token?.symbol}
+                  {toFixed(reward.toString(10), 4)} {token?.symbol}
                 </div>
               </div>
               <div className={styles.formItem}>
                 <label>{$t('{#手續費#}')}</label>
                 <div className={styles.grey}>
                   {' '}
-                  {toFixed(fee)} {token?.symbol}
+                  {toFixed(fee, 4)} {token?.symbol}
                 </div>
               </div>
               {showLeftTime ? (
