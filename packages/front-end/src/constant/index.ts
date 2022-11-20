@@ -68,6 +68,10 @@ export const MyCodeApi = `https://config.tdex.cz/api/get_mycode`;
 // export const GetPriceApi = `http://18.141.222.213/api/get_price`;
 export const GetPriceApi = `https://config.tdex.cz/api/get_price`;
 
+export const GetBindInfoApi = `https://config.tdex.cz/api/get_bind_info`;
+
+export const SetBindInfoApi = `https://config.tdex.cz/api/do_bind`;
+
 /**
  * 上报bet记录
  * 开发机模式下是同域下的，然后做代理转发backend的/bet接口
@@ -82,3 +86,4 @@ export const ReportBetApi = `https://api.worldcup.direct/bet`;
 
 // export const RefCode = `http://18.141.222.213:3000/refcode`;
 export const RefCode = `https://api.worldcup.direct/refcode`;
+
