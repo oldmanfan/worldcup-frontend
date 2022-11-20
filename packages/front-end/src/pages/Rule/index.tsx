@@ -35,7 +35,7 @@ export default function Rule() {
           <p>
             1.如果一场比赛结束，胜利池有100TT，三个池子总奖池有10000TT，则胜利的赔率是10000/100=100 X<br />
             2.有百分之三的国库费哦；<br />
-            3.如果你在HECO链下注了100TT,该池子的赔率是80X，你就可以赢取（100*80）*（1-0.03）=776TT（具体赔率需要根据实际情况计算）；
+            3.如果你在HECO链下注了100TT,该池子的赔率是80X，你就可以赢取（100*80）*（1-0.03）=7760TT（具体赔率需要根据实际情况计算）；
           </p>
         </div>) : (
           <div className={styles.content}>
@@ -66,7 +66,7 @@ export default function Rule() {
             <p>
               1. If a game is over, the victory pool has 100TT, and the total prize pool of the three pools is 10000TT, then the odds of victory are 10000/100=100x;<br />
               2. There is a 3% fee;<br />
-              3. If you bet 100TT on the HECO chain, and the odds of this pool are 80x, you can win (100*80)*(1-0.03)=776TT (the specific odds need to be calculated according to the actual situation).
+              3. If you bet 100TT on the HECO chain, and the odds of this pool are 80x, you can win (100*80)*(1-0.03)=7760TT (the specific odds need to be calculated according to the actual situation).
             </p>
         </div>
       )}
