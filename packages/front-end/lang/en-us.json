@@ -63,5 +63,6 @@
   "下注金額": "Bet Amount",
   "下注時間": "Bet time",
   "|": "",
-  "%s勝": "on %s"
+  "%s勝": "on %s",
+  "可用": "Available:"
 }

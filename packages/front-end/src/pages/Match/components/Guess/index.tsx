@@ -348,8 +348,16 @@ export default function Guess(props: GuessOptions) {
       message.error('Get token info failed');
       return;
     }
+    let tmp = ttBalance.div(toPow(currentMatch?.token.decimals))
+    console.log(ttBalance.toString())
+    let balance
+    if (tmp.lte(0)) {
+      balance = 0
+    } else {
+      balance = tmp.toFixed(4, 1)
+    }
     setInputValue(
-      ttBalance.div(toPow(currentMatch?.token.decimals)).toString(10),
+      balance.toString()
     );
   };
 
@@ -528,10 +536,11 @@ export default function Guess(props: GuessOptions) {
                 <button onClick={handleAll}>ALL</button>
               </div>
               <div className={styles.balance}>
+                <span className={styles.balancetip}>{$t('{#可用#}')}</span>
                 {toFixed(
                   ttBalance
                     .div(toPow(currentMatch.token.decimals))
-                    .toString(10),
+                    .toString(10), 4
                 )}{' '}
                 {token?.symbol}
               </div>
