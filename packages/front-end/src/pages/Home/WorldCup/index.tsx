@@ -7,17 +7,26 @@ import FutureList from '../components/FutureList';
 import styles from './index.module.less';
 import Banner from '@/components/Banner';
 import useTranslation from '@/hooks/useTranslation'
+import {useMatches} from "@/hooks/useLens";
 
 const getTab = (tab: string) => ['11', '12', '13'].includes(tab) ? tab : '11';
 
 export default function WorldCup() {
   const { $t } = useTranslation();
+  const { onGoingMatches } = useMatches();
   const [searchParams, setSearchParams] = useSearchParams();
   const [selected, setSelected] = useState<string>(getTab(searchParams.get('tab') || ''));
 
   useEffect(() => {
+    if (selected === '11' && onGoingMatches.length === 0) {
+      setSelected('12')
+    }
+  }, [onGoingMatches])
+
+  useEffect(() => {
     setSelected(getTab(searchParams.get('tab') || ''))
   }, [searchParams]);
+
 
   return (
     <div className={styles.worldCup}>
