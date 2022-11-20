@@ -1,0 +1,114 @@
+.icon {
+  position: fixed;
+  right: 11px;
+  bottom: 95px;
+  z-index: 10;
+  cursor: pointer;
+  width: 54px;
+  height: 50px;
+  background: url('@/assets/img/mycode-en.png');
+  background-size: 100%;
+
+  &.zh {
+    background-image: url('@/assets/img/mycode-zh.png');
+  }
+
+  &.done {
+    background-image: url('@/assets/img/mycode-bound-en.png');
+
+    &.zh {
+      background-image: url('@/assets/img/mycode-bound-zh.png');
+    }
+  }
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .mask {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: #000000;
+    opacity: 0.8;
+    z-index: 8;
+  }
+
+  .content {
+    position: relative;
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 315px;
+    height: 197px;
+    background: #27335D;
+    border-radius: 18px;
+    padding: 24px 20px;
+
+    > h3 {
+      font-size: 18px;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 25px;
+      margin: 0 0 14px 0;
+    }
+    p {
+      font-size: 18px;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 22px;
+      padding: 0;
+      text-align: center;
+      word-break: break-all;
+      margin-top: 5px;
+      margin-bottom: 20px;
+    }
+    > input {
+      width: 100%;
+      height: 48px;
+      background: #161D31;
+      border: 1px solid transparent;
+      // border-image: linear-gradient(180deg, rgba(13, 19, 43, 1), rgba(39, 73, 146, 1)) 1 1;
+      border-radius: 10px;
+      margin-bottom: 20px;
+
+      font-size: 14px;
+      font-weight: 400;
+      color: #FFFFFF;
+      line-height: 18px;
+      padding: 12px 15px;
+      outline: none;
+      overflow: hidden;
+    }
+
+    button {
+      width: 275px;
+      height: 42px;
+      background: rgba(255, 255, 255, 0.2);
+      border-style: none;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 20px;
+    }
+  }
+}
+
+.hidden-overflow {
+  overflow: hidden;
+}

@@ -1,7 +1,7 @@
 import { toBase64 } from '@/utils';
 import queryString from 'query-string';
 import md5 from 'crypto-js/md5';
-import {MyCodeApi, GetPriceApi, ReportBetApi, RefCode} from '@/constant';
+import { MyCodeApi, GetPriceApi, RefCode, GetBindInfoApi, SetBindInfoApi, ReportBetApi } from '@/constant';
 
 export interface AuthParams {
   time: number;
@@ -66,18 +66,15 @@ export async function getPrice(): Promise<number> {
   return 0;
 }
 
-export async function setRefCode(
-  inviteCode: string,
-  address: string,
-): Promise<boolean> {
-  const body = {
-    referralCode: inviteCode,
-    wallet: address,
-  };
-  const url = RefCode;
+export async function getBindCode(address: string): Promise<string> {
+  const authParams = await getAuthParams();
+  const query = queryString.stringify({
+    ...authParams,
+    address,
+  });
+  const url = `${GetBindInfoApi}?${query}`;
   const res = await fetch(url, {
-    method: 'POST',
-    body: JSON.stringify(body),
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -85,10 +82,37 @@ export async function setRefCode(
   });
   if (res && res.status === 200) {
     const data = (await res.json()) || {};
-    return data.code === 200;
+    if (data.status === 1) {
+      return data.code;
+    }
   }
-  return false;
+  return '';
 }
+
+export async function setBindCode(address: string, code: string): Promise<number> {
+  const authParams = await getAuthParams();
+  const params = {
+    ...authParams,
+    address,
+    code,
+  };
+  // const url = RefCode;
+  const url = `${SetBindInfoApi}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(params),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'same-origin',
+  });
+  if (res && res.status === 200) {
+    const data = (await res.json()) || {};
+    return data?.status;
+  }
+  return 0;
+}
+
 
 export interface BatRecord {
   chainId: number,

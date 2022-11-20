@@ -5,9 +5,16 @@ import TestPage from './pages/TestPage';
 import Match from './pages/Match';
 import Rule from './pages/Rule';
 import useInvite from '@/hooks/useInvite';
+import { useEffect } from 'react';
+import { hooks } from '@/connectors/metamask';
+const { useAccount } = hooks;
 
 function App() {
-  useInvite();
+  const account = useAccount();
+  const { init } = useInvite();
+  useEffect(() => {
+    init();
+  }, [account]);
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
