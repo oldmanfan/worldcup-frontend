@@ -189,8 +189,8 @@ export default function Guess(props: GuessOptions) {
     // console.log(currentMatch?.winlosePool.eachDeposited)
     // console.log(totalDeposit.div(poolDeposit).toString())
     // console.log(index)
-    console.log(poolDeposit.toString())
-    console.log(totalDeposit.toString())
+    // console.log(poolDeposit.toString())
+    // console.log(totalDeposit.toString())
     // const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
     // const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
     const reward = input.div(poolDeposit.plus(input)).multipliedBy(totalDeposit.plus(input)).div(decimals)
@@ -219,17 +219,17 @@ export default function Guess(props: GuessOptions) {
     const poolDeposit = toBN(currentMatch?.scoreGuessPool.eachDeposited[index]!);
     // console.log(currentMatch?.scoreGuessPool.eachDeposited)
     // console.log(toBN(currentMatch?.scoreGuessPool.eachDeposited[index]!).toString())
-    console.log(poolDeposit.toString())
-    // console.log(index)
-    // console.log(input.toString())
-    console.log(totalDeposit.toString())
+    // console.log(poolDeposit.toString())
+    // // console.log(index)
+    // // console.log(input.toString())
+    // console.log(totalDeposit.toString())
 
     // const odd = totalDeposit.plus(input).multipliedBy(1e18).div(poolDeposit.plus(input));
 
     // const reward = odd ? input.multipliedBy(toBN(odd)).div(1e18).div(decimals) : 0;
     // console.log(`score gussing: input: ${input.toString(10)}, odd: ${odd.toString(10)} reward: ${reward.toString(10)}`)
     const reward = input.div(poolDeposit.plus(input)).multipliedBy(totalDeposit.plus(input)).div(decimals)
-    console.log(reward.toString())
+    // console.log(reward.toString())
 
     setInputValue(inputValue);
     setReward(reward);
