@@ -105,8 +105,9 @@ export async function setBindCode(address: string, code: string): Promise<number
     },
     credentials: 'same-origin',
   });
-  if (res && res.status === 1) {
+  if (res) {
     const data = (await res.json()) || {};
+    console.log('data====>', data);
     return data?.status;
   }
   return 0;

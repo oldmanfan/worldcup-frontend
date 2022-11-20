@@ -35,18 +35,20 @@ export default function useInvite() {
   /**
    * 保存绑定邀请关系
    */
-  const setRelationship = async (code: string): Promise<void> => {
+  const setRelationship = async (code: string): Promise<number> => {
     if (!code || !account) {
-      return;
+      return 0;
     }
     try {
       const result = await setBindCode(account, code);
       if (result === 1) {
         setReferralCode(code);
       }
+      return result;
     } catch (e) {
       console.error('setRelationship error:', e);
     }
+    return 0;
   }
 
   // useEffect(() => {
