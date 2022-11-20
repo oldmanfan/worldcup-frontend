@@ -53,25 +53,16 @@ export default function useInvite() {
 
   // useEffect(() => {
   const init = async () => {
-    const { invite } = queryString.parse(location.search);
     console.log('invite init...account=', account);
-    if (!account) {
-      // 账户不存在，存在邀请码，则暂时保存，连接钱包后再绑定
-      if (invite) {
-        setReferralCode(invite as string);
-      } else {
-        setReferralCode('');
-      }
-    } else {
+    if (account) {
       const code = await getBoundCode(account);
+      console.log('===>code=', code);
       if (code) {
         setReferralCode(code);
       } else {
-        // 优先url地址的invite参数，不存在从locale读取
-        const inviteCode = invite || getReferralCode();
-        if (inviteCode) {
+        const { invite } = queryString.parse(location.search);
+        if (invite) {
           await setRelationship(invite as string);
-          setReferralCode(invite as string);
         }
       }
     }
