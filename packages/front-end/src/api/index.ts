@@ -80,9 +80,9 @@ export async function getBindCode(address: string): Promise<string> {
     },
     credentials: 'same-origin',
   });
-  if (res && res.status === 1) {
+  if (res && res.status === 200) {
     const data = (await res.json()) || {};
-    if (data.error === 0) {
+    if (data.status === 1) {
       return data.code;
     }
   }
@@ -105,9 +105,8 @@ export async function setBindCode(address: string, code: string): Promise<number
     },
     credentials: 'same-origin',
   });
-  if (res) {
+  if (res && res.status === 200) {
     const data = (await res.json()) || {};
-    console.log('data====>', data);
     return data?.status;
   }
   return 0;
