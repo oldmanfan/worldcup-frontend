@@ -63,7 +63,7 @@ export default function useLens() {
         // setMatchMap(matchMap);
         // 倒序
         setAllMatches([...allMatches.sort((a, b) => {
-          return b.matchId.toNumber() - a.matchId.toNumber();
+          return a.matchId.toNumber() - b.matchId.toNumber();
         })]);
         const notStartMatches = allMatches.filter(
           (item) => item.status === MatchStatus.GUESS_NOT_START,
