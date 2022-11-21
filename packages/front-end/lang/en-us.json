@@ -46,7 +46,7 @@
   "待領取": "Claimable",
   "待開獎": "Waiting",
   "往期賽事": "Past events",
-  "平局": "Even",
+  "平局": "Draw",
   "已領取": "Claimed",
   "已競猜": "Done bet",
   "回報率": "Return ratio",
@@ -63,6 +63,6 @@
   "下注金額": "Bet Amount",
   "下注時間": "Bet time",
   "|": "",
-  "%s勝": "on %s",
+  "%s勝": "%s",
   "可用": "Available:"
 }
