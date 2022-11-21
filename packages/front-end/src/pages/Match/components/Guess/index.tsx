@@ -449,7 +449,7 @@ export default function Guess(props: GuessOptions) {
                     toBN(claimedReward.betAmount)
                       .multipliedBy(toBN(claimedReward.odds).div(1e18))
                       .div(toPow(currentMatch.token.decimals))
-                      .toString()) ||
+                      .toFixed(4, 1)) ||
                     0}{' '}
                   {token && token?.symbol}
                 </strong>
