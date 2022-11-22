@@ -361,6 +361,17 @@ export default function Guess(props: GuessOptions) {
     );
   };
 
+  const iptForce = () => {
+    if (inputValue === '0') {
+      setInputValue('')
+    }
+  }
+  const iptBlur = () => {
+    if (inputValue === '') {
+      setInputValue('0')
+    }
+  }
+
   const getForm = () => {
     if (!currentMatch) return <></>;
     if (currentMatch.status === MatchStatus.MATCH_FINISHED) return <></>;
@@ -531,6 +542,8 @@ export default function Guess(props: GuessOptions) {
                   type="text"
                   placeholder={$t('{#輸入數額參與競猜#}')}
                   value={inputValue}
+                  onFocus={iptForce}
+                  onBlur={iptBlur}
                   onChange={(value) => handleInput(value.target.value)}
                 />
                 <button onClick={handleAll}>ALL</button>
