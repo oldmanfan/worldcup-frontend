@@ -15,7 +15,7 @@ export default function Rule() {
           </p>
           <h2>下注时间：</h2>
           <p>
-            开始下注时间：开赛前六个小时；<br />
+            开始下注时间：根据赛程安排动态调整；<br />
             结束下注时间：开赛前10秒截止；<br />
             开奖时间：以实际时间为准；
           </p>
@@ -46,7 +46,7 @@ export default function Rule() {
             </p>
             <h2>Betting time:</h2>
             <p>
-              Start betting time: six hours before the start of the game;<br />
+              Start betting time: dynamically adjust according to the schedule;<br />
               End betting time: 10 seconds before the game starts;<br />
               Draw time: right after the end of the competition;
             </p>
