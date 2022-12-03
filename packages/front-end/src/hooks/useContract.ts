@@ -65,6 +65,12 @@ export interface LensContract extends Contract {
   ) => Promise<MatchStatistics>;
   // 查询所有比赛信息
   getAllMatches: (qatar: string, player: string) => Promise<MatchStatistics[]>;
+  getMatches: (
+    qatar: string,
+    player: string,
+    startMatch: number,
+    pageSize: number,
+  ) => Promise<MatchStatistics[]>;
   getTopNRecords: (
     qatar: string, // 世界杯合约地址
     matchId: number, // 比赛Id
