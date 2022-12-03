@@ -11,7 +11,6 @@ import {
 import useWallet from './useWallet';
 import { toBN, BigNumberLike } from '@/utils/bn';
 import { useMatchStore } from '@/models';
-import {message} from "antd";
 
 // 玩家个人统计数据
 interface PlayerTotalInfoProps {
@@ -48,205 +47,210 @@ export function useMatches() {
     getAllMatches();
   }, [chainId, account, provider, contractAddress]);
 
-
-  function getAllMatches() {
-    console.log('getAllMatches')
+  async function getAllMatches() {
     if (provider && account && contractAddress) {
       const lensContract = makeLensContract(
         contractAddress.lens,
         provider,
         account,
       );
+      const [list1, list2] = await Promise.all([
+        lensContract.getMatches(contractAddress.qatar, account, 1, 45),
+        lensContract.getMatches(contractAddress.qatar, account, 46, 45),
+      ]);
+
+      const res = list1.concat(list2);
       // message.success(lensContract.getAllMatches.toString());
-      lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
-        // console.log('getAllMatches', res);
-        const matchMap: MatchMapProps = {};
-        let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
-        let playerTotalWinAmount = toBN(0); // 中奖金额
-        let playerTotalWithdraw = toBN(0); // 已提取
-        let playerTotalUnWithdraw = toBN(0);
-        let playerTotalPartIn = toBN(0);
-        let playerTotalWinTimes = toBN(0); // 中奖次数
-        let playerWinRate = toBN(0);
-        //假设一个默认值
-        let playToken: Token = {
-          name: 'TT',
-          symbol: 'TT',
-          address: '',
-          decimals: 18,
+      // lensContract.getAllMatches(contractAddress.qatar, account).then((res) => {
+      // console.log('getAllMatches', res);
+      const matchMap: MatchMapProps = {};
+      let playerTotalBetAmount = toBN(0); // 累计竞猜值  winloseRecords.betAmount + scoreGuessRecords.betAmount
+      let playerTotalWinAmount = toBN(0); // 中奖金额
+      let playerTotalWithdraw = toBN(0); // 已提取
+      let playerTotalUnWithdraw = toBN(0);
+      let playerTotalPartIn = toBN(0);
+      let playerTotalWinTimes = toBN(0); // 中奖次数
+      let playerWinRate = toBN(0);
+      //假设一个默认值
+      let playToken: Token = {
+        name: 'TT',
+        symbol: 'TT',
+        address: '',
+        decimals: 18,
+      };
+
+      let playerWinLoseRecords: PlayerRecords[] = [];
+      let playerScoreGuessRecords: PlayerRecords[] = [];
+      const allMatches = res.map((item) => {
+        const token: Token = {
+          name: item.payTokenName,
+          symbol: item.payTokenSymbol,
+          decimals: item.payTokenDecimals.toNumber(),
+          address: item.payToken,
         };
+        playToken = token;
+        const { winlosePool, scoreGuessPool, winloseRecords } = item;
+        const totalPool = toBN(winlosePool.deposited).plus(
+          toBN(scoreGuessPool.deposited),
+        );
+        const totalPlayers = toBN(winlosePool.playersAmount).plus(
+          toBN(scoreGuessPool.playersAmount),
+        );
+        // 猜输赢的总赢得
+        let totalWinloseReward = toBN(0);
 
-        let playerWinLoseRecords: PlayerRecords[] = [];
-        let playerScoreGuessRecords: PlayerRecords[] = [];
-        const allMatches = res.map((item) => {
-          const token: Token = {
-            name: item.payTokenName,
-            symbol: item.payTokenSymbol,
-            decimals: item.payTokenDecimals.toNumber(),
-            address: item.payToken,
-          };
-          playToken = token;
-          const { winlosePool, scoreGuessPool, winloseRecords } = item;
-          const totalPool = toBN(winlosePool.deposited).plus(
-            toBN(scoreGuessPool.deposited),
+        for (const winlose of item.winloseRecords) {
+          // 累计竞猜值
+          playerTotalBetAmount = playerTotalBetAmount.plus(
+            toBN(winlose.betAmount),
           );
-          const totalPlayers = toBN(winlosePool.playersAmount).plus(
-            toBN(scoreGuessPool.playersAmount),
+          // 已提取
+          playerTotalWithdraw = playerTotalWithdraw.plus(
+            toBN(winlose.claimedAmount),
           );
-          // 猜输赢的总赢得
-          let totalWinloseReward = toBN(0);
-
-          for (const winlose of item.winloseRecords) {
-            // 累计竞猜值
-            playerTotalBetAmount = playerTotalBetAmount.plus(
-              toBN(winlose.betAmount),
-            );
-            // 已提取
-            playerTotalWithdraw = playerTotalWithdraw.plus(
-              toBN(winlose.claimedAmount),
-            );
-            // 我的才输赢记录
-            playerWinLoseRecords.push({
-              ...winlose,
-              winAmount: toBN(winlose.betAmount).multipliedBy(
-                toBN(winlose.odds).div(1e18),
-              ),
-              scoresA: item.scoresA,
-              scoresB: item.scoresB,
-              matchEndTime: item.matchEndTime,
-              matchId: item.matchId,
-              countryA: item.countryA,
-              countryB: item.countryB,
-              status: item.status,
-              token,
-            });
-
-            if (item.status == MatchStatus.MATCH_FINISHED && winlose.win) {
-              // odds默认有1e18
-              playerTotalWinAmount = playerTotalWinAmount.plus(
-                toBN(winlose.odds)
-                  .multipliedBy(toBN(winlose.betAmount))
-                  .div(1e18),
-              );
-              totalWinloseReward = totalWinloseReward.plus(
-                toBN(winlose.odds).multipliedBy(toBN(winlose.betAmount)),
-              );
-              // 中奖次数+1
-              playerTotalWinTimes = toBN(playerTotalWinTimes).plus(1);
-            }
-          }
-          let totalScoreGuessReward = toBN(0);
-
-          for (const scoreGuess of item.scoreGuessRecords) {
-            // 累计竞猜值
-            playerTotalBetAmount = playerTotalBetAmount.plus(
-              toBN(scoreGuess.betAmount),
-            );
-            // 已提取
-            playerTotalWithdraw = playerTotalWithdraw.plus(
-              toBN(scoreGuess.claimedAmount),
-            );
-            playerScoreGuessRecords.push({
-              ...scoreGuess,
-              winAmount: toBN(scoreGuess.betAmount).multipliedBy(
-                toBN(scoreGuess.odds).div(1e18),
-              ),
-              scoresA: item.scoresA,
-              scoresB: item.scoresB,
-              matchEndTime: item.matchEndTime,
-              matchId: item.matchId,
-              countryA: item.countryA,
-              countryB: item.countryB,
-              status: item.status,
-              token,
-            });
-
-            if (item.status == MatchStatus.MATCH_FINISHED && scoreGuess.win) {
-              playerTotalWinAmount = playerTotalWinAmount.plus(
-                toBN(scoreGuess.odds)
-                  .multipliedBy(toBN(scoreGuess.betAmount))
-                  .div(1e18),
-              );
-              totalScoreGuessReward = totalScoreGuessReward.plus(
-                toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)),
-              );
-              // 中奖次数+1
-              playerTotalWinTimes = toBN(playerTotalWinTimes).plus(1);
-            }
-          }
-
-          // 参与次数
-          playerTotalPartIn = playerTotalPartIn
-            .plus(item.winloseRecords.length)
-            .plus(item.scoreGuessRecords.length);
-          const newItem = {
-            totalPool,
-            totalPlayers,
-            totalWinloseReward,
-            totalScoreGuessReward,
+          // 我的才输赢记录
+          playerWinLoseRecords.push({
+            ...winlose,
+            winAmount: toBN(winlose.betAmount).multipliedBy(
+              toBN(winlose.odds).div(1e18),
+            ),
+            scoresA: item.scoresA,
+            scoresB: item.scoresB,
+            matchEndTime: item.matchEndTime,
+            matchId: item.matchId,
+            countryA: item.countryA,
+            countryB: item.countryB,
+            status: item.status,
             token,
-            ...item,
-          } as ListItemProps;
-          matchMap[item.matchId.toNumber()] = newItem;
-          return newItem;
+          });
+
+          if (item.status == MatchStatus.MATCH_FINISHED && winlose.win) {
+            // odds默认有1e18
+            playerTotalWinAmount = playerTotalWinAmount.plus(
+              toBN(winlose.odds)
+                .multipliedBy(toBN(winlose.betAmount))
+                .div(1e18),
+            );
+            totalWinloseReward = totalWinloseReward.plus(
+              toBN(winlose.odds).multipliedBy(toBN(winlose.betAmount)),
+            );
+            // 中奖次数+1
+            playerTotalWinTimes = toBN(playerTotalWinTimes).plus(1);
+          }
+        }
+        let totalScoreGuessReward = toBN(0);
+
+        for (const scoreGuess of item.scoreGuessRecords) {
+          // 累计竞猜值
+          playerTotalBetAmount = playerTotalBetAmount.plus(
+            toBN(scoreGuess.betAmount),
+          );
+          // 已提取
+          playerTotalWithdraw = playerTotalWithdraw.plus(
+            toBN(scoreGuess.claimedAmount),
+          );
+          playerScoreGuessRecords.push({
+            ...scoreGuess,
+            winAmount: toBN(scoreGuess.betAmount).multipliedBy(
+              toBN(scoreGuess.odds).div(1e18),
+            ),
+            scoresA: item.scoresA,
+            scoresB: item.scoresB,
+            matchEndTime: item.matchEndTime,
+            matchId: item.matchId,
+            countryA: item.countryA,
+            countryB: item.countryB,
+            status: item.status,
+            token,
+          });
+
+          if (item.status == MatchStatus.MATCH_FINISHED && scoreGuess.win) {
+            playerTotalWinAmount = playerTotalWinAmount.plus(
+              toBN(scoreGuess.odds)
+                .multipliedBy(toBN(scoreGuess.betAmount))
+                .div(1e18),
+            );
+            totalScoreGuessReward = totalScoreGuessReward.plus(
+              toBN(scoreGuess.odds).multipliedBy(toBN(scoreGuess.betAmount)),
+            );
+            // 中奖次数+1
+            playerTotalWinTimes = toBN(playerTotalWinTimes).plus(1);
+          }
+        }
+
+        // 参与次数
+        playerTotalPartIn = playerTotalPartIn
+          .plus(item.winloseRecords.length)
+          .plus(item.scoreGuessRecords.length);
+        const newItem = {
+          totalPool,
+          totalPlayers,
+          totalWinloseReward,
+          totalScoreGuessReward,
+          token,
+          ...item,
+        } as ListItemProps;
+        matchMap[item.matchId.toNumber()] = newItem;
+        return newItem;
+      });
+
+      // 待领取
+      playerTotalUnWithdraw = playerTotalWinAmount.minus(playerTotalWithdraw);
+      // 收益率
+      playerWinRate = playerTotalWinAmount
+        .minus(playerTotalBetAmount)
+        .div(playerTotalBetAmount)
+        .multipliedBy(100);
+
+      setPlayerScoreGuessRecordsStore([...playerScoreGuessRecords]);
+      setPlayerWinLoseRecordsStore(playerWinLoseRecords);
+
+      // setMatchMap(matchMap);
+      setMatchMapStore(matchMap);
+      setAllMatches(allMatches);
+      setTokenStore(playToken);
+      const notStartMatches = allMatches
+        .filter((item) => item.status === MatchStatus.GUESS_NOT_START)
+        .sort((a, b) => {
+          // 未来赛事matchId正序排列
+          return a.matchId.toNumber() - b.matchId.toNumber();
+        });
+      // 进行中matchId正序排列
+      const onGoingMatches = allMatches
+        .filter(
+          (item) =>
+            item.status === MatchStatus.GUESS_ON_GOING ||
+            item.status === MatchStatus.MATCH_ON_GOING,
+        )
+        .sort((a, b) => {
+          return a.matchId.toNumber() - b.matchId.toNumber();
+        });
+      // 完成按match倒序
+      const finishedMatches = allMatches
+        .filter((item) => item.status === MatchStatus.MATCH_FINISHED)
+        .sort((a, b) => {
+          return b.matchId.toNumber() - a.matchId.toNumber();
         });
 
-        // 待领取
-        playerTotalUnWithdraw = playerTotalWinAmount.minus(playerTotalWithdraw);
-        // 收益率
-        playerWinRate = playerTotalWinAmount.minus(playerTotalBetAmount)
-          .div(playerTotalBetAmount)
-          .multipliedBy(100);
+      setNotStartMatches(notStartMatches);
+      setOnGoingMatches(onGoingMatches);
+      setFinishedMatches(finishedMatches);
 
-        setPlayerScoreGuessRecordsStore([...playerScoreGuessRecords]);
-        setPlayerWinLoseRecordsStore(playerWinLoseRecords);
-
-        // setMatchMap(matchMap);
-        setMatchMapStore(matchMap);
-        setAllMatches(allMatches);
-        setTokenStore(playToken);
-        const notStartMatches = allMatches
-          .filter((item) => item.status === MatchStatus.GUESS_NOT_START)
-          .sort((a, b) => {
-            // 未来赛事matchId正序排列
-            return a.matchId.toNumber() - b.matchId.toNumber();
-          });
-        // 进行中matchId正序排列
-        const onGoingMatches = allMatches
-          .filter(
-            (item) =>
-              item.status === MatchStatus.GUESS_ON_GOING ||
-              item.status === MatchStatus.MATCH_ON_GOING,
-          )
-          .sort((a, b) => {
-            return a.matchId.toNumber() - b.matchId.toNumber();
-          });
-        // 完成按match倒序
-        const finishedMatches = allMatches
-          .filter((item) => item.status === MatchStatus.MATCH_FINISHED)
-          .sort((a, b) => {
-            return b.matchId.toNumber() - a.matchId.toNumber();
-          });
-
-        setNotStartMatches(notStartMatches);
-        setOnGoingMatches(onGoingMatches);
-        setFinishedMatches(finishedMatches);
-
-        // 玩家统计数据
-        setPlayerTotalInfo({
-          playerTotalBetAmount,
-          playerTotalWinAmount,
-          playerTotalWithdraw,
-          playerTotalUnWithdraw,
-          playerTotalPartIn,
-          playerTotalWinTimes,
-          playerWinRate,
-          token: playToken,
-        });
+      // 玩家统计数据
+      setPlayerTotalInfo({
+        playerTotalBetAmount,
+        playerTotalWinAmount,
+        playerTotalWithdraw,
+        playerTotalUnWithdraw,
+        playerTotalPartIn,
+        playerTotalWinTimes,
+        playerWinRate,
+        token: playToken,
+      });
 
       // }).catch(e => {
       //   message.success(e);
-      });
+      // });
     }
   }
 
