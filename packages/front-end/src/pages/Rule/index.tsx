@@ -11,7 +11,8 @@ export default function Rule() {
           <h2>比赛规则：</h2>
           <p>
             1.在规定的下注时间选择你支持的球队使用TT进行下注即可！<br />
-            2.可以下注胜平负三个池子，根据你下注池子的赔率决定赢的金额倍数；
+            2.小组赛可以下注胜平负三个池子，根据你下注池子的赔率决定赢的金额倍数；淘汰赛中只能下注胜和负。<br />
+            3.淘汰赛比分包含点球（若有），以最终赛事结束结果为准。
           </p>
           <h2>下注时间：</h2>
           <p>
@@ -41,8 +42,9 @@ export default function Rule() {
           <div className={styles.content}>
             <h2>Competition rules:</h2>
             <p>
-              1. Choose the team you support to bet at the betting time!<br />
-              2. Betting is divided into guessing wins and losses & guessing the score. The prize you may win is determined according to the odds of your betting pool;
+              1.Choose the team you support to bet at the betting time!<br />
+              2.Betting is divided into guessing wins and losses & guessing the score. The prize you may win is determined according to the odds of your betting pool; In knockout round there is no flat guessing.<br />
+              3.Knockout round include the score of the penalty shoot-out (if any).
             </p>
             <h2>Betting time:</h2>
             <p>

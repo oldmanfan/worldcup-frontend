@@ -47,7 +47,7 @@ export default function ScoreForm(props: ScoreFormProps) {
                 : CountriesById[currentMatch.countryA.toNumber()].enName
               }
             </div>
-            <div>{$t('{#平局#}')}</div>
+            {/*<div>{$t('{#平局#}')}</div>*/}
             <div className={styles.right}>
               {locale === 'zh-hk'
                 ? CountriesById[currentMatch.countryB.toNumber()].zhName
@@ -61,6 +61,9 @@ export default function ScoreForm(props: ScoreFormProps) {
                 let label = item.label;
                 if (item.value === 26) {
                   label = $t('{#其他#}');
+                }
+                if (item.value === 3 || item.value === 8 || item.value === 13 || item.value === 18 || item.value === 23) {
+                  return <a className={styles.hidden} key={item.value as string}></a>
                 }
                 return (
                   <a

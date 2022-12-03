@@ -166,7 +166,8 @@
   margin-top: 20px;
 
   > div {
-    width: 98px;
+    //width: 98px;
+    width: calc(98px * 3 / 2 + 6px);
     height: 56px;
     background: #27335d;
     border-radius: 6px;
@@ -180,6 +181,8 @@
     padding: 10px 0;
     margin-bottom: 16px;
     cursor: pointer;
+
+    //margin: 0 5px 16px;
 
     &.selected {
       background: #ff5852;
@@ -236,7 +239,8 @@
     flex-wrap: wrap;
 
     > a {
-      width: calc((100% - 24px) / 5);
+      //width: calc((100% - 24px) / 5);
+      width: calc((100% - 18px) / 4);
       height: 46px;
       background: #27335d;
       border-radius: 4px;
@@ -261,6 +265,9 @@
         background: #ff5852;
         border-color: #ff5852;
         border-radius: 4px;
+      }
+      &.hidden{
+        display: none;
       }
     }
   }

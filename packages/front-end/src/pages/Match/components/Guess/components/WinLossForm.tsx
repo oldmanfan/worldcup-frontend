@@ -46,11 +46,11 @@ export default function WinLossForm(props: WinLossFormProps) {
           label: $t('{#%s勝#}').replace('%s', countryA),
           desc: odds[0],
         },
-        {
-          value: GuessType.GUESS_WINLOSE_DRAW,
-          label: $t('{#平局#}'),
-          desc: odds[1],
-        },
+        // {
+        //   value: GuessType.GUESS_WINLOSE_DRAW,
+        //   label: $t('{#平局#}'),
+        //   desc: odds[1],
+        // },
         {
           value: GuessType.GUESS_WINLOSE_B_WIN,
           label: $t('{#%s勝#}').replace('%s', countryB),
